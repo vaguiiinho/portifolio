@@ -6,6 +6,7 @@ import { Menu, X, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { cn } from "@/lib/utils"
+import { siteConfig } from "@/data/site"
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -15,15 +16,25 @@ const navLinks = [
 ]
 
 export function Navbar() {
+  const [isDark, setIsDark] = useState(() => 
+    typeof window !== 'undefined' && document.documentElement.classList.contains("dark")
+  )
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isDark, setIsDark] = useState(false)
 
   useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"))
-    const handleScroll = () => setIsScrolled(window.scrollY > 10)
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = () => setIsDark(mediaQuery.matches)
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   const toggleTheme = () => {
@@ -47,7 +58,7 @@ export function Navbar() {
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#home" className="text-xl font-bold tracking-tight">
-            alex<span className="text-accent">.</span>dev
+            {siteConfig.name}
           </a>
 
           {/* Desktop Navigation */}

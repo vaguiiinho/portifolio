@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
+import { siteConfig } from '@/data/site'
 import './globals.css'
 
 const inter = Inter({ 
@@ -14,11 +14,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Alex Chen | Full Stack Developer',
-  description: 'Full Stack Developer building scalable and modern applications. Specializing in React, Next.js, and cloud architecture.',
-  generator: 'v0.app',
+  title: siteConfig.title,
+  description: siteConfig.description,
+  generator: 'Next.js',
   keywords: ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'Web Development'],
-  authors: [{ name: 'Alex Chen' }],
+  authors: [{ name: siteConfig.name }],
   icons: {
     icon: [
       {
@@ -54,7 +54,6 @@ export default function RootLayout({
     <html lang="en" className="dark scroll-smooth bg-background">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )

@@ -1,13 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import { Send, Github, Linkedin, Mail, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Container } from "./container"
-import { SectionHeading } from "./section-heading"
+import { FadeIn } from "@/components/ui/fade-in"
 
 const socialLinks = [
   {
@@ -46,20 +44,18 @@ export function Contact() {
   return (
     <section id="contact" className="py-24 sm:py-32">
       <Container>
-        <SectionHeading
-          title="Let's Build Something Together"
-          subtitle="Have a project in mind? I'd love to hear about it. Let's discuss how we can work together to bring your ideas to life."
-        />
+        <FadeIn className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-balance">
+            Let's Build Something Together
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
+            Have a project in mind? I'd love to hear about it. Let's discuss how we can work together to bring your ideas to life.
+          </p>
+        </FadeIn>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="space-y-8"
-          >
+          <FadeIn direction="left" className="space-y-8">
             <div>
               <h3 className="text-xl font-semibold mb-2">Get in touch</h3>
               <p className="text-muted-foreground text-pretty leading-relaxed">
@@ -71,17 +67,7 @@ export function Contact() {
             {/* Social Links */}
             <div className="space-y-4">
               {socialLinks.map((link, index) => (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 hover:border-accent/50 transition-all group"
-                >
+                <FadeIn key={link.name} direction="left" delay={index * 0.1} className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:bg-secondary/50 hover:border-accent/50 transition-all group">
                   <div className="p-3 rounded-lg bg-secondary group-hover:bg-accent/10 transition-colors">
                     <link.icon className="h-5 w-5 group-hover:text-accent transition-colors" />
                   </div>
@@ -90,43 +76,38 @@ export function Contact() {
                     <div className="text-sm text-muted-foreground">{link.username}</div>
                   </div>
                   <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" />
-                </motion.a>
+                </FadeIn>
               ))}
             </div>
-          </motion.div>
+          </FadeIn>
 
           {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
+          <FadeIn direction="right">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium">
                     Name
                   </label>
-                  <Input
+                  <input
                     id="name"
                     name="name"
                     placeholder="Your name"
                     required
-                    className="rounded-xl bg-card border-border focus:border-accent"
+                    className="flex h-10 w-full rounded-xl bg-card border border-border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium">
                     Email
                   </label>
-                  <Input
+                  <input
                     id="email"
                     name="email"
                     type="email"
                     placeholder="your@email.com"
                     required
-                    className="rounded-xl bg-card border-border focus:border-accent"
+                    className="flex h-10 w-full rounded-xl bg-card border border-border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
               </div>
@@ -135,12 +116,12 @@ export function Contact() {
                 <label htmlFor="subject" className="text-sm font-medium">
                   Subject
                 </label>
-                <Input
+                <input
                   id="subject"
                   name="subject"
                   placeholder="What's this about?"
                   required
-                  className="rounded-xl bg-card border-border focus:border-accent"
+                  className="flex h-10 w-full rounded-xl bg-card border border-border px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
 
@@ -148,13 +129,13 @@ export function Contact() {
                 <label htmlFor="message" className="text-sm font-medium">
                   Message
                 </label>
-                <Textarea
+                <textarea
                   id="message"
                   name="message"
                   placeholder="Tell me about your project..."
                   rows={5}
                   required
-                  className="rounded-xl bg-card border-border focus:border-accent resize-none"
+                  className="flex min-h-[80px] w-full rounded-xl bg-card border border-border px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
                 />
               </div>
 
@@ -177,7 +158,7 @@ export function Contact() {
                 )}
               </Button>
             </form>
-          </motion.div>
+          </FadeIn>
         </div>
       </Container>
     </section>

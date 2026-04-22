@@ -1,9 +1,5 @@
-"use client"
-
-import { motion } from "framer-motion"
 import { Container } from "./container"
-import { SectionHeading } from "./section-heading"
-import { Badge } from "./badge"
+import { FadeIn } from "@/components/ui/fade-in"
 
 const techStack = [
   { name: "React", category: "Frontend" },
@@ -24,20 +20,18 @@ export function About() {
   return (
     <section id="about" className="py-24 sm:py-32 bg-secondary/30">
       <Container>
-        <SectionHeading
-          title="About Me"
-          subtitle="Passionate about creating impactful digital experiences through clean code and thoughtful design."
-        />
+        <FadeIn className="mb-12 text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-balance">
+            About Me
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
+            Passionate about creating impactful digital experiences through clean code and thoughtful design.
+          </p>
+        </FadeIn>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Avatar / Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="relative"
-          >
+          <FadeIn className="relative">
             <div className="relative aspect-square max-w-md mx-auto">
               {/* Glow Effect */}
               <div className="absolute -inset-4 bg-gradient-to-r from-accent/30 to-accent/10 rounded-3xl blur-2xl" />
@@ -51,16 +45,10 @@ export function About() {
                 <div className="absolute bottom-4 left-4 w-32 h-32 bg-accent/5 rounded-full blur-2xl" />
               </div>
             </div>
-          </motion.div>
+          </FadeIn>
 
           {/* Bio */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
+          <FadeIn direction="right" className="space-y-6">
             <div className="prose prose-invert max-w-none">
               <p className="text-lg text-muted-foreground leading-relaxed text-pretty">
                 {`Hi, I'm Alex Chen, a Full Stack Developer with over 5 years of experience 
@@ -86,19 +74,15 @@ export function About() {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {techStack.map((tech, index) => (
-                  <motion.div
-                    key={tech.name}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                  >
-                    <Badge variant="glow">{tech.name}</Badge>
-                  </motion.div>
+                  <FadeIn key={tech.name} direction="up" delay={index * 0.05}>
+                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-accent/10 text-accent border border-accent/20">
+                      {tech.name}
+                    </span>
+                  </FadeIn>
                 ))}
               </div>
             </div>
-          </motion.div>
+          </FadeIn>
         </div>
       </Container>
     </section>

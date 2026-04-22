@@ -23,22 +23,21 @@ const sizeStyles: Record<ButtonSize, string> = {
   'icon-lg': 'h-10 w-10 p-2',
 }
 
-interface ButtonProps<T extends React.ElementType = 'button'>
-  extends React.ComponentPropsWithoutRef<T> {
-  as?: T
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   size?: ButtonSize
-  className?: string
+  as?: 'button' | 'a'
+  href?: string
 }
 
-export function Button<T extends React.ElementType = 'button'>({
-  as,
+export function Button({
   variant = 'default',
   size = 'default',
+  as = 'button',
   className,
   ...props
-}: ButtonProps<T>) {
-  const Component = as || 'button'
+}: ButtonProps) {
+  const Component = as === 'a' ? 'a' : 'button'
 
   return (
     <Component
