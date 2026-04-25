@@ -3,12 +3,12 @@ import { Inter } from 'next/font/google'
 import { siteConfig } from '@/data/site'
 import './globals.css'
 
-const inter = Inter({ 
+const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter"
-});
+})
 
-export const metadata: Metadata = {
+const defaultMetadata: Metadata = {
   metadataBase: new URL(`https://${siteConfig.domain}`),
   title: siteConfig.title,
   description: siteConfig.description,
@@ -65,6 +65,8 @@ export const metadata: Metadata = {
     canonical: `https://${siteConfig.domain}`,
   }
 }
+
+export const metadata: Metadata = defaultMetadata
 
 export const viewport: Viewport = {
   themeColor: [

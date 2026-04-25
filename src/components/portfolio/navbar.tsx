@@ -6,22 +6,16 @@ import { Menu, X, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { cn } from "@/lib/utils"
+import { useTheme } from "./use-theme"
+import { useMobileMenu } from "./use-mobile-menu"
+import { DesktopNav } from "./desktop-nav"
+import { MobileNav } from "./mobile-nav"
 import { siteConfig } from "@/data/site"
-import { navLinks } from "@/data/navigation"
 
 export function Navbar() {
-  const [isDark, setIsDark] = useState(() => 
-    typeof window !== 'undefined' && document.documentElement.classList.contains("dark")
-  )
+  const { isDark, toggleTheme } = useTheme()
+  const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleChange = () => setIsDark(mediaQuery.matches)
-    mediaQuery.addEventListener('change', handleChange)
-    return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,11 +24,6 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark")
-    setIsDark((current) => !current)
-  }
 
   return (
     <motion.header
@@ -55,18 +44,7 @@ export function Navbar() {
             {siteConfig.name}
           </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
+          <DesktopNav />
 
           {/* Actions */}
           <div className="flex items-center gap-3">
@@ -89,7 +67,7 @@ export function Navbar() {
               variant="ghost"
               size="icon"
               className="md:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={toggleMobileMenu}
               aria-label="Toggle navigation menu"
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-nav-menu"
@@ -99,30 +77,7 @@ export function Navbar() {
           </div>
         </nav>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <motion.div
-            id="mobile-nav-menu"
-            role="navigation"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border/50 bg-background/95 backdrop-blur-lg"
-          >
-            <div className="py-4 space-y-2">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-4 py-2 text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
+        <MobileNav isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
       </Container>
     </motion.header>
   )

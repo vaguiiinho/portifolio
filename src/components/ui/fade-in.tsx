@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 
-const ANIMATION_VARIANTS = {
+const DIRECTION_OFFSETS = {
   up: { y: 30 },
   down: { y: -30 },
   left: { x: 30 },
@@ -11,7 +11,7 @@ const ANIMATION_VARIANTS = {
 
 interface FadeInProps {
   children: React.ReactNode
-  direction?: keyof typeof ANIMATION_VARIANTS
+  direction?: keyof typeof DIRECTION_OFFSETS
   delay?: number
   className?: string
   useReducedMotion?: boolean
@@ -29,7 +29,7 @@ export function FadeIn({
     typeof window !== 'undefined' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const initialAnimation = prefersReducedMotion ? {} : { opacity: 0, ...ANIMATION_VARIANTS[direction] }
+  const initialAnimation = prefersReducedMotion ? {} : { opacity: 0, ...DIRECTION_OFFSETS[direction] }
   const whileInViewAnimation = prefersReducedMotion ? {} : { opacity: 1, x: 0, y: 0 }
 
   return (

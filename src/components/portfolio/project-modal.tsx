@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, ExternalLink, Github, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
+import { useModalOverflow } from "./use-modal-overflow"
 import type { Project } from "./project-card"
 import { projectModalData } from "@/data/site"
 
@@ -14,14 +14,7 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
-  useEffect(() => {
-    if (project) {
-      document.body.style.overflow = "hidden"
-    }
-    return () => {
-      document.body.style.overflow = "unset"
-    }
-  }, [project])
+  useModalOverflow(!!project)
 
   return (
     <AnimatePresence>
