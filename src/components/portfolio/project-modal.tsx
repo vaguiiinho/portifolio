@@ -6,6 +6,7 @@ import { X, ExternalLink, Github, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import type { Project } from "./project-card"
+import { projectModalData } from "@/data/site"
 
 interface ProjectModalProps {
   project: Project | null
@@ -75,20 +76,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
               {/* Problem / Solution / Result */}
               <div className="grid gap-6 sm:grid-cols-3">
-                {[
-                  { 
-                    title: "Problem", 
-                    description: "Users needed a faster, more intuitive way to manage their workflows without technical complexity." 
-                  },
-                  { 
-                    title: "Solution", 
-                    description: "Built a modern web application with real-time collaboration features and an intuitive drag-and-drop interface." 
-                  },
-                  { 
-                    title: "Result", 
-                    description: "Increased user productivity by 40% and reduced onboarding time from days to hours." 
-                  },
-                ].map((item, i) => (
+                {projectModalData.sections.map((item) => (
                   <div key={item.title} className="space-y-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-accent" />
@@ -103,7 +91,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
               {/* Tech Stack */}
               <div>
-                <h3 className="font-semibold mb-3">Technologies Used</h3>
+                <h3 className="font-semibold mb-3">{projectModalData.technologiesTitle}</h3>
                 <div className="flex flex-wrap gap-2">
                   {project.techStack.map((tech) => (
                     <Badge key={tech} variant="glow">
@@ -118,13 +106,13 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 {project.liveUrl && (
                   <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="rounded-full">
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    View Live Demo
+                    {projectModalData.viewLiveDemoText}
                   </Button>
                 )}
                 {project.githubUrl && (
                   <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" className="rounded-full">
                     <Github className="mr-2 h-4 w-4" />
-                    View Source Code
+                    {projectModalData.viewSourceCodeText}
                   </Button>
                 )}
               </div>

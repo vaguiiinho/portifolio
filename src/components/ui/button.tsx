@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
 type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
@@ -23,12 +24,25 @@ const sizeStyles: Record<ButtonSize, string> = {
   'icon-lg': 'h-10 w-10 p-2',
 }
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+type ButtonBaseProps = {
   variant?: ButtonVariant
   size?: ButtonSize
-  as?: 'button' | 'a'
-  href?: string
+  className?: string
 }
+
+type ButtonAsButtonProps = ButtonBaseProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    as?: 'button'
+  }
+
+type ButtonAsAnchorProps = ButtonBaseProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+    as: 'a'
+    href: string
+    isExternal?: boolean // Para links externos
+  }
+
+type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps
 
 export function Button({
   variant = 'default',
@@ -37,17 +51,26 @@ export function Button({
   className,
   ...props
 }: ButtonProps) {
-  const Component = as === 'a' ? 'a' : 'button'
+  const classNames = cn(
+    'inline-flex items-center justify-center transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
+    variantStyles[variant],
+    sizeStyles[size],
+    className,
+  )
+
+  if (as === 'a') {
+    const { isExternal = false, ...anchorProps } = props as ButtonAsAnchorProps & { isExternal?: boolean }
+
+    if (isExternal) {
+      return <a className={classNames} {...anchorProps} />
+    }
+
+    return (
+      <Link className={classNames} {...anchorProps} />
+    )
+  }
 
   return (
-    <Component
-      className={cn(
-        'inline-flex items-center justify-center transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-primary/40',
-        variantStyles[variant],
-        sizeStyles[size],
-        className,
-      )}
-      {...props}
-    />
+    <button className={classNames} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)} />
   )
 }

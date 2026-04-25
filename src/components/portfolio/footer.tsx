@@ -1,11 +1,6 @@
-import { Github, Linkedin, Twitter } from "lucide-react"
 import { Container } from "./container"
-
-const socialLinks = [
-  { name: "GitHub", href: "https://github.com", icon: Github },
-  { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin },
-  { name: "Twitter", href: "https://twitter.com", icon: Twitter },
-]
+import { socialLinks } from "@/data/navigation"
+import { footerData, siteConfig } from "@/data/site"
 
 export function Footer() {
   return (
@@ -14,7 +9,7 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Copyright */}
           <div className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Alex Chen. All rights reserved.
+            &copy; {new Date().getFullYear()} {siteConfig.name}. {footerData.copyrightText}
           </div>
 
           {/* Social Links */}
@@ -26,9 +21,10 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={link.name}
+                aria-label={`Visit ${link.name}`}
+                title={link.name}
               >
-                <link.icon className="h-5 w-5" />
+                <link.icon className="h-5 w-5" aria-hidden="true" />
               </a>
             ))}
           </div>

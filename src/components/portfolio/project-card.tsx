@@ -1,5 +1,6 @@
 "use client"
 
+import type { MouseEvent } from "react"
 import { motion } from "framer-motion"
 import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -58,13 +59,13 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
             {/* Overlay on Hover */}
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
               {project.liveUrl && (
-                <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" size="sm" className="rounded-full" onClick={(e) => e.stopPropagation()}>
+                <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <ExternalLink className="mr-2 h-4 w-4" />
                   Live Demo
                 </Button>
               )}
               {project.githubUrl && (
-                <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" size="sm" className="rounded-full" onClick={(e) => e.stopPropagation()}>
+                <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <Github className="mr-2 h-4 w-4" />
                   GitHub
                 </Button>

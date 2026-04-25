@@ -7,13 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { cn } from "@/lib/utils"
 import { siteConfig } from "@/data/site"
-
-const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "Projects", href: "#projects" },
-  { name: "About", href: "#about" },
-  { name: "Contact", href: "#contact" },
-]
+import { navLinks } from "@/data/navigation"
 
 export function Navbar() {
   const [isDark, setIsDark] = useState(() => 
@@ -96,7 +90,9 @@ export function Navbar() {
               size="icon"
               className="md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-nav-menu"
             >
               {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
@@ -106,6 +102,8 @@ export function Navbar() {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-nav-menu"
+            role="navigation"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}

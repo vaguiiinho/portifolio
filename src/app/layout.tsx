@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { siteConfig } from '@/data/site'
 import './globals.css'
 
@@ -8,12 +8,8 @@ const inter = Inter({
   variable: "--font-inter"
 });
 
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono"
-});
-
 export const metadata: Metadata = {
+  metadataBase: new URL(`https://${siteConfig.domain}`),
   title: siteConfig.title,
   description: siteConfig.description,
   generator: 'Next.js',
@@ -36,6 +32,38 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    url: `https://${siteConfig.domain}`,
+    siteName: siteConfig.title,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [
+      {
+        url: `https://${siteConfig.domain}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.title,
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [`https://${siteConfig.domain}/og-image.png`],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-snippet': -1,
+    'max-video-preview': -1,
+  },
+  alternates: {
+    canonical: `https://${siteConfig.domain}`,
+  }
 }
 
 export const viewport: Viewport = {
@@ -51,8 +79,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth bg-background">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+    <html lang="pt-br" className="dark scroll-smooth bg-background">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

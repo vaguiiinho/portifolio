@@ -1,8 +1,9 @@
-import { ArrowRight, Github } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { stats } from "@/data/stats"
 import { FadeIn } from "@/components/ui/fade-in"
+import { heroData, siteConfig } from "@/data/site"
 
 export function Hero() {
   return (
@@ -12,9 +13,9 @@ export function Hero() {
         {/* Gradient Orb */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-        
+
         {/* Grid Pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.02] grid-pattern"
         />
       </div>
@@ -29,31 +30,29 @@ export function Hero() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
-                Available for new projects
+                {heroData.availabilityText}
               </FadeIn>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance leading-tight">
-                Full Stack Developer building{" "}
+                {heroData.title}{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent/60">
-                  scalable
+                  {heroData.titleHighlight}
                 </span>{" "}
                 and modern applications
               </h1>
 
               <p className="text-lg sm:text-xl text-muted-foreground max-w-xl text-pretty leading-relaxed">
-                I transform complex problems into elegant, user-centric solutions. 
-                Specializing in React, Next.js, and cloud architecture to build 
-                products that scale.
+                {heroData.subtitle}
               </p>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <Button as="a" href="#projects" size="lg" className="rounded-full group">
-              View Projects
+              {heroData.viewProjectsText}
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
             <Button as="a" href="#contact" variant="outline" size="lg" className="rounded-full">
-              Contact Me
+              {heroData.contactMeText}
             </Button>
             </div>
 
@@ -73,11 +72,13 @@ export function Hero() {
             <div className="relative aspect-square max-w-md mx-auto">
               {/* Glow Effect */}
               <div className="absolute -inset-4 bg-gradient-to-r from-accent/30 to-accent/10 rounded-3xl blur-2xl" />
-              
+
               {/* Avatar Placeholder */}
               <div className="relative aspect-square bg-gradient-to-br from-secondary to-muted rounded-2xl overflow-hidden border border-border flex items-center justify-center">
-                <div className="text-9xl font-bold text-muted-foreground/20">J</div>
-                
+                <div className="text-9xl font-bold text-muted-foreground/20">
+                  {siteConfig.name.charAt(0)}
+                </div>
+
                 {/* Decorative Elements */}
                 <div className="absolute top-4 right-4 w-20 h-20 bg-accent/10 rounded-full blur-xl" />
                 <div className="absolute bottom-4 left-4 w-32 h-32 bg-accent/5 rounded-full blur-2xl" />

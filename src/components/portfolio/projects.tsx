@@ -6,6 +6,7 @@ import { ProjectCard, type Project } from "./project-card"
 import { ProjectModal } from "./project-modal"
 import { projects } from "@/data/projects"
 import { FadeIn } from "@/components/ui/fade-in"
+import { projectsData } from "@/data/site"
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -15,10 +16,10 @@ export function Projects() {
       <Container>
         <FadeIn className="mb-12 text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-balance">
-            Featured Projects
+            {projectsData.title}
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-            A selection of projects that showcase my expertise in building modern, scalable applications.
+            {projectsData.subtitle}
           </p>
         </FadeIn>
 
