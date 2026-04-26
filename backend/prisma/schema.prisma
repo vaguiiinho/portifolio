@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+
+// ============================================
+// DOMAIN: Projects
+// ============================================
+
+model Project {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(255)
+  description String
+  techStack String[] // Array of tech stack strings
+  githubUrl String?  @db.VarChar(512)
+  liveUrl   String?  @db.VarChar(512)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("projects")
+}
+
+// ============================================
+// DOMAIN: Contact
+// ============================================
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  message   String
+  createdAt DateTime @default(now())
+
+  @@map("contacts")
+}
+
+// ============================================
+// DOMAIN: Stats
+// ============================================
+
+model Stats {
+  id            String   @id @default(cuid())
+  projectsCount Int      @default(0)
+  visitors      Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  @@map("stats")
+}
+
+// ============================================
+// DOMAIN: Config
+// ============================================
+
+model Config {
+  id          String   @id @default(cuid())
+  siteName    String   @db.VarChar(255)
+  description String
+  updatedAt   DateTime @updatedAt
+
+  @@map("config")
+}

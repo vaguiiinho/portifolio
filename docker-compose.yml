@@ -1,8 +1,31 @@
 services:
-  app:
-    container_name: app
-    build: .
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    env_file:
+      - ./.env
     volumes:
-      - .:/app
+      - ./frontend:/app
     ports:
       - "3000:3000"
+  backend:
+    container_name: backend
+    build: ./backend
+    env_file:
+      - ./.env
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3001:3001"
+  database:
+    container_name: database
+    image: postgres:latest
+    env_file:
+      - ./.env
+    volumes:
+      - ./db_data/:/var/lib/postgresql/18/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data:
