@@ -267,6 +267,7 @@ error
 ### Critério de Aceite
 
 * Erros consistentes em toda API
+* Endpoints funcionando via Postman o curl
 
 ---
 
@@ -275,12 +276,12 @@ error
 ### Subtarefas
 
 * Unitários:
-
+  
+  * domain
   * UseCases
-  * Repositories (mock)
 
 * Integração:
-
+  * Repositories ultilizar testcontainer
   * Controllers
 
 ### Meta
