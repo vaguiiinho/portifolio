@@ -2,9 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { X, ExternalLink, Github, CheckCircle2 } from "lucide-react"
+import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
-import { useModalOverflow } from "./use-modal-overflow"
 import type { Project } from "./project-card"
 import { projectModalData } from "@/data/site"
 
@@ -14,33 +14,32 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
-  useModalOverflow(!!project)
-
   return (
     <AnimatePresence>
       {project && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-        >
-          {/* Backdrop */}
+        <RemoveScroll enabled>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-          />
-
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
           >
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onClose}
+              className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            />
+
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl"
+            >
             {/* Close Button */}
             <button
               onClick={onClose}
@@ -112,6 +111,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </div>
           </motion.div>
         </motion.div>
+      </RemoveScroll>
       )}
     </AnimatePresence>
   )

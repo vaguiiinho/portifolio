@@ -1,12 +1,12 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useReducedMotion as useReducedMotionHook } from "framer-motion"
 
 const DIRECTION_OFFSETS = {
   up: { y: 30 },
   down: { y: -30 },
   left: { x: 30 },
-  right: { x: -30 }
+  right: { x: 30 }
 } as const
 
 interface FadeInProps {
@@ -24,13 +24,11 @@ export function FadeIn({
   className,
   useReducedMotion = true
 }: FadeInProps) {
-  // Respeitar preferência de usuário
-  const prefersReducedMotion = useReducedMotion &&
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const prefersReducedMotion = useReducedMotionHook()
+  const shouldReduceMotion = useReducedMotion && prefersReducedMotion
 
-  const initialAnimation = prefersReducedMotion ? {} : { opacity: 0, ...DIRECTION_OFFSETS[direction] }
-  const whileInViewAnimation = prefersReducedMotion ? {} : { opacity: 1, x: 0, y: 0 }
+  const initialAnimation = shouldReduceMotion ? {} : { opacity: 0, ...DIRECTION_OFFSETS[direction] }
+  const whileInViewAnimation = shouldReduceMotion ? {} : { opacity: 1, x: 0, y: 0 }
 
   return (
     <motion.div

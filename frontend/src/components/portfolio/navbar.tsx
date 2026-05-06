@@ -1,29 +1,31 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
+import { useState } from "react"
+import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { Menu, X, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { cn } from "@/lib/utils"
-import { useTheme } from "./use-theme"
+import { useTheme } from "next-themes"
 import { useMobileMenu } from "./use-mobile-menu"
 import { DesktopNav } from "./desktop-nav"
 import { MobileNav } from "./mobile-nav"
 import { siteConfig } from "@/data/site"
 
 export function Navbar() {
-  const { isDark, toggleTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
+  const isDark = resolvedTheme === "dark"
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
   const [isScrolled, setIsScrolled] = useState(false)
+  const { scrollY } = useScroll()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0)
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 0)
+  })
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+  }
 
   return (
     <motion.header

@@ -75,15 +75,17 @@ export const viewport: Viewport = {
   ],
 }
 
+import { ThemeProvider } from "@/components/theme-provider"
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-br" className="dark scroll-smooth bg-background">
-      <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+    <html lang="pt-br" suppressHydrationWarning className="scroll-smooth">
+      <body className={`${inter.variable} font-sans antialiased bg-background`}>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )
