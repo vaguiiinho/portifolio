@@ -15,8 +15,10 @@ services:
       - ./.env
     volumes:
       - ./backend:/app
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "3001:3001"
+    privileged: true
   database:
     container_name: database
     image: postgres:latest

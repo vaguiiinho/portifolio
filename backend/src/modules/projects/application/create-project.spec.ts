@@ -1,0 +1,89 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { CreateProject } from './create-project';
+import { Project } from '../domain/entities/project';
+import { IProjectRepository } from '../domain/repositories/i-project-repository';
+
+describe('CreateProject', () => {
+  let service: CreateProject;
+  let mockRepository: jest.Mocked<IProjectRepository>;
+
+  beforeEach(async () => {
+    const mockRepo = {
+      create: jest.fn(),
+      findAll: jest.fn(),
+      findById: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        CreateProject,
+        {
+          provide: 'IProjectRepository',
+          useValue: mockRepo,
+        },
+      ],
+    }).compile();
+
+    service = module.get<CreateProject>(CreateProject);
+    mockRepository = module.get('IProjectRepository');
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should create a project', async () => {
+    const input = {
+      title: 'Test Project',
+      description: 'A test project',
+      techStack: ['TypeScript', 'NestJS'],
+      githubUrl: 'https://github.com/test',
+      liveUrl: 'https://live.com',
+    };
+
+    const mockProject = new Project(
+      '123',
+      input.title,
+      input.description,
+      input.techStack,
+      input.githubUrl,
+      input.liveUrl,
+      new Date(),
+    );
+
+    mockRepository.create.mockResolvedValue(mockProject);
+
+    const result = await service.execute(input);
+
+    expect(mockRepository.create).toHaveBeenCalled();
+    expect(result).toBe(mockProject);
+    expect(result.title).toBe(input.title);
+  });
+
+  it('should create project with empty urls if not provided', async () => {
+    const input = {
+      title: 'Test Project',
+      description: 'A test project',
+      techStack: ['TypeScript'],
+    };
+
+    const mockProject = new Project(
+      '123',
+      input.title,
+      input.description,
+      input.techStack,
+      '',
+      '',
+      new Date(),
+    );
+
+    mockRepository.create.mockResolvedValue(mockProject);
+
+    const result = await service.execute(input);
+
+    expect(result.githubUrl).toBe('');
+    expect(result.liveUrl).toBe('');
+  });
+});
