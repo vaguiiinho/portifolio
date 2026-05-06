@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { Stats } from '../domain/entities/stats';
 import type { IStatsRepository } from '../domain/repositories/i-stats-repository';
 
@@ -9,7 +9,10 @@ export interface UpdateStatsInput {
 
 @Injectable()
 export class UpdateStats {
-  constructor(private readonly statsRepository: IStatsRepository) {}
+  constructor(
+    @Inject('IStatsRepository')
+    private readonly statsRepository: IStatsRepository,
+  ) {}
 
   async execute(input: UpdateStatsInput): Promise<Stats> {
     const existingStats = await this.statsRepository.find();

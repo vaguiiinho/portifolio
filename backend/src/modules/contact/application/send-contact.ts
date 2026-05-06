@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { Contact } from '../domain/entities/contact';
 import type { IContactRepository } from '../domain/repositories/i-contact-repository';
 
@@ -10,7 +10,10 @@ export interface SendContactInput {
 
 @Injectable()
 export class SendContact {
-  constructor(private readonly contactRepository: IContactRepository) {}
+  constructor(
+    @Inject('IContactRepository')
+    private readonly contactRepository: IContactRepository,
+  ) {}
 
   async execute(input: SendContactInput): Promise<Contact> {
     const id = this.generateId();

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { Project } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
 
@@ -12,7 +12,10 @@ export interface CreateProjectInput {
 
 @Injectable()
 export class CreateProject {
-  constructor(private readonly projectRepository: IProjectRepository) {}
+  constructor(
+    @Inject('IProjectRepository')
+    private readonly projectRepository: IProjectRepository,
+  ) {}
 
   async execute(input: CreateProjectInput): Promise<Project> {
     const id = this.generateId();
