@@ -1,0 +1,91 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { Response } from 'express';
+import { GlobalExceptionFilter } from './global-exception.filter';
+
+describe('GlobalExceptionFilter', () => {
+  let filter: GlobalExceptionFilter;
+  let mockResponse: Partial<Response>;
+  let mockRequest: Partial<Request>;
+  let mockHost: Partial<ArgumentsHost>;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [GlobalExceptionFilter],
+    }).compile();
+
+    filter = module.get<GlobalExceptionFilter>(GlobalExceptionFilter);
+
+    mockResponse = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    mockRequest = {};
+
+    mockHost = {
+      switchToHttp: jest.fn().mockReturnValue({
+        getResponse: jest.fn().mockReturnValue(mockResponse),
+        getRequest: jest.fn().mockReturnValue(mockRequest),
+      }),
+    };
+  });
+
+  it('should handle HttpException correctly', () => {
+    const exception = new HttpException(
+      { message: 'Test error', error: 'Bad Request' },
+      HttpStatus.BAD_REQUEST,
+    );
+
+    filter.catch(exception, mockHost as ArgumentsHost);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: 'Test error',
+      error: 'Bad Request',
+    });
+  });
+
+  it('should handle HttpException with object response', () => {
+    const exception = new HttpException(
+      { message: 'Custom message', error: 'Custom Error' },
+      HttpStatus.UNAUTHORIZED,
+    );
+
+    filter.catch(exception, mockHost as ArgumentsHost);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.UNAUTHORIZED);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.UNAUTHORIZED,
+      message: 'Custom message',
+      error: 'Custom Error',
+    });
+  });
+
+  it('should handle generic Error', () => {
+    const exception = new Error('Generic error message');
+
+    filter.catch(exception, mockHost as ArgumentsHost);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: 500,
+      message: 'Generic error message',
+      error: 'Internal Server Error',
+    });
+  });
+
+  it('should handle unknown exception', () => {
+    const exception = 'Unknown error';
+
+    filter.catch(exception, mockHost as ArgumentsHost);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: 500,
+      message: 'Internal server error',
+      error: 'Internal Server Error',
+    });
+  });
+});
