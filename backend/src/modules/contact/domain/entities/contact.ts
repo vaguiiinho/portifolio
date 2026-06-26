@@ -50,4 +50,14 @@ export class Contact {
   updateMessage(message: string): void {
     this._message = message;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email,
+      message: this.message,
+      createdAt: this.createdAt,
+    };
+  }
 }

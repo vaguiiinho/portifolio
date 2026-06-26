@@ -72,4 +72,16 @@ export class Project {
   updateLiveUrl(liveUrl: string): void {
     this._liveUrl = liveUrl;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      title: this.title,
+      description: this.description,
+      techStack: this.techStack,
+      githubUrl: this.githubUrl,
+      liveUrl: this.liveUrl,
+      createdAt: this.createdAt,
+    };
+  }
 }

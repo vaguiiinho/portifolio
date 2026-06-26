@@ -321,6 +321,39 @@ error
 
 ---
 
+## 🔹 Tarefa 11: CRUD de Projetos no Frontend e Backend
+
+### Subtarefas
+
+* Criar fluxo de cadastro de projeto
+* Criar fluxo de edição de projeto
+* Reaproveitar os endpoints do backend para salvar alterações
+* Adicionar ações de criar e editar na interface de projetos
+* Validar título, descrição, tecnologias e URLs
+
+### Critério de Aceite
+
+* Projetos podem ser criados e editados pela interface
+* Backend persiste as alterações corretamente
+* Lista de projetos atualiza após salvar
+
+---
+
+## 🔹 Tarefa 12: Vídeos de Apresentação dos Projetos
+
+### Subtarefas
+
+* Adicionar suporte a vídeo de apresentação por projeto
+* Exibir vídeo na visualização de detalhes do projeto
+* Permitir configurar URL ou arquivo de vídeo no cadastro/edição
+
+### Critério de Aceite
+
+* Cada projeto pode exibir um vídeo de demonstração
+* Vídeos ficam acessíveis na tela de detalhes do projeto
+
+---
+
 # 📈 Melhorias Futuras (NÃO IMPLEMENTAR AGORA)
 
 * Autenticação JWT (admin)

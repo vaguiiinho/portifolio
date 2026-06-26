@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from "react"
 import { motion } from "framer-motion"
-import { ExternalLink, Github } from "lucide-react"
+import { ExternalLink, Github, PencilLine } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import { cn } from "@/lib/utils"
@@ -22,9 +22,12 @@ interface ProjectCardProps {
   project: Project
   index: number
   onClick?: () => void
+  onEdit?: () => void
 }
 
-export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
+export function ProjectCard({ project, index, onClick, onEdit }: ProjectCardProps) {
+  const initial = project.title?.charAt(0) || "P"
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 30 }}
@@ -52,12 +55,26 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
               className="w-full h-full bg-gradient-to-br from-secondary to-muted flex items-center justify-center"
             >
               <div className="text-6xl font-bold text-muted-foreground/20">
-                {project.title.charAt(0)}
+                {initial}
               </div>
             </div>
             
             {/* Overlay on Hover */}
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+              {onEdit && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="rounded-full"
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation()
+                    onEdit()
+                  }}
+                >
+                  <PencilLine className="mr-2 h-4 w-4" />
+                  Edit
+                </Button>
+              )}
               {project.liveUrl && (
                 <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <ExternalLink className="mr-2 h-4 w-4" />

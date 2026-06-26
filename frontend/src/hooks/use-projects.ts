@@ -22,35 +22,34 @@ export function useProjects() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    let cancelled = false
+  const loadProjects = async (cancelledRef?: { current: boolean }) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const data = await fetchProjects()
 
-    async function loadProjects() {
-      try {
-        setIsLoading(true)
-        setError(null)
-        const data = await fetchProjects()
-
-        if (!cancelled) {
-          setProjects(data.map(mapProject))
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load projects")
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false)
-        }
+      if (!cancelledRef?.current) {
+        setProjects(data.map(mapProject))
+      }
+    } catch (err) {
+      if (!cancelledRef?.current) {
+        setError(err instanceof Error ? err.message : "Failed to load projects")
+      }
+    } finally {
+      if (!cancelledRef?.current) {
+        setIsLoading(false)
       }
     }
+  }
 
-    loadProjects()
+  useEffect(() => {
+    const cancelledRef = { current: false }
+    loadProjects(cancelledRef)
 
     return () => {
-      cancelled = true
+      cancelledRef.current = true
     }
   }, [])
 
-  return { projects, isLoading, error }
+  return { projects, isLoading, error, reloadProjects: loadProjects }
 }

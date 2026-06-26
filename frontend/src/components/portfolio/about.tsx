@@ -4,7 +4,11 @@ import { Avatar } from "./avatar"
 import { TechStack } from "./tech-stack"
 import { aboutData } from "@/data/site"
 
-export function About() {
+interface AboutProps {
+  siteName: string
+}
+
+export function About({ siteName }: AboutProps) {
   return (
     <section id="about" className="py-24 sm:py-32 bg-secondary/30">
       <Container>
@@ -20,7 +24,7 @@ export function About() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Avatar / Image */}
           <FadeIn className="relative">
-            <Avatar />
+            <Avatar siteName={siteName} />
           </FadeIn>
 
           {/* Bio */}

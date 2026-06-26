@@ -41,4 +41,13 @@ export class Config {
     this._description = description;
     this._updatedAt = new Date();
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      siteName: this.siteName,
+      description: this.description,
+      updatedAt: this.updatedAt,
+    };
+  }
 }

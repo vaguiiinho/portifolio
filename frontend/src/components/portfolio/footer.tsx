@@ -1,15 +1,19 @@
 import { Container } from "./container"
 import { socialLinks } from "@/data/navigation"
-import { footerData, siteConfig } from "@/data/site"
+import { footerData } from "@/data/site"
 
-export function Footer() {
+interface FooterProps {
+  siteName: string
+}
+
+export function Footer({ siteName }: FooterProps) {
   return (
     <footer className="py-8 border-t border-border">
       <Container>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           {/* Copyright */}
           <div className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} {siteConfig.name}. {footerData.copyrightText}
+            &copy; {new Date().getFullYear()} {siteName}. {footerData.copyrightText}
           </div>
 
           {/* Social Links */}

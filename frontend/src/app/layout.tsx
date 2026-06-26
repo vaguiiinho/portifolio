@@ -1,66 +1,72 @@
 import type { Metadata, Viewport } from 'next'
-import { siteConfig } from '@/data/site'
+import { ThemeProvider } from "@/components/theme-provider"
 import './globals.css'
+import { fetchSiteConfig, siteDefaults } from '@/lib/site-config'
 
-const defaultMetadata: Metadata = {
-  metadataBase: new URL(`https://${siteConfig.domain}`),
-  title: siteConfig.title,
-  description: siteConfig.description,
-  generator: 'Next.js',
-  keywords: ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'Web Development'],
-  authors: [{ name: siteConfig.name }],
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    url: `https://${siteConfig.domain}`,
-    siteName: siteConfig.title,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [
-      {
-        url: `https://${siteConfig.domain}/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.title,
-      }
-    ]
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [`https://${siteConfig.domain}/og-image.png`],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    'max-image-preview': 'large',
-    'max-snippet': -1,
-    'max-video-preview': -1,
-  },
-  alternates: {
-    canonical: `https://${siteConfig.domain}`,
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await fetchSiteConfig()
+  const siteName = config.siteName || siteDefaults.siteName
+  const description = config.description || siteDefaults.description
+  const title = `${siteName} | Full Stack Developer`
+
+  return {
+    metadataBase: new URL(`https://${siteDefaults.domain}`),
+    title,
+    description,
+    generator: 'Next.js',
+    keywords: ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'Web Development'],
+    authors: [{ name: siteName }],
+    icons: {
+      icon: [
+        {
+          url: '/icon-light-32x32.png',
+          media: '(prefers-color-scheme: light)',
+        },
+        {
+          url: '/icon-dark-32x32.png',
+          media: '(prefers-color-scheme: dark)',
+        },
+        {
+          url: '/icon.svg',
+          type: 'image/svg+xml',
+        },
+      ],
+      apple: '/apple-icon.png',
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'pt_BR',
+      url: `https://${siteDefaults.domain}`,
+      siteName: title,
+      title,
+      description,
+      images: [
+        {
+          url: `https://${siteDefaults.domain}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`https://${siteDefaults.domain}/og-image.png`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+    alternates: {
+      canonical: `https://${siteDefaults.domain}`,
+    },
   }
 }
-
-export const metadata: Metadata = defaultMetadata
 
 export const viewport: Viewport = {
   themeColor: [
@@ -68,8 +74,6 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: dark)', color: '#0a0a0f' },
   ],
 }
-
-import { ThemeProvider } from "@/components/theme-provider"
 
 export default function RootLayout({
   children,

@@ -10,9 +10,12 @@ import { useTheme } from "next-themes"
 import { useMobileMenu } from "./use-mobile-menu"
 import { DesktopNav } from "./desktop-nav"
 import { MobileNav } from "./mobile-nav"
-import { siteConfig } from "@/data/site"
 
-export function Navbar() {
+interface NavbarProps {
+  siteName: string
+}
+
+export function Navbar({ siteName }: NavbarProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const isDark = resolvedTheme === "dark"
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
@@ -43,7 +46,7 @@ export function Navbar() {
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="#home" className="text-xl font-bold tracking-tight">
-            {siteConfig.name}
+            {siteName}
           </a>
 
           <DesktopNav />

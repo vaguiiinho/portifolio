@@ -4,7 +4,11 @@ import { Avatar } from "./avatar"
 import { BackgroundEffects } from "./background-effects"
 import { HeroContent } from "./hero-content"
 
-export function Hero() {
+interface HeroProps {
+  siteName: string
+}
+
+export function Hero({ siteName }: HeroProps) {
   return (
     <section id="home" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
       <BackgroundEffects />
@@ -15,7 +19,7 @@ export function Hero() {
 
           {/* Avatar */}
           <FadeIn direction="right" delay={0.2} className="relative hidden lg:block">
-            <Avatar />
+            <Avatar siteName={siteName} />
           </FadeIn>
         </div>
       </Container>

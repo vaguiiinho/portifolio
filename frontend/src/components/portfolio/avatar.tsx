@@ -1,6 +1,10 @@
-import { siteConfig } from "@/data/site"
+interface AvatarProps {
+  siteName: string
+}
 
-export function Avatar() {
+export function Avatar({ siteName }: AvatarProps) {
+  const initial = siteName?.charAt(0) || "J"
+
   return (
     <div className="relative aspect-square max-w-md mx-auto">
       {/* Glow Effect */}
@@ -9,7 +13,7 @@ export function Avatar() {
       {/* Avatar Placeholder */}
       <div className="relative aspect-square bg-gradient-to-br from-secondary to-muted rounded-2xl overflow-hidden border border-border flex items-center justify-center">
         <div className="text-9xl font-bold text-muted-foreground/20">
-          {siteConfig.name.charAt(0)}
+          {initial}
         </div>
 
         {/* Decorative Elements */}

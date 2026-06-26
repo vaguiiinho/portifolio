@@ -9,6 +9,14 @@ export interface ApiProject {
   updatedAt: string
 }
 
+export interface ProjectPayload {
+  title: string
+  description: string
+  techStack: string[]
+  githubUrl?: string
+  liveUrl?: string
+}
+
 export interface ApiStats {
   id: string
   projectsCount: number
@@ -54,6 +62,20 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export async function fetchProjects() {
   return request<ApiProject[]>('/projects')
+}
+
+export async function createProject(payload: ProjectPayload) {
+  return request<ApiProject>('/projects', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function updateProject(id: string, payload: ProjectPayload) {
+  return request<ApiProject>(`/projects/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
 }
 
 export async function fetchStats() {

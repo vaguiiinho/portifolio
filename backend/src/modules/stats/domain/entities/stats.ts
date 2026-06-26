@@ -58,4 +58,13 @@ export class Stats {
     this._visitors = count;
     this._updatedAt = new Date();
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      projectsCount: this.projectsCount,
+      visitors: this.visitors,
+      updatedAt: this.updatedAt,
+    };
+  }
 }

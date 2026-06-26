@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, ExternalLink, Github, CheckCircle2 } from "lucide-react"
+import { X, ExternalLink, Github, CheckCircle2, PencilLine } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
@@ -11,9 +11,12 @@ import { projectModalData } from "@/data/site"
 interface ProjectModalProps {
   project: Project | null
   onClose: () => void
+  onEdit?: () => void
 }
 
-export function ProjectModal({ project, onClose }: ProjectModalProps) {
+export function ProjectModal({ project, onClose, onEdit }: ProjectModalProps) {
+  const initial = project?.title?.charAt(0) || "P"
+
   return (
     <AnimatePresence>
       {project && (
@@ -40,76 +43,82 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-card border border-border rounded-2xl shadow-2xl"
             >
-            {/* Close Button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-secondary/80 hover:bg-secondary transition-colors"
-              aria-label="Close modal"
-            >
-              <X className="h-5 w-5" />
-            </button>
+              {/* Close Button */}
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-secondary/80 hover:bg-secondary transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="h-5 w-5" />
+              </button>
 
-            {/* Banner */}
-            <div className="relative aspect-video bg-gradient-to-br from-accent/20 to-secondary flex items-center justify-center">
-              <div className="text-8xl font-bold text-muted-foreground/20">
-                {project.title.charAt(0)}
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-8 space-y-8">
-              {/* Header */}
-              <div>
-                <h2 className="text-2xl font-bold">{project.title}</h2>
-                <p className="mt-2 text-muted-foreground text-pretty leading-relaxed">
-                  {project.description}
-                </p>
-              </div>
-
-              {/* Problem / Solution / Result */}
-              <div className="grid gap-6 sm:grid-cols-3">
-                {projectModalData.sections.map((item) => (
-                  <div key={item.title} className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-accent" />
-                      <h3 className="font-semibold">{item.title}</h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground text-pretty">
-                      {item.description}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Tech Stack */}
-              <div>
-                <h3 className="font-semibold mb-3">{projectModalData.technologiesTitle}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack.map((tech) => (
-                    <Badge key={tech} variant="glow">
-                      {tech}
-                    </Badge>
-                  ))}
+              {/* Banner */}
+              <div className="relative aspect-video bg-gradient-to-br from-accent/20 to-secondary flex items-center justify-center">
+                <div className="text-8xl font-bold text-muted-foreground/20">
+                  {initial}
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex flex-wrap gap-3 pt-4 border-t border-border">
-                {project.liveUrl && (
-                  <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="rounded-full">
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    {projectModalData.viewLiveDemoText}
-                  </Button>
-                )}
-                {project.githubUrl && (
-                  <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" className="rounded-full">
-                    <Github className="mr-2 h-4 w-4" />
-                    {projectModalData.viewSourceCodeText}
-                  </Button>
-                )}
+              {/* Content */}
+              <div className="p-8 space-y-8">
+                {/* Header */}
+                <div>
+                  <h2 className="text-2xl font-bold">{project.title}</h2>
+                  <p className="mt-2 text-muted-foreground text-pretty leading-relaxed">
+                    {project.description}
+                  </p>
+                </div>
+
+                {/* Problem / Solution / Result */}
+                <div className="grid gap-6 sm:grid-cols-3">
+                  {projectModalData.sections.map((item) => (
+                    <div key={item.title} className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-accent" />
+                        <h3 className="font-semibold">{item.title}</h3>
+                      </div>
+                      <p className="text-sm text-muted-foreground text-pretty">
+                        {item.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Tech Stack */}
+                <div>
+                  <h3 className="font-semibold mb-3">{projectModalData.technologiesTitle}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.map((tech) => (
+                      <Badge key={tech} variant="glow">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-wrap gap-3 pt-4 border-t border-border">
+                  {onEdit && (
+                    <Button variant="outline" className="rounded-full" onClick={onEdit}>
+                      <PencilLine className="mr-2 h-4 w-4" />
+                      Edit Project
+                    </Button>
+                  )}
+                  {project.liveUrl && (
+                    <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="rounded-full">
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      {projectModalData.viewLiveDemoText}
+                    </Button>
+                  )}
+                  {project.githubUrl && (
+                    <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" className="rounded-full">
+                      <Github className="mr-2 h-4 w-4" />
+                      {projectModalData.viewSourceCodeText}
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
         </motion.div>
       </RemoveScroll>
       )}
