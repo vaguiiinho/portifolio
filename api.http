@@ -1,0 +1,58 @@
+@baseUrl = http://localhost:3001
+@projectId = 1782502896650
+
+### Health check
+GET {{baseUrl}}/
+
+### List projects
+GET {{baseUrl}}/projects
+
+### Get project by id
+GET {{baseUrl}}/projects/{{projectId}}
+
+### Create project
+POST {{baseUrl}}/projects
+Content-Type: application/json
+
+{
+  "title": "Portfolio Website",
+  "description": "Personal portfolio built with Next.js and NestJS.",
+  "techStack": ["Next.js", "NestJS", "Prisma", "PostgreSQL"],
+  "githubUrl": "https://github.com/username/portfolio",
+  "liveUrl": "https://portfolio.example.com"
+}
+
+### Update project
+PUT {{baseUrl}}/projects/{{projectId}}
+Content-Type: application/json
+
+{
+  "title": "Updated Portfolio Website",
+  "description": "Updated description for the portfolio project.",
+  "techStack": ["Next.js", "NestJS", "Prisma"]
+}
+
+### Delete project
+DELETE {{baseUrl}}/projects/{{projectId}}
+
+### Send contact message
+POST {{baseUrl}}/contact
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "message": "Hello, I would like to discuss a new project."
+}
+
+### Get stats
+GET {{baseUrl}}/stats
+
+### Update stats
+PUT {{baseUrl}}/stats
+Content-Type: application/json
+
+{
+  "projectsCount": 8,
+  "visitors": 1200
+}
