@@ -6,8 +6,7 @@ import { GlobalExceptionFilter } from './shared/infrastructure';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
-  // Enable global validation pipe
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -16,9 +15,8 @@ async function bootstrap() {
     }),
   );
 
-  // Enable global exception filter
   app.useGlobalFilters(new GlobalExceptionFilter());
-  
+
   await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();

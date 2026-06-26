@@ -25,7 +25,6 @@ export class Project {
     this._createdAt = createdAt;
   }
 
-  // Getters
   get id(): string {
     return this._id;
   }
@@ -54,7 +53,6 @@ export class Project {
     return this._createdAt;
   }
 
-  // Methods
   updateTitle(title: string): void {
     this._title = title;
   }

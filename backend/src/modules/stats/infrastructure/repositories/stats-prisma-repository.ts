@@ -11,7 +11,6 @@ export class StatsPrismaRepository implements IStatsRepository {
   async find(): Promise<Stats> {
     let prismaStats = await this.prisma.stats.findFirst();
 
-    // If no stats exist, create default ones
     if (!prismaStats) {
       prismaStats = await this.prisma.stats.create({
         data: {

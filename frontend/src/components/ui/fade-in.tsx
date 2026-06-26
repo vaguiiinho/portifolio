@@ -36,7 +36,7 @@ export function FadeIn({
       whileInView={whileInViewAnimation}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
-      layout={false} // ← Previne reflows
+      layout={false}
       className={className}
     >
       {children}

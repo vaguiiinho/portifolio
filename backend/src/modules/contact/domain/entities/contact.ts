@@ -19,7 +19,6 @@ export class Contact {
     this._createdAt = createdAt;
   }
 
-  // Getters
   get id(): string {
     return this._id;
   }
@@ -40,7 +39,6 @@ export class Contact {
     return this._createdAt;
   }
 
-  // Methods
   updateName(name: string): void {
     this._name = name;
   }

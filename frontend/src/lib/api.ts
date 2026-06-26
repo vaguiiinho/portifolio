@@ -40,9 +40,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     try {
       const body = await response.json()
       message = body?.message || body?.error || fallbackMessage
-    } catch {
-      // Ignore JSON parsing errors for non-JSON responses.
-    }
+    } catch {}
 
     throw new Error(message)
   }

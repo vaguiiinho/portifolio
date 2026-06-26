@@ -16,7 +16,7 @@ export function Badge({ variant = "default", className, ...props }: BadgeProps) 
     <span
       className={cn(
         "inline-flex items-center px-2 py-1 text-xs font-medium rounded-full transition-colors",
-        BADGE_VARIANTS[variant], // ← Type-safe
+        BADGE_VARIANTS[variant],
         className
       )}
       {...props}

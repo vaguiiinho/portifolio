@@ -16,7 +16,6 @@ export class Stats {
     this._updatedAt = updatedAt;
   }
 
-  // Getters
   get id(): string {
     return this._id;
   }
@@ -33,7 +32,6 @@ export class Stats {
     return this._updatedAt;
   }
 
-  // Methods
   incrementProjectsCount(): void {
     this._projectsCount += 1;
     this._updatedAt = new Date();

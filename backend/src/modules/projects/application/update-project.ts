@@ -31,7 +31,7 @@ export class UpdateProject {
       input.techStack ?? existingProject.techStack,
       input.githubUrl ?? existingProject.githubUrl,
       input.liveUrl ?? existingProject.liveUrl,
-      existingProject.createdAt, // Keep original createdAt
+      existingProject.createdAt,
     );
 
     return this.projectRepository.update(updatedProject);

@@ -21,7 +21,7 @@ export class UpdateStats {
       existingStats.id,
       input.projectsCount ?? existingStats.projectsCount,
       input.visitors ?? existingStats.visitors,
-      new Date(), // updatedAt
+      new Date(),
     );
 
     return this.statsRepository.update(updatedStats);

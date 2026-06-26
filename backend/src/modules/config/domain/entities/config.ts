@@ -16,7 +16,6 @@ export class Config {
     this._updatedAt = updatedAt;
   }
 
-  // Getters
   get id(): string {
     return this._id;
   }
@@ -33,7 +32,6 @@ export class Config {
     return this._updatedAt;
   }
 
-  // Methods
   updateSiteName(siteName: string): void {
     this._siteName = siteName;
     this._updatedAt = new Date();

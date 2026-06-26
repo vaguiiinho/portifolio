@@ -31,7 +31,6 @@ export class SendContact {
   }
 
   private generateId(): string {
-    // Simple ID generation
     return Date.now().toString();
   }
 }

@@ -35,7 +35,6 @@ export class CreateProject {
   }
 
   private generateId(): string {
-    // Simple ID generation, in real app use UUID or CUID
     return Date.now().toString();
   }
 }

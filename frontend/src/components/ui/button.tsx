@@ -37,9 +37,9 @@ type ButtonAsButtonProps = ButtonBaseProps &
 
 type ButtonAsAnchorProps = ButtonBaseProps &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-    as: 'a'
-    href: string
-    isExternal?: boolean // Para links externos
+  as: 'a'
+  href: string
+    isExternal?: boolean
   }
 
 type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps
