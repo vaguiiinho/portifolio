@@ -1,12 +1,6 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
 import { siteConfig } from '@/data/site'
 import './globals.css'
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter"
-})
 
 const defaultMetadata: Metadata = {
   metadataBase: new URL(`https://${siteConfig.domain}`),
@@ -84,7 +78,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning className="scroll-smooth">
-      <body className={`${inter.variable} font-sans antialiased bg-background`}>
+      <body className="font-sans antialiased bg-background">
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

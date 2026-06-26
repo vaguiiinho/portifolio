@@ -1,10 +1,14 @@
-import { ArrowRight } from "lucide-react"
+"use client"
+
+import { ArrowRight, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/ui/fade-in"
-import { stats } from "@/data/stats"
 import { heroData } from "@/data/site"
+import { useStats } from "@/hooks/use-stats"
 
 export function HeroContent() {
+  const { stats, isLoading } = useStats()
+
   return (
     <FadeIn direction="left" className="space-y-8">
       <div className="space-y-4">
@@ -41,12 +45,19 @@ export function HeroContent() {
 
       {/* Stats */}
       <div className="flex gap-8 pt-4">
-        {stats.map((stat, i) => (
-          <FadeIn key={stat.label} direction="up" delay={0.4 + i * 0.1}>
-            <div className="text-2xl sm:text-3xl font-bold">{stat.value}</div>
-            <div className="text-sm text-muted-foreground">{stat.label}</div>
-          </FadeIn>
-        ))}
+        {isLoading ? (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Loading stats...
+          </div>
+        ) : (
+          stats.map((stat, i) => (
+            <FadeIn key={stat.label} direction="up" delay={0.4 + i * 0.1}>
+              <div className="text-2xl sm:text-3xl font-bold">{stat.value}</div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            </FadeIn>
+          ))
+        )}
       </div>
     </FadeIn>
   )

@@ -1,23 +1,32 @@
 "use client"
 
 import { useState } from "react"
-import { Send } from "lucide-react"
+import { AlertCircle, CheckCircle2, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/ui/fade-in"
 import { FormField } from "@/components/ui/form-field"
 import { contactData } from "@/data/site"
+import { useContact } from "@/hooks/use-contact"
 
 export function ContactForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [statusMessage, setStatusMessage] = useState<string | null>(null)
+  const { submitContact, isSubmitting, error, success } = useContact()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsSubmitting(false)
-    // Reset form
-    ;(e.target as HTMLFormElement).reset()
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    const subject = String(formData.get("subject") ?? "").trim()
+    const message = String(formData.get("message") ?? "").trim()
+
+    await submitContact({
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      message: subject ? `Subject: ${subject}\n\n${message}` : message,
+    })
+
+    setStatusMessage("Message sent. I will get back to you soon.")
+    form.reset()
   }
 
   return (
@@ -76,6 +85,21 @@ export function ContactForm() {
             </>
           )}
         </Button>
+
+        {(statusMessage || success || error) && (
+          <div
+            className={`flex items-start gap-2 rounded-xl border p-4 text-sm ${
+              error ? "border-red-500/30 bg-red-500/10 text-red-200" : "border-emerald-500/30 bg-emerald-500/10 text-emerald-200"
+            }`}
+          >
+            {error ? (
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+            ) : (
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+            )}
+            <span>{error || success || statusMessage}</span>
+          </div>
+        )}
       </form>
     </FadeIn>
   )
