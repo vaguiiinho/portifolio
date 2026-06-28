@@ -24,6 +24,7 @@ type RawProject = {
   solutionDescription: string | null;
   resultTitle: string | null;
   resultDescription: string | null;
+  featured: boolean;
   createdAt: Date;
 };
 
@@ -33,7 +34,8 @@ export class ProjectPrismaRepository implements IProjectRepository {
 
   async findAll(): Promise<Project[]> {
     const hasExtendedColumns = await this.hasExtendedColumns();
-    const prismaProjects = hasExtendedColumns
+    const hasFeaturedColumn = hasExtendedColumns && (await this.hasFeaturedColumn());
+    const prismaProjects = hasFeaturedColumn
       ? await this.prisma.$queryRaw<RawProject[]>(
           Prisma.sql`
             SELECT
@@ -50,9 +52,10 @@ export class ProjectPrismaRepository implements IProjectRepository {
               "solutionDescription",
               "resultTitle",
               "resultDescription",
+              "featured",
               "createdAt"
             FROM "projects"
-            ORDER BY "createdAt" DESC
+            ORDER BY "featured" DESC, "createdAt" DESC
           `,
         )
       : await this.prisma.$queryRaw<RawProject[]>(
@@ -71,6 +74,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               NULL AS "solutionDescription",
               NULL AS "resultTitle",
               NULL AS "resultDescription",
+              FALSE AS "featured",
               "createdAt"
             FROM "projects"
             ORDER BY "createdAt" DESC
@@ -81,7 +85,8 @@ export class ProjectPrismaRepository implements IProjectRepository {
 
   async findById(id: string): Promise<Project | null> {
     const hasExtendedColumns = await this.hasExtendedColumns();
-    const prismaProjects = hasExtendedColumns
+    const hasFeaturedColumn = hasExtendedColumns && (await this.hasFeaturedColumn());
+    const prismaProjects = hasFeaturedColumn
       ? await this.prisma.$queryRaw<RawProject[]>(
           Prisma.sql`
             SELECT
@@ -98,6 +103,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               "solutionDescription",
               "resultTitle",
               "resultDescription",
+              "featured",
               "createdAt"
             FROM "projects"
             WHERE id = ${id}
@@ -120,6 +126,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               NULL AS "solutionDescription",
               NULL AS "resultTitle",
               NULL AS "resultDescription",
+              FALSE AS "featured",
               "createdAt"
             FROM "projects"
             WHERE id = ${id}
@@ -131,8 +138,9 @@ export class ProjectPrismaRepository implements IProjectRepository {
 
   async create(project: Project): Promise<Project> {
     const hasExtendedColumns = await this.hasExtendedColumns();
+    const hasFeaturedColumn = hasExtendedColumns && (await this.hasFeaturedColumn());
     const videoUrl = await this.persistVideoReference(project.videoUrl);
-    const prismaProjects = hasExtendedColumns
+    const prismaProjects = hasFeaturedColumn
       ? await this.prisma.$queryRaw<RawProject[]>(
           Prisma.sql`
             INSERT INTO "projects" (
@@ -143,6 +151,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               "githubUrl",
               "liveUrl",
               "videoUrl",
+              "featured",
               "createdAt",
               "updatedAt"
             ) VALUES (
@@ -153,6 +162,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               ${project.githubUrl || null},
               ${project.liveUrl || null},
               ${videoUrl || null},
+              ${project.featured},
               ${project.createdAt},
               ${new Date()}
             )
@@ -170,6 +180,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               "solutionDescription",
               "resultTitle",
               "resultDescription",
+              "featured",
               "createdAt"
           `,
         )
@@ -208,6 +219,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               NULL AS "solutionDescription",
               NULL AS "resultTitle",
               NULL AS "resultDescription",
+              FALSE AS "featured",
               "createdAt"
           `,
         );
@@ -216,8 +228,9 @@ export class ProjectPrismaRepository implements IProjectRepository {
 
   async update(project: Project): Promise<Project> {
     const hasExtendedColumns = await this.hasExtendedColumns();
+    const hasFeaturedColumn = hasExtendedColumns && (await this.hasFeaturedColumn());
     const videoUrl = await this.persistVideoReference(project.videoUrl);
-    const prismaProjects = hasExtendedColumns
+    const prismaProjects = hasFeaturedColumn
       ? await this.prisma.$queryRaw<RawProject[]>(
           Prisma.sql`
             UPDATE "projects"
@@ -228,6 +241,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               "githubUrl" = ${project.githubUrl || null},
               "liveUrl" = ${project.liveUrl || null},
               "videoUrl" = ${videoUrl || null},
+              "featured" = ${project.featured},
               "problemTitle" = ${project.problemTitle || null},
               "problemDescription" = ${project.problemDescription || null},
               "solutionTitle" = ${project.solutionTitle || null},
@@ -250,6 +264,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               "solutionDescription",
               "resultTitle",
               "resultDescription",
+              "featured",
               "createdAt"
           `,
         )
@@ -278,6 +293,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
               NULL AS "solutionDescription",
               NULL AS "resultTitle",
               NULL AS "resultDescription",
+              FALSE AS "featured",
               "createdAt"
           `,
         );
@@ -300,6 +316,7 @@ export class ProjectPrismaRepository implements IProjectRepository {
       project.githubUrl || '',
       project.liveUrl || '',
       project.createdAt,
+      project.featured ?? false,
       project.videoUrl ?? undefined,
       project.problemTitle ?? undefined,
       project.problemDescription ?? undefined,
@@ -318,6 +335,21 @@ export class ProjectPrismaRepository implements IProjectRepository {
           FROM information_schema.columns
           WHERE table_name = 'projects'
             AND column_name = 'problemTitle'
+        ) AS "exists"
+      `,
+    );
+
+    return result[0]?.exists ?? false;
+  }
+
+  private async hasFeaturedColumn(): Promise<boolean> {
+    const result = await this.prisma.$queryRaw<Array<{ exists: boolean }>>(
+      Prisma.sql`
+        SELECT EXISTS (
+          SELECT 1
+          FROM information_schema.columns
+          WHERE table_name = 'projects'
+            AND column_name = 'featured'
         ) AS "exists"
       `,
     );

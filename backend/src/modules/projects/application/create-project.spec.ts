@@ -41,6 +41,7 @@ describe('CreateProject', () => {
       techStack: ['TypeScript', 'NestJS'],
       githubUrl: 'https://github.com/test',
       liveUrl: 'https://live.com',
+      featured: true,
     };
 
     const mockProject = new Project(
@@ -51,6 +52,7 @@ describe('CreateProject', () => {
       input.githubUrl,
       input.liveUrl,
       new Date(),
+      true,
     );
 
     mockRepository.create.mockResolvedValue(mockProject);
@@ -60,6 +62,7 @@ describe('CreateProject', () => {
     expect(mockRepository.create).toHaveBeenCalled();
     expect(result).toBe(mockProject);
     expect(result.title).toBe(input.title);
+    expect(result.featured).toBe(true);
   });
 
   it('should create project with empty urls if not provided', async () => {

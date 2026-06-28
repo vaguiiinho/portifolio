@@ -17,6 +17,6 @@ export function mapApiProjectToPortfolioProject(project: ApiProject): Project {
     solutionDescription: project.solutionDescription ?? undefined,
     resultTitle: project.resultTitle ?? undefined,
     resultDescription: project.resultDescription ?? undefined,
-    featured: false,
+    featured: project.featured ?? false,
   }
 }

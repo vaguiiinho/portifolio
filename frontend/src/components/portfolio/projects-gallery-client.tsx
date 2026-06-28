@@ -16,10 +16,17 @@ interface ProjectsGalleryClientProps {
   projects: Project[]
   error?: string | null
   allowCreate?: boolean
+  showProjectDetails?: boolean
   locale: Locale
 }
 
-export function ProjectsGalleryClient({ projects, error, allowCreate = false, locale }: ProjectsGalleryClientProps) {
+export function ProjectsGalleryClient({
+  projects,
+  error,
+  allowCreate = false,
+  showProjectDetails = false,
+  locale,
+}: ProjectsGalleryClientProps) {
   const router = useRouter()
   const { user, isAuthenticated, isLoading } = useAuth()
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -95,28 +102,43 @@ export function ProjectsGalleryClient({ projects, error, allowCreate = false, lo
               project={project}
               index={index}
               locale={locale}
-              onClick={() => {
-                trackStatsEvent(`project:view:${project.id}`)
-                setSelectedProject(project)
-              }}
+              onClick={
+                showProjectDetails
+                  ? () => {
+                      trackStatsEvent(`project:view:${project.id}`)
+                      setSelectedProject(project)
+                    }
+                  : undefined
+              }
+              onDetailsClick={
+                showProjectDetails
+                  ? () => {
+                      setActionError(null)
+                      setSelectedProject(project)
+                    }
+                  : undefined
+              }
+              showDetailsAction={showProjectDetails && canManageProjects}
             />
           ))}
         </div>
       )}
 
-      <ProjectModal
-        project={selectedProject}
-        locale={locale}
-        onClose={() => setSelectedProject(null)}
-        canManage={canManageProjects}
-        onEdit={(project) => {
-          setActionError(null)
-          setSelectedProject(null)
-          setIsCreateOpen(false)
-          setEditingProject(project)
-        }}
-        onDelete={(project) => void handleDelete(project)}
-      />
+      {showProjectDetails && (
+        <ProjectModal
+          project={selectedProject}
+          locale={locale}
+          onClose={() => setSelectedProject(null)}
+          canManage={canManageProjects}
+          onEdit={(project) => {
+            setActionError(null)
+            setSelectedProject(null)
+            setIsCreateOpen(false)
+            setEditingProject(project)
+          }}
+          onDelete={(project) => void handleDelete(project)}
+        />
+      )}
       <ProjectFormModal
         key={editingProject?.id ?? (isCreateOpen ? "create" : "closed")}
         open={isCreateOpen || Boolean(editingProject)}

@@ -58,7 +58,7 @@ export default async function AboutPage() {
           </div>
         }
       />
-      <About siteName={config.siteName} showHeader={false} locale={locale} />
+      <About siteName={config.siteName} showHeader={false} locale={locale} content={config.aboutBio} />
     </PortfolioRouteShell>
   )
 }

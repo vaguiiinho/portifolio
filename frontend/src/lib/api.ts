@@ -1,4 +1,5 @@
 import { fetchFromApi, getApiBaseUrl } from './api-base-url'
+import type { LocalizedContent, ServicesContent, TestimonialsContent } from './site-content'
 
 export interface ApiProject {
   id: string
@@ -14,6 +15,7 @@ export interface ApiProject {
   solutionDescription?: string | null
   resultTitle?: string | null
   resultDescription?: string | null
+  featured?: boolean
   createdAt: string
   updatedAt: string
 }
@@ -46,6 +48,25 @@ export interface ProjectPayload {
   solutionDescription?: string
   resultTitle?: string
   resultDescription?: string
+  featured?: boolean
+}
+
+export interface ConfigPayload {
+  siteName?: string
+  description?: string
+  aboutBio?: LocalizedContent<string[]>
+  servicesContent?: LocalizedContent<ServicesContent>
+  testimonialsContent?: LocalizedContent<TestimonialsContent>
+}
+
+export interface ApiConfig {
+  id: string
+  siteName: string
+  description: string
+  aboutBio?: LocalizedContent<string[]>
+  servicesContent?: LocalizedContent<ServicesContent>
+  testimonialsContent?: LocalizedContent<TestimonialsContent>
+  updatedAt: string
 }
 
 export interface ApiStats {
@@ -155,16 +176,26 @@ export async function fetchProjects() {
 }
 
 export async function createProject(payload: ProjectPayload | FormData) {
+  const body =
+    payload instanceof FormData
+      ? payload
+      : JSON.stringify(payload)
+
   return request<ApiProject>('/projects', {
     method: 'POST',
-    body: payload instanceof FormData ? payload : JSON.stringify(payload),
+    body,
   })
 }
 
 export async function updateProject(id: string, payload: ProjectPayload | FormData) {
+  const body =
+    payload instanceof FormData
+      ? payload
+      : JSON.stringify(payload)
+
   return request<ApiProject>(`/projects/${id}`, {
     method: 'PUT',
-    body: payload instanceof FormData ? payload : JSON.stringify(payload),
+    body,
   })
 }
 
@@ -176,6 +207,13 @@ export async function deleteProject(id: string) {
 
 export async function fetchStats() {
   return request<ApiStats>('/stats')
+}
+
+export async function updateConfig(payload: ConfigPayload) {
+  return request<ApiConfig>('/config', {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  })
 }
 
 export async function sendContact(payload: ContactPayload) {

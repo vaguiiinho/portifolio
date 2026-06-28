@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from "react"
 import { motion } from "framer-motion"
-import { ExternalLink, Github } from "lucide-react"
+import { ExternalLink, Github, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import { cn } from "@/lib/utils"
@@ -31,10 +31,12 @@ interface ProjectCardProps {
   project: Project
   index: number
   onClick?: () => void
+  onDetailsClick?: () => void
+  showDetailsAction?: boolean
   locale: Locale
 }
 
-export function ProjectCard({ project, index, onClick, locale }: ProjectCardProps) {
+export function ProjectCard({ project, index, onClick, onDetailsClick, showDetailsAction = false, locale }: ProjectCardProps) {
   const projectContent = getProjectsContent(locale)
   const initial = project.title?.charAt(0) || "P"
   const fallbackDescriptions =
@@ -63,10 +65,10 @@ export function ProjectCard({ project, index, onClick, locale }: ProjectCardProp
       <div
         onClick={onClick}
         className={cn(
-          "relative bg-card border border-border rounded-2xl overflow-hidden cursor-pointer",
+          "relative bg-card border border-border rounded-2xl overflow-hidden",
+          onClick ? "cursor-pointer" : "cursor-default",
           "transition-all duration-300",
-          "hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5",
-          "hover:-translate-y-1"
+          onClick ? "hover:border-accent/50 hover:shadow-lg hover:shadow-accent/5 hover:-translate-y-1" : "",
         )}
       >
         {/* Glow Effect on Hover */}
@@ -103,9 +105,16 @@ export function ProjectCard({ project, index, onClick, locale }: ProjectCardProp
           {/* Content */}
           <div className="p-6 space-y-4">
             <div>
-              <h3 className="text-lg font-semibold group-hover:text-accent transition-colors">
-                {project.title}
-              </h3>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-lg font-semibold group-hover:text-accent transition-colors">
+                  {project.title}
+                </h3>
+                {project.featured && (
+                  <span className="inline-flex items-center rounded-full border border-border bg-secondary/70 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    {locale === "en" ? "Featured" : "Destaque"}
+                  </span>
+                )}
+              </div>
               <p className="mt-2 text-sm text-muted-foreground line-clamp-2 text-pretty">
                 {project.description}
               </p>
@@ -146,6 +155,24 @@ export function ProjectCard({ project, index, onClick, locale }: ProjectCardProp
                 </p>
               </div>
             </div>
+
+            {showDetailsAction && onDetailsClick && (
+              <div className="pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    onDetailsClick()
+                  }}
+                >
+                  <Eye className="h-4 w-4" />
+                  {locale === "en" ? "Open details" : "Abrir detalhes"}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

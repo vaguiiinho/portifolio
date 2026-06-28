@@ -137,7 +137,7 @@ export function ProjectModal({ project, onClose, onEdit, onDelete, canManage = f
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-3 pt-4 border-t border-border">
-                  {project.liveUrl && (
+                  {canManage && project.liveUrl && (
                     <Button
                       as="a"
                       href={project.liveUrl}
@@ -150,7 +150,7 @@ export function ProjectModal({ project, onClose, onEdit, onDelete, canManage = f
                       {locale === "en" ? "View demo" : "Ver demo"}
                     </Button>
                   )}
-                  {project.githubUrl && (
+                  {canManage && project.githubUrl && (
                     <Button
                       as="a"
                       href={project.githubUrl}

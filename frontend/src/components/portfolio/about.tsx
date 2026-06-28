@@ -4,15 +4,18 @@ import { TechStack } from "./tech-stack"
 import { SectionHeader } from "./section-header"
 import { getAboutContent } from "@/lib/content/localized"
 import type { Locale } from "@/lib/locale"
+import { resolveLocalizedField, type SiteContentField } from "@/lib/site-content"
 
 interface AboutProps {
   siteName: string
   showHeader?: boolean
   locale: Locale
+  content?: SiteContentField<string[]>
 }
 
-export function About({ siteName, showHeader = true, locale }: AboutProps) {
+export function About({ siteName, showHeader = true, locale, content }: AboutProps) {
   const aboutContent = getAboutContent(locale)
+  const bio = resolveLocalizedField(content, locale, aboutContent.bio)
 
   return (
     <section id="about" className="py-24 sm:py-32 bg-secondary/30">
@@ -30,7 +33,7 @@ export function About({ siteName, showHeader = true, locale }: AboutProps) {
           {/* Bio */}
           <div className="space-y-6">
             <div className="prose prose-invert max-w-none">
-              {aboutContent.bio.map((paragraph, index) => (
+              {bio.map((paragraph, index) => (
                 <p key={index} className="text-lg text-muted-foreground leading-relaxed text-pretty">
                   {paragraph}
                 </p>

@@ -15,6 +15,7 @@ export interface CreateProjectInput {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  featured?: boolean;
 }
 
 @Injectable()
@@ -36,6 +37,7 @@ export class CreateProject {
       input.githubUrl || '',
       input.liveUrl || '',
       createdAt,
+      input.featured ?? false,
       input.videoUrl,
       input.problemTitle,
       input.problemDescription,

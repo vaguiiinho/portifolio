@@ -43,6 +43,7 @@ describe('UpdateProject', () => {
       'old-github',
       'old-live',
       new Date(),
+      true,
     );
 
     const input = {
@@ -60,6 +61,7 @@ describe('UpdateProject', () => {
       'old-github',
       'old-live',
       existingProject.createdAt,
+      false,
     );
 
     mockRepository.findById.mockResolvedValue(existingProject);
@@ -89,6 +91,7 @@ describe('UpdateProject', () => {
       'github',
       'live',
       new Date(),
+      true,
     );
 
     const updatedProject = new Project(
@@ -99,6 +102,7 @@ describe('UpdateProject', () => {
       'github',
       'live',
       existingProject.createdAt,
+      true,
     );
 
     mockRepository.findById.mockResolvedValue(existingProject);
@@ -108,5 +112,6 @@ describe('UpdateProject', () => {
 
     expect(result.description).toBe('Desc');
     expect(result.techStack).toEqual(['Tech']);
+    expect(result.featured).toBe(true);
   });
 });

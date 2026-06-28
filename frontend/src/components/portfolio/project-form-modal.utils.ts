@@ -10,6 +10,7 @@ export interface ProjectFormState {
   githubUrl: string
   liveUrl: string
   videoUrl: string
+  featured: boolean
   problemTitle: string
   problemDescription: string
   solutionTitle: string
@@ -26,6 +27,7 @@ export function buildInitialProjectFormState(project: Project | null): ProjectFo
     githubUrl: project?.githubUrl ?? "",
     liveUrl: project?.liveUrl ?? "",
     videoUrl: "",
+    featured: project?.featured ?? false,
     problemTitle: project?.problemTitle ?? "",
     problemDescription: project?.problemDescription ?? "",
     solutionTitle: project?.solutionTitle ?? "",
@@ -73,6 +75,7 @@ export function buildProjectPayload(values: ProjectFormState): ProjectPayload {
     title: values.title.trim(),
     description: values.description.trim(),
     techStack: parseTechStack(values.techStack),
+    featured: values.featured,
   }
 
   const githubUrl = normalizeOptionalValue(values.githubUrl)
@@ -115,6 +118,8 @@ export function buildProjectFormData(values: ProjectFormState, videoFile: File |
   } else if (payload.videoUrl) {
     formData.append("videoUrl", payload.videoUrl)
   }
+
+  formData.append("featured", String(values.featured))
 
   if (values.problemTitle.trim()) {
     formData.append("problemTitle", values.problemTitle.trim())

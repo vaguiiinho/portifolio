@@ -1,4 +1,5 @@
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import { IsObject, IsOptional, IsString, MinLength } from 'class-validator';
+import type { SiteContent } from '../../domain/entities/site-content';
 
 export class UpdateConfigDto {
   @IsOptional()
@@ -10,4 +11,16 @@ export class UpdateConfigDto {
   @IsString({ message: 'description must be a string' })
   @MinLength(10, { message: 'description must be at least 10 characters' })
   description?: string;
+
+  @IsOptional()
+  @IsObject({ message: 'aboutBio must be an object' })
+  aboutBio?: SiteContent['aboutBio'];
+
+  @IsOptional()
+  @IsObject({ message: 'servicesContent must be an object' })
+  servicesContent?: SiteContent['servicesContent'];
+
+  @IsOptional()
+  @IsObject({ message: 'testimonialsContent must be an object' })
+  testimonialsContent?: SiteContent['testimonialsContent'];
 }

@@ -31,6 +31,7 @@ describe('Project', () => {
     expect(project.githubUrl).toBe(mockGithubUrl);
     expect(project.liveUrl).toBe(mockLiveUrl);
     expect(project.createdAt).toBe(mockCreatedAt);
+    expect(project.featured).toBe(false);
   });
 
   it('should return a copy of techStack array', () => {
@@ -67,5 +68,10 @@ describe('Project', () => {
     const newLiveUrl = 'https://updated.com';
     project.updateLiveUrl(newLiveUrl);
     expect(project.liveUrl).toBe(newLiveUrl);
+  });
+
+  it('should update featured', () => {
+    project.updateFeatured(true);
+    expect(project.featured).toBe(true);
   });
 });

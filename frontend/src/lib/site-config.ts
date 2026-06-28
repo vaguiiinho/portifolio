@@ -1,9 +1,21 @@
 import { fetchFromApi } from './api-base-url'
+import type { SiteContentField } from './site-content'
 
 export interface SiteConfig {
   id: string
   siteName: string
   description: string
+  aboutBio?: SiteContentField<string[]>
+  servicesContent?: SiteContentField<{
+    ctaTitle: string
+    ctaDescription: string
+    ctaLabel: string
+    cards: { title: string; description: string; deliverables: string[] }[]
+  }>
+  testimonialsContent?: SiteContentField<{
+    cards: { quote: string; name: string; role: string; company: string; result: string }[]
+    trustPoints: string[]
+  }>
   updatedAt: string
 }
 
@@ -31,6 +43,9 @@ export async function fetchSiteConfig(): Promise<SiteConfig> {
         id: 'default',
         siteName: siteDefaults.siteName,
         description: siteDefaults.description,
+        aboutBio: undefined,
+        servicesContent: undefined,
+        testimonialsContent: undefined,
         updatedAt: new Date().toISOString(),
       }
     }
@@ -41,6 +56,9 @@ export async function fetchSiteConfig(): Promise<SiteConfig> {
       id: 'default',
       siteName: siteDefaults.siteName,
       description: siteDefaults.description,
+      aboutBio: undefined,
+      servicesContent: undefined,
+      testimonialsContent: undefined,
       updatedAt: new Date().toISOString(),
     }
   }

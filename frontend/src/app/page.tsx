@@ -31,7 +31,7 @@ export default async function HomePage() {
       <Navbar siteName={config.siteName} locale={locale} />
       <Hero siteName={config.siteName} locale={locale} />
       <HomeHub locale={locale} />
-      <Testimonials locale={locale} />
+      <Testimonials locale={locale} content={config.testimonialsContent} />
       <ConversionMetrics locale={locale} />
       <Footer siteName={config.siteName} locale={locale} />
     </main>

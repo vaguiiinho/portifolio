@@ -58,6 +58,7 @@ describe('ProjectPrismaRepository (Integration)', () => {
       'github.com',
       'live.com',
       new Date(),
+      true,
     );
 
     const created = await repository.create(project);
@@ -78,6 +79,7 @@ describe('ProjectPrismaRepository (Integration)', () => {
       '',
       '',
       new Date(),
+      false,
     );
     const project2 = new Project(
       '2',
@@ -87,6 +89,7 @@ describe('ProjectPrismaRepository (Integration)', () => {
       '',
       '',
       new Date(),
+      true,
     );
 
     await repository.create(project1);
@@ -94,7 +97,8 @@ describe('ProjectPrismaRepository (Integration)', () => {
 
     const all = await repository.findAll();
     expect(all).toHaveLength(2);
-    expect(all.map((p) => p.title)).toEqual(['Project 1', 'Project 2']);
+    expect(all.map((p) => p.title)).toEqual(['Project 2', 'Project 1']);
+    expect(all[0].featured).toBe(true);
   });
 
   it('should update a project', async () => {
@@ -106,6 +110,7 @@ describe('ProjectPrismaRepository (Integration)', () => {
       '',
       '',
       new Date(),
+      false,
     );
     await repository.create(project);
 
@@ -117,6 +122,7 @@ describe('ProjectPrismaRepository (Integration)', () => {
       '',
       '',
       new Date(),
+      true,
     );
     const result = await repository.update(updatedProject);
 

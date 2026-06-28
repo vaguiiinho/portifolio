@@ -29,6 +29,7 @@ model Project {
   solutionDescription String?
   resultTitle        String?  @db.VarChar(255)
   resultDescription  String?
+  featured           Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 
@@ -56,10 +57,13 @@ model Stats {
 }
 
 model Config {
-  id          String   @id @default(cuid())
-  siteName    String   @db.VarChar(255)
-  description String
-  updatedAt   DateTime @updatedAt
+  id                String   @id @default(cuid())
+  siteName          String   @db.VarChar(255)
+  description       String
+  aboutBio          Json     @default("[]")
+  servicesContent    Json     @default("{}")
+  testimonialsContent Json     @default("{}")
+  updatedAt         DateTime @updatedAt
 
   @@map("config")
 }

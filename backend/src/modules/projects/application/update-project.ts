@@ -16,6 +16,7 @@ export interface UpdateProjectInput {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  featured?: boolean;
 }
 
 @Injectable()
@@ -39,6 +40,7 @@ export class UpdateProject {
       input.githubUrl ?? existingProject.githubUrl,
       input.liveUrl ?? existingProject.liveUrl,
       existingProject.createdAt,
+      input.featured ?? existingProject.featured,
       input.videoUrl ?? existingProject.videoUrl,
       input.problemTitle ?? existingProject.problemTitle,
       input.problemDescription ?? existingProject.problemDescription,

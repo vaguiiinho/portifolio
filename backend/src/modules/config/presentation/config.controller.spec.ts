@@ -6,6 +6,7 @@ import { UpdateConfig } from '../application/update-config';
 import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Config } from '../domain/entities/config';
+import type { SiteContent } from '../domain/entities/site-content';
 
 describe('ConfigController', () => {
   let controller: ConfigController;
@@ -45,6 +46,12 @@ describe('ConfigController', () => {
       '1',
       'Site',
       'Description',
+      { pt: [], en: [] },
+      {
+        pt: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
+        en: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
+      },
+      { pt: { cards: [], trustPoints: [] }, en: { cards: [], trustPoints: [] } },
       new Date('2026-06-28T00:00:00.000Z'),
     );
     mockGetConfig.execute.mockResolvedValue(mockConfig);
@@ -54,11 +61,25 @@ describe('ConfigController', () => {
   });
 
   it('should update config', async () => {
-    const dto = { siteName: 'New site' };
+    const dto: SiteContent & { siteName?: string; description?: string } = {
+      aboutBio: { pt: ['Novo bio'], en: ['New bio'] },
+      servicesContent: {
+        pt: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
+        en: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
+      },
+      testimonialsContent: { pt: { cards: [], trustPoints: [] }, en: { cards: [], trustPoints: [] } },
+      siteName: 'New site',
+    };
     const mockConfig = new Config(
       '1',
       'New site',
       'Description',
+      { pt: ['Novo bio'], en: ['New bio'] },
+      {
+        pt: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
+        en: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
+      },
+      { pt: { cards: [], trustPoints: [] }, en: { cards: [], trustPoints: [] } },
       new Date('2026-06-28T00:00:00.000Z'),
     );
     mockUpdateConfig.execute.mockResolvedValue(mockConfig);

@@ -6,13 +6,16 @@ import { MetricBeacon } from "./metric-beacon"
 import { SectionHeader } from "./section-header"
 import { getTestimonialsContent } from "@/lib/content/localized"
 import type { Locale } from "@/lib/locale"
+import { resolveLocalizedField, type SiteContentField, type TestimonialsContent } from "@/lib/site-content"
 
 interface TestimonialsProps {
   locale: Locale
+  content?: SiteContentField<TestimonialsContent>
 }
 
-export function Testimonials({ locale }: TestimonialsProps) {
+export function Testimonials({ locale, content }: TestimonialsProps) {
   const testimonialsContent = getTestimonialsContent(locale)
+  const resolvedContent = resolveLocalizedField(content, locale, testimonialsContent)
 
   return (
     <section id="testimonials" className="py-24 sm:py-32 bg-secondary/20">
@@ -24,7 +27,7 @@ export function Testimonials({ locale }: TestimonialsProps) {
         />
 
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {testimonialsContent.cards.map((item) => (
+          {resolvedContent.cards.map((item) => (
             <article
               key={`${item.name}-${item.company}`}
               className="relative h-full rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5"
@@ -53,7 +56,7 @@ export function Testimonials({ locale }: TestimonialsProps) {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          {testimonialsContent.trustPoints.map((point) => (
+          {resolvedContent.trustPoints.map((point) => (
             <div
               key={point}
               className="rounded-full border border-border bg-card px-4 py-2 text-sm text-muted-foreground shadow-sm"

@@ -5,6 +5,7 @@ import {
   IsUrl,
   MinLength,
   Matches,
+  IsBoolean,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
@@ -42,6 +43,26 @@ function normalizeText(value: unknown): unknown {
   }
 
   return value;
+}
+
+function parseBoolean(value: unknown): boolean | undefined {
+  if (typeof value === 'boolean') {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+
+    if (['true', '1', 'on', 'yes'].includes(normalized)) {
+      return true;
+    }
+
+    if (['false', '0', 'off', 'no'].includes(normalized)) {
+      return false;
+    }
+  }
+
+  return undefined;
 }
 
 export class UpdateProjectDto {
@@ -108,4 +129,9 @@ export class UpdateProjectDto {
   @Transform(({ value }) => normalizeText(value))
   @IsString({ message: 'Result description must be a string' })
   resultDescription?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => parseBoolean(value))
+  @IsBoolean({ message: 'Featured must be a boolean' })
+  featured?: boolean;
 }

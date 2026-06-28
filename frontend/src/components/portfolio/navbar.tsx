@@ -68,11 +68,11 @@ export function Navbar({ siteName, locale }: NavbarProps) {
           <DesktopNav locale={locale} />
 
           {/* Actions */}
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <LocaleToggle locale={locale} />
             {!isLoading &&
               (isAuthenticated ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div className="hidden lg:flex flex-col text-right leading-tight">
                     <span className="text-xs text-muted-foreground">Admin</span>
                     <span className="text-xs font-medium">{user?.email}</span>
@@ -112,7 +112,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
             <Button
               as="a"
               href={shellCtaContent.navbar.primaryHref}
-              className="hidden sm:inline-flex rounded-full"
+              className="hidden shrink-0 whitespace-nowrap rounded-full px-3 sm:inline-flex"
               metricKey="cta:navbar-primary"
             >
               {shellCtaContent.navbar.primaryLabel}
@@ -122,7 +122,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
               as="a"
               href={shellCtaContent.navbar.secondaryHref}
               variant="outline"
-              className="hidden lg:inline-flex rounded-full"
+              className="hidden shrink-0 whitespace-nowrap rounded-full px-3 lg:inline-flex"
               metricKey="cta:navbar-secondary"
             >
               {shellCtaContent.navbar.secondaryLabel}
@@ -132,7 +132,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden shrink-0"
               onClick={toggleMobileMenu}
               aria-label="Toggle navigation menu"
               aria-expanded={isMobileMenuOpen}

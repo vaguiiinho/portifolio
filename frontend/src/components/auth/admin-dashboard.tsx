@@ -1,12 +1,14 @@
 "use client"
 
-import { useEffect, useSyncExternalStore } from "react"
+import { useEffect, useState, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowRight, BarChart3, FolderGit2, LogOut, ShieldCheck, Sparkles, Users, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "./auth-provider"
 import { portfolioRoutes } from "@/lib/routes"
-import { ProjectsGalleryClient } from "@/components/portfolio/projects-gallery-client"
+import { SiteConfigModal } from "./site-config-modal"
+import { SiteContentModal } from "./site-content-modal"
+import { ProjectsAdminTable } from "./projects-admin-table"
 import type { Locale } from "@/lib/locale"
 import type { ApiStats } from "@/lib/api"
 import { Container } from "@/components/portfolio/container"
@@ -39,6 +41,8 @@ function getTopProjectEvent(events: Record<string, number>) {
 export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDashboardProps) {
   const router = useRouter()
   const { user, isAuthenticated, isLoading, logout } = useAuth()
+  const [isConfigEditorOpen, setIsConfigEditorOpen] = useState(false)
+  const [isContentEditorOpen, setIsContentEditorOpen] = useState(false)
   const isClient = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -205,14 +209,53 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
               </div>
             </div>
             <div className="rounded-2xl border border-border bg-background/70 p-4">
-              <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                {locale === "en" ? "Site" : "Site"}
+              <div className="flex items-start justify-between gap-3">
+                <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  {locale === "en" ? "Site" : "Site"}
+                </div>
+                <div className="flex flex-wrap justify-end gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() => setIsConfigEditorOpen(true)}
+                  >
+                    {locale === "en" ? "Edit site" : "Editar site"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="rounded-full"
+                    onClick={() => setIsContentEditorOpen(true)}
+                  >
+                    {locale === "en" ? "Edit content" : "Editar conteúdo"}
+                  </Button>
+                </div>
               </div>
               <div className="mt-2 font-medium">{siteConfig.siteName}</div>
               <p className="mt-2 text-sm text-muted-foreground">{siteConfig.description}</p>
             </div>
           </div>
         </div>
+
+        <SiteConfigModal
+          key={isConfigEditorOpen ? siteConfig.updatedAt : "site-config-closed"}
+          open={isConfigEditorOpen}
+          config={siteConfig}
+          locale={locale}
+          onClose={() => setIsConfigEditorOpen(false)}
+          onSaved={() => router.refresh()}
+        />
+        <SiteContentModal
+          key={isContentEditorOpen ? `site-content-${siteConfig.updatedAt}` : "site-content-closed"}
+          open={isContentEditorOpen}
+          config={siteConfig}
+          locale={locale}
+          onClose={() => setIsContentEditorOpen(false)}
+          onSaved={() => router.refresh()}
+        />
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
@@ -272,11 +315,7 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
           </div>
 
           <div className="mt-6">
-            <ProjectsGalleryClient
-              projects={projects}
-              locale={locale}
-              allowCreate
-            />
+            <ProjectsAdminTable projects={projects} locale={locale} />
           </div>
         </div>
       </div>

@@ -12,6 +12,7 @@ export class Project {
   private _solutionDescription?: string;
   private _resultTitle?: string;
   private _resultDescription?: string;
+  private _featured: boolean;
   private _createdAt: Date;
 
   constructor(
@@ -22,6 +23,7 @@ export class Project {
     githubUrl: string,
     liveUrl: string,
     createdAt: Date,
+    featured = false,
     videoUrl?: string,
     problemTitle?: string,
     problemDescription?: string,
@@ -37,6 +39,7 @@ export class Project {
     this._githubUrl = githubUrl;
     this._liveUrl = liveUrl;
     this._createdAt = createdAt;
+    this._featured = featured;
     this._videoUrl = videoUrl;
     this._problemTitle = problemTitle;
     this._problemDescription = problemDescription;
@@ -102,6 +105,10 @@ export class Project {
     return this._createdAt;
   }
 
+  get featured(): boolean {
+    return this._featured;
+  }
+
   updateTitle(title: string): void {
     this._title = title;
   }
@@ -150,6 +157,10 @@ export class Project {
     this._resultDescription = resultDescription;
   }
 
+  updateFeatured(featured: boolean): void {
+    this._featured = featured;
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -165,6 +176,7 @@ export class Project {
       solutionDescription: this.solutionDescription,
       resultTitle: this.resultTitle,
       resultDescription: this.resultDescription,
+      featured: this.featured,
       createdAt: this.createdAt,
     };
   }

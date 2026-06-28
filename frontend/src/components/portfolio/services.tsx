@@ -6,15 +6,18 @@ import { SectionHeader } from "./section-header"
 import { getServicesContent } from "@/lib/content/localized"
 import { portfolioRoutes } from "@/lib/routes"
 import type { Locale } from "@/lib/locale"
+import { resolveLocalizedField, type SiteContentField, type ServicesContent } from "@/lib/site-content"
 
 interface ServicesProps {
   showHeader?: boolean
   showActions?: boolean
   locale: Locale
+  content?: SiteContentField<ServicesContent>
 }
 
-export function Services({ showHeader = true, showActions = true, locale }: ServicesProps) {
+export function Services({ showHeader = true, showActions = true, locale, content }: ServicesProps) {
   const servicesContent = getServicesContent(locale)
+  const resolvedContent = resolveLocalizedField(content, locale, servicesContent)
 
   return (
     <section id="services" className="py-24 sm:py-32">
@@ -25,7 +28,7 @@ export function Services({ showHeader = true, showActions = true, locale }: Serv
         )}
 
         <div className="grid gap-6 md:grid-cols-2">
-          {servicesContent.cards.map((service, index) => (
+          {resolvedContent.cards.map((service, index) => (
             <article
               key={service.title}
               className="h-full rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5"
@@ -56,9 +59,9 @@ export function Services({ showHeader = true, showActions = true, locale }: Serv
         {showActions && (
           <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border bg-secondary/30 px-6 py-6 text-center md:flex-row md:text-left">
             <div className="max-w-2xl">
-              <h3 className="text-xl font-semibold tracking-tight">{servicesContent.ctaTitle}</h3>
+              <h3 className="text-xl font-semibold tracking-tight">{resolvedContent.ctaTitle}</h3>
               <p className="mt-2 text-sm text-muted-foreground text-pretty">
-                {servicesContent.ctaDescription}
+                {resolvedContent.ctaDescription}
               </p>
             </div>
 
@@ -69,7 +72,7 @@ export function Services({ showHeader = true, showActions = true, locale }: Serv
               className="rounded-full shrink-0"
               metricKey="cta:services-contact"
             >
-              {servicesContent.ctaLabel}
+              {resolvedContent.ctaLabel}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>

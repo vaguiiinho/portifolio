@@ -58,7 +58,7 @@ export default async function ProjectsPage() {
           </div>
         }
       />
-      <Projects showHeader={false} showActions={false} showCreateAction locale={locale} />
+      <Projects showHeader={false} showActions={false} locale={locale} />
     </PortfolioRouteShell>
   )
 }

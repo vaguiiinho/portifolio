@@ -59,8 +59,8 @@ export default async function ServicesPage() {
           </div>
         }
       />
-      <Services showHeader={false} showActions={false} locale={locale} />
-      <Testimonials locale={locale} />
+      <Services showHeader={false} showActions={false} locale={locale} content={config.servicesContent} />
+      <Testimonials locale={locale} content={config.testimonialsContent} />
     </PortfolioRouteShell>
   )
 }

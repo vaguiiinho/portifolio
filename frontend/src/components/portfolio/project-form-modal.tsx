@@ -238,6 +238,26 @@ export function ProjectFormModal({
                         : projectFormContent.helperText.videoUpload}
                     </p>
                   </div>
+                  <label className="flex items-center gap-3 rounded-2xl border border-border bg-secondary/20 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      checked={values.featured}
+                      onChange={(event) =>
+                        setValues((current) => ({ ...current, featured: event.target.checked }))
+                      }
+                      className="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+                    />
+                    <span className="space-y-1">
+                      <span className="block text-sm font-medium">
+                        {locale === "en" ? "Featured project" : "Projeto em destaque"}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        {locale === "en"
+                          ? "Highlighted projects appear first in the public listing."
+                          : "Projetos destacados aparecem primeiro na listagem pública."}
+                      </span>
+                    </span>
+                  </label>
                   <div className="space-y-4 rounded-2xl border border-border bg-secondary/20 p-4">
                     <div>
                       <h3 className="text-sm font-semibold">{projectFormContent.helperText.detailsTitle}</h3>
