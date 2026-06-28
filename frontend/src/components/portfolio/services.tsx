@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { SectionHeader } from "./section-header"
 import { servicesContent } from "@/lib/content"
+import { portfolioRoutes } from "@/lib/routes"
 
 interface ServicesProps {
   showHeader?: boolean
@@ -57,7 +58,7 @@ export function Services({ showHeader = true, showActions = true }: ServicesProp
               </p>
             </div>
 
-            <Button as="a" href="/contato" size="lg" className="rounded-full shrink-0">
+            <Button as="a" href={portfolioRoutes.contact} size="lg" className="rounded-full shrink-0">
               Pedir orçamento
               <ArrowRight className="h-4 w-4" />
             </Button>

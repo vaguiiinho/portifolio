@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { heroContent } from "@/lib/content"
+import { portfolioRoutes } from "@/lib/routes"
 import type { HeroStat } from "@/lib/stats"
 
 interface HeroContentProps {
@@ -33,11 +34,11 @@ export function HeroContent({ stats }: HeroContentProps) {
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <Button as="a" href="/projetos" size="lg" className="rounded-full group">
+        <Button as="a" href={portfolioRoutes.services} size="lg" className="rounded-full group">
           {heroContent.viewProjectsText}
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
-        <Button as="a" href="/contato" variant="outline" size="lg" className="rounded-full">
+        <Button as="a" href={portfolioRoutes.contact} variant="outline" size="lg" className="rounded-full">
           {heroContent.contactMeText}
         </Button>
       </div>

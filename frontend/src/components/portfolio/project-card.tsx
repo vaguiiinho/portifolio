@@ -6,6 +6,7 @@ import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import { cn } from "@/lib/utils"
+import { projectCopy } from "@/lib/content"
 
 export interface Project {
   id: string
@@ -32,7 +33,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
-  const initial = project.title?.charAt(0) || "P"
+  const initial = project.title?.charAt(0) || projectCopy.card.emptyTitle.charAt(0)
 
   return (
     <motion.article
@@ -70,13 +71,13 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
               {project.liveUrl && (
                 <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <ExternalLink className="mr-2 h-4 w-4" />
-                  Ver demo
+                  {projectCopy.card.demoLabel}
                 </Button>
               )}
               {project.githubUrl && (
                 <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <Github className="mr-2 h-4 w-4" />
-                  GitHub
+                  {projectCopy.card.sourceLabel}
                 </Button>
               )}
             </div>
@@ -108,7 +109,7 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
                   {project.problemTitle || "Problema"}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.problemDescription || "Descrição não informada."}
+                  {project.problemDescription || projectCopy.card.emptyDescription}
                 </p>
               </div>
               <div className="space-y-1">
@@ -116,7 +117,7 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
                   {project.solutionTitle || "Solução"}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.solutionDescription || "Descrição não informada."}
+                  {project.solutionDescription || projectCopy.card.emptyDescription}
                 </p>
               </div>
               <div className="space-y-1">
@@ -124,7 +125,7 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
                   {project.resultTitle || "Resultado"}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.resultDescription || "Descrição não informada."}
+                  {project.resultDescription || projectCopy.card.emptyDescription}
                 </p>
               </div>
             </div>

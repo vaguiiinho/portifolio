@@ -13,6 +13,7 @@ import {
   validateProjectForm,
   type ProjectFormState,
 } from "./project-form-modal.utils"
+import { projectFormContent } from "@/lib/content"
 import type { Project } from "./project-card"
 
 interface ProjectFormModalProps {
@@ -123,7 +124,7 @@ export function ProjectFormModal({
                   <div>
                     <h2 className="text-2xl font-bold">{title}</h2>
                     <p className="mt-2 text-sm text-muted-foreground text-pretty">
-                      Fill in the project data and save it to the backend.
+                      {projectFormContent.helperText.submitHelp}
                     </p>
                   </div>
                 </div>
@@ -202,9 +203,9 @@ export function ProjectFormModal({
                     {currentVideoUrl && (
                       <div className="space-y-2 rounded-2xl border border-border bg-secondary/20 p-3">
                         <div className="flex items-center justify-between gap-3">
-                          <p className="text-sm font-medium">Current video</p>
+                          <p className="text-sm font-medium">{projectFormContent.helperText.videoCurrent}</p>
                           <span className="text-xs text-muted-foreground">
-                            Leave the URL empty to keep it unchanged
+                            {projectFormContent.helperText.videoKeepExisting}
                           </span>
                         </div>
                         <video
@@ -230,14 +231,14 @@ export function ProjectFormModal({
                     <p className="text-xs text-muted-foreground">
                       {selectedVideoFile
                         ? `Selected file: ${selectedVideoFile.name}`
-                        : "Optional. Uploading a file avoids the JSON body size limit."}
+                        : projectFormContent.helperText.videoUpload}
                     </p>
                   </div>
                   <div className="space-y-4 rounded-2xl border border-border bg-secondary/20 p-4">
                     <div>
-                      <h3 className="text-sm font-semibold">Project blocks</h3>
+                      <h3 className="text-sm font-semibold">{projectFormContent.helperText.detailsTitle}</h3>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Edit the three sections shown inside the project detail modal.
+                        {projectFormContent.helperText.detailsDescription}
                       </p>
                     </div>
 

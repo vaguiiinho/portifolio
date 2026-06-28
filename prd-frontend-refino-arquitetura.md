@@ -84,7 +84,14 @@ src/data/
 
 # 🚀 Fases de Execução
 
+Status atual:
+* Fases 1, 2 e 3: concluídas.
+* Fase 4: em andamento.
+* Fases 5 e 6: pendentes.
+
 ## Fase 1: Auditoria e limites
+### Status
+* Concluída
 ### Subtarefas
 * Mapear componentes que podem virar Server Components.
 * Identificar componentes com múltiplas responsabilidades.
@@ -96,6 +103,8 @@ src/data/
 * Existe um inventário claro do que é UI, lógica e dado.
 
 ## Fase 2: Separação de responsabilidades
+### Status
+* Concluída
 ### Subtarefas
 * Extrair conteúdo estático para módulos específicos.
 * Extrair lógica reutilizável para hooks ou helpers.
@@ -107,6 +116,8 @@ src/data/
 * Nenhuma seção principal depende de um componente monolítico.
 
 ## Fase 3: Server Components primeiro
+### Status
+* Concluída
 ### Subtarefas
 * Converter para Server Components tudo o que não precisar de estado.
 * Manter client components apenas onde houver necessidade real.
@@ -118,6 +129,8 @@ src/data/
 * O número de client components cai sem perda funcional.
 
 ## Fase 4: Estrutura por rotas e páginas
+### Status
+* Em andamento
 ### Subtarefas
 * Definir quais seções continuam na home e quais viram rotas próprias.
 * Criar páginas dedicadas para áreas com contexto próprio, como portfólio, currículo ou contato, quando fizer sentido.
@@ -129,6 +142,8 @@ src/data/
 * O site deixa de depender de uma única página longa para tudo o que é relevante.
 
 ## Fase 5: Consolidação de dados e fluxos
+### Status
+* Pendente
 ### Subtarefas
 * Centralizar dados em módulos mais semânticos.
 * Padronizar links internos/externos.
@@ -140,6 +155,8 @@ src/data/
 * O conteúdo não fica duplicado em múltiplos arquivos.
 
 ## Fase 6: Validação final
+### Status
+* Pendente
 ### Subtarefas
 * Rodar lint e typecheck.
 * Validar build.

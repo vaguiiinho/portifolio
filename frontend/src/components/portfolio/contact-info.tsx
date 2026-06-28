@@ -18,7 +18,7 @@ export function ContactInfo() {
           {contactContent.contactDescription}
         </p>
         <p className="mt-4 text-sm text-muted-foreground">
-          Se preferir, me mande o contexto, o prazo e o objetivo do projeto. Isso acelera a resposta.
+          {contactContent.contactNote}
         </p>
       </div>
 

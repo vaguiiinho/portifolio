@@ -6,7 +6,7 @@ import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import type { Project } from "./project-card"
-import { projectModalContent } from "@/lib/content"
+import { projectCopy, projectModalContent } from "@/lib/content"
 import { resolveMediaUrl } from "@/lib/api"
 
 interface ProjectModalProps {
@@ -18,15 +18,15 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const initial = project?.title?.charAt(0) || "P"
   const sections = [
     {
-      title: project?.problemTitle || projectModalContent.sections[0].title,
+      title: project?.problemTitle || projectCopy.card.fallbackSectionTitles.problem,
       description: project?.problemDescription || projectModalContent.sections[0].description,
     },
     {
-      title: project?.solutionTitle || projectModalContent.sections[1].title,
+      title: project?.solutionTitle || projectCopy.card.fallbackSectionTitles.solution,
       description: project?.solutionDescription || projectModalContent.sections[1].description,
     },
     {
-      title: project?.resultTitle || projectModalContent.sections[2].title,
+      title: project?.resultTitle || projectCopy.card.fallbackSectionTitles.result,
       description: project?.resultDescription || projectModalContent.sections[2].description,
     },
   ]
@@ -87,7 +87,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Play className="h-4 w-4 text-accent" />
-                      <h3 className="font-semibold">Vídeo de apresentação</h3>
+                      <h3 className="font-semibold">{projectCopy.modal.videoTitle}</h3>
                     </div>
                     <div className="overflow-hidden rounded-2xl border border-border bg-black">
                       <video
@@ -117,7 +117,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
                 {/* Tech Stack */}
                 <div>
-                  <h3 className="font-semibold mb-3">{projectModalContent.technologiesTitle}</h3>
+                  <h3 className="font-semibold mb-3">{projectCopy.modal.technologiesTitle}</h3>
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.map((tech) => (
                       <Badge key={tech} variant="glow">

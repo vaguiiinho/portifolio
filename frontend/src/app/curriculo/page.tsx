@@ -5,8 +5,9 @@ import { Container } from "@/components/portfolio/container"
 import { Footer } from "@/components/portfolio/footer"
 import { Navbar } from "@/components/portfolio/navbar"
 import { SectionHeader } from "@/components/portfolio/section-header"
+import { portfolioRoutes } from "@/lib/routes"
 import { fetchSiteConfig } from "@/lib/site-config"
-import { resumeContent } from "@/lib/content"
+import { resumeContent, resumePageContent } from "@/lib/content"
 import { siteDefaults } from "@/lib/site-config"
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,7 +37,7 @@ export default async function ResumePage() {
           <div className="max-w-4xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/70 px-3 py-1 text-sm text-muted-foreground">
               <Sparkles className="h-4 w-4 text-accent" />
-              Currículo para recrutadores e clientes
+              {resumePageContent.heroBadge}
             </div>
 
             <div className="mt-6 space-y-5">
@@ -49,9 +50,9 @@ export default async function ResumePage() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button as="a" href="/curriculo.pdf" isExternal download size="lg" className="rounded-full">
+              <Button as="a" href={portfolioRoutes.resumePdf} isExternal download size="lg" className="rounded-full">
                 <ArrowDownToLine className="h-4 w-4" />
-                Baixar PDF
+                {resumePageContent.heroActions.downloadLabel}
               </Button>
               <Button as="a" href="#experiencia" variant="outline" size="lg" className="rounded-full">
                 Ver experiência
@@ -67,7 +68,7 @@ export default async function ResumePage() {
           <SectionHeader
             className="mb-8"
             align="left"
-            title="Resumo profissional"
+            title={resumePageContent.sections.summaryTitle}
             subtitle={resumeContent.summary}
           />
 
@@ -105,7 +106,7 @@ export default async function ResumePage() {
               <SectionHeader
                 align="left"
                 title={resumeContent.experienceTitle}
-                subtitle="Linha do tempo objetiva das entregas mais relevantes."
+                subtitle={resumePageContent.sections.experienceSubtitle}
               />
 
               <div className="mt-6 space-y-6">
@@ -137,7 +138,7 @@ export default async function ResumePage() {
                 <SectionHeader
                   align="left"
                   title={resumeContent.educationTitle}
-                  subtitle="Formação contínua e pontos de foco técnico."
+                  subtitle={resumePageContent.sections.educationSubtitle}
                 />
                 <div className="mt-5 space-y-4">
                   {resumeContent.education.map((item) => (
@@ -155,12 +156,12 @@ export default async function ResumePage() {
                   subtitle={resumeContent.ctaDescription}
                 />
                 <div className="mt-6 flex flex-wrap gap-3">
-                  <Button as="a" href="/curriculo.pdf" isExternal download className="rounded-full">
-                    <ArrowDownToLine className="h-4 w-4" />
-                    Baixar PDF
-                  </Button>
-                  <Button as="a" href="/contato" variant="outline" className="rounded-full">
-                    Falar comigo
+              <Button as="a" href={portfolioRoutes.resumePdf} isExternal download className="rounded-full">
+                <ArrowDownToLine className="h-4 w-4" />
+                {resumePageContent.ctaActions.downloadLabel}
+              </Button>
+                  <Button as="a" href={portfolioRoutes.contact} variant="outline" className="rounded-full">
+                    {resumePageContent.ctaActions.contactLabel}
                   </Button>
                 </div>
               </div>

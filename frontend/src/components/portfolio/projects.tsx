@@ -4,6 +4,7 @@ import { Container } from "./container"
 import { SectionHeader } from "./section-header"
 import { projectsContent } from "@/lib/content"
 import { ProjectsGallery } from "./projects-gallery"
+import { portfolioRoutes } from "@/lib/routes"
 
 interface ProjectsProps {
   showHeader?: boolean
@@ -22,7 +23,7 @@ export function Projects({ showHeader = true, showActions = true }: ProjectsProp
               )}
             </div>
             {showActions && (
-              <Button as="a" href="/contato" className="rounded-full shrink-0">
+              <Button as="a" href={portfolioRoutes.contact} className="rounded-full shrink-0">
                 Quero um case assim
                 <ArrowRight className="h-4 w-4" />
               </Button>

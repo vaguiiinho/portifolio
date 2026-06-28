@@ -4,6 +4,7 @@ import { Container } from "./container"
 import { AppLink } from "@/components/ui/app-link"
 import { socialLinks } from "@/data/navigation"
 import { footerContent } from "@/lib/content"
+import { portfolioRoutes } from "@/lib/routes"
 
 interface FooterProps {
   siteName: string
@@ -20,14 +21,14 @@ export function Footer({ siteName }: FooterProps) {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-3">
-              <Button as="a" href="/curriculo" variant="outline" size="sm" className="rounded-full">
+              <Button as="a" href={portfolioRoutes.resume} variant="outline" size="sm" className="rounded-full">
                 Ver currículo
               </Button>
-              <Button as="a" href="/curriculo.pdf" isExternal download size="sm" className="rounded-full">
+              <Button as="a" href={portfolioRoutes.resumePdf} isExternal download size="sm" className="rounded-full">
                 <ArrowDownToLine className="h-4 w-4" />
                 Baixar PDF
               </Button>
-              <Button as="a" href="/contato" size="sm" className="rounded-full">
+              <Button as="a" href={portfolioRoutes.contact} size="sm" className="rounded-full">
                 Falar comigo
                 <ArrowRight className="h-4 w-4" />
               </Button>

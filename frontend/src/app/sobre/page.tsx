@@ -6,7 +6,7 @@ import { RouteIntro } from "@/components/portfolio/route-intro"
 import { PortfolioRouteShell } from "@/components/portfolio/portfolio-route-shell"
 import { createRouteMetadata } from "@/lib/metadata"
 import { fetchSiteConfig } from "@/lib/site-config"
-import { aboutContent } from "@/lib/content"
+import { aboutContent, routeCtaContent } from "@/lib/content"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
@@ -29,12 +29,12 @@ export default async function AboutPage() {
         subtitle={aboutContent.subtitle}
         actions={
           <div className="flex flex-wrap gap-3">
-            <Button as="a" href="/curriculo" size="lg" className="rounded-full">
-              Ver currículo
+            <Button as="a" href={routeCtaContent.about.primaryHref} size="lg" className="rounded-full">
+              {routeCtaContent.about.primaryLabel}
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button as="a" href="/contato" variant="outline" size="lg" className="rounded-full">
-              Falar comigo
+            <Button as="a" href={routeCtaContent.about.secondaryHref} variant="outline" size="lg" className="rounded-full">
+              {routeCtaContent.about.secondaryLabel}
             </Button>
           </div>
         }

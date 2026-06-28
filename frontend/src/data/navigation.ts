@@ -1,12 +1,13 @@
 import { Github, Linkedin, Mail, MessageCircleMore } from "lucide-react"
+import { portfolioRoutes } from "@/lib/routes"
 
 export const navLinks = [
-  { name: "Início", href: "/" },
-  { name: "Serviços", href: "/servicos" },
-  { name: "Projetos", href: "/projetos" },
-  { name: "Currículo", href: "/curriculo" },
-  { name: "Sobre", href: "/sobre" },
-  { name: "Contato", href: "/contato" },
+  { name: "Início", href: portfolioRoutes.home },
+  { name: "Serviços", href: portfolioRoutes.services },
+  { name: "Projetos", href: portfolioRoutes.projects },
+  { name: "Currículo", href: portfolioRoutes.resume },
+  { name: "Sobre", href: portfolioRoutes.about },
+  { name: "Contato", href: portfolioRoutes.contact },
 ]
 
 export const socialLinks = [

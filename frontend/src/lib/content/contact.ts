@@ -1,3 +1,5 @@
+import { portfolioRoutes } from "@/lib/routes"
+
 export const contactContent = {
   title: "Pronto para conversar?",
   subtitle:
@@ -5,13 +7,15 @@ export const contactContent = {
   contactTitle: "Canais diretos",
   contactDescription:
     "Escolha o canal mais rápido para você. Eu priorizo contato objetivo e retorno em até 24 horas úteis.",
+  contactNote:
+    "Se preferir, me mande o contexto, o prazo e o objetivo do projeto. Isso acelera a resposta.",
   paths: [
     {
       title: "Sou recrutador",
       description:
         "Quero entender seu histórico, currículo e stack com rapidez para avaliar fit técnico e de comunicação.",
       ctaLabel: "Ver currículo",
-      ctaHref: "/curriculo",
+      ctaHref: portfolioRoutes.resume,
       secondaryLabel: "LinkedIn",
       secondaryHref: "https://linkedin.com/in/joaosilva",
     },
@@ -20,7 +24,7 @@ export const contactContent = {
       description:
         "Tenho uma ideia, uma página ou um produto para colocar no ar com foco em conversão e clareza de escopo.",
       ctaLabel: "Pedir orçamento",
-      ctaHref: "/contato#contact-form",
+      ctaHref: `${portfolioRoutes.contact}#contact-form`,
       secondaryLabel: "WhatsApp",
       secondaryHref: "https://wa.me/5500000000000",
     },

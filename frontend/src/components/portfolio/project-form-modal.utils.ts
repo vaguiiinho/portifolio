@@ -1,4 +1,5 @@
 import type { ProjectPayload } from "@/lib/api"
+import { projectFormContent } from "@/lib/content"
 import type { Project } from "./project-card"
 
 export interface ProjectFormState {
@@ -147,27 +148,27 @@ export function validateProjectForm(values: ProjectFormState) {
   const description = payload.description.trim()
 
   if (title.length < 3) {
-    return "Title must be at least 3 characters"
+    return projectFormContent.validation.titleTooShort
   }
 
   if (description.length < 10) {
-    return "Description must be at least 10 characters"
+    return projectFormContent.validation.descriptionTooShort
   }
 
   if (payload.techStack.length === 0) {
-    return "Add at least one technology"
+    return projectFormContent.validation.noTechStack
   }
 
   if (!isValidUrl(payload.githubUrl ?? "")) {
-    return "GitHub URL must be a valid URL"
+    return projectFormContent.validation.invalidGithubUrl
   }
 
   if (!isValidUrl(payload.liveUrl ?? "")) {
-    return "Live URL must be a valid URL"
+    return projectFormContent.validation.invalidLiveUrl
   }
 
   if (!isValidVideoSource(payload.videoUrl ?? "")) {
-    return "Video must be a valid URL, upload path, or video file"
+    return projectFormContent.validation.invalidVideoSource
   }
 
   return null

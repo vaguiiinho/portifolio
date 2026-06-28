@@ -2,27 +2,28 @@ import { ArrowRight } from "lucide-react"
 import { Container } from "./container"
 import { SectionHeader } from "./section-header"
 import { AppLink } from "@/components/ui/app-link"
+import { portfolioRoutes } from "@/lib/routes"
 
 const routes = [
   {
     title: "Serviços",
     description: "Entenda o tipo de entrega e o formato de trabalho que eu priorizo.",
-    href: "/servicos",
+    href: portfolioRoutes.services,
   },
   {
     title: "Projetos",
     description: "Veja os cases e o padrão de implementação aplicado nos projetos.",
-    href: "/projetos",
+    href: portfolioRoutes.projects,
   },
   {
     title: "Sobre",
     description: "Saiba mais sobre a trajetória, o foco técnico e o contexto profissional.",
-    href: "/sobre",
+    href: portfolioRoutes.about,
   },
   {
     title: "Contato",
     description: "Entre em contato direto para conversar sobre escopo e orçamento.",
-    href: "/contato",
+    href: portfolioRoutes.contact,
   },
 ]
 
