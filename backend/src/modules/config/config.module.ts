@@ -4,8 +4,10 @@ import { GetConfig } from './application/get-config';
 import { UpdateConfig } from './application/update-config';
 import { ConfigPrismaRepository } from './infrastructure/repositories/config-prisma-repository';
 import { PrismaService } from '../../shared/infrastructure/prisma.service';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [ConfigController],
   providers: [
     GetConfig,

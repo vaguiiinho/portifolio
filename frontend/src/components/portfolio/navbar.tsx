@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun, LogIn, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AppLink } from "@/components/ui/app-link"
 import { Container } from "./container"
@@ -14,6 +14,9 @@ import { MobileNav } from "./mobile-nav"
 import { LocaleToggle } from "./locale-toggle"
 import type { Locale } from "@/lib/locale"
 import { getShellCtaContent } from "@/lib/content/localized"
+import { useAuth } from "@/components/auth/auth-provider"
+import { portfolioRoutes } from "@/lib/routes"
+import { useRouter } from "next/navigation"
 
 interface NavbarProps {
   siteName: string
@@ -25,6 +28,8 @@ export function Navbar({ siteName, locale }: NavbarProps) {
   const isDark = resolvedTheme === "dark"
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
   const [isScrolled, setIsScrolled] = useState(false)
+  const { user, isAuthenticated, logout, isLoading } = useAuth()
+  const router = useRouter()
   const { scrollY } = useScroll()
   const shellCtaContent = getShellCtaContent(locale)
 
@@ -34,6 +39,11 @@ export function Navbar({ siteName, locale }: NavbarProps) {
 
   const toggleTheme = () => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark")
+  }
+
+  function handleLogout() {
+    logout()
+    router.push(portfolioRoutes.home)
   }
 
   return (
@@ -60,6 +70,35 @@ export function Navbar({ siteName, locale }: NavbarProps) {
           {/* Actions */}
           <div className="flex items-center gap-3">
             <LocaleToggle locale={locale} />
+            {!isLoading &&
+              (isAuthenticated ? (
+                <div className="flex items-center gap-3">
+                  <div className="hidden lg:flex flex-col text-right leading-tight">
+                    <span className="text-xs text-muted-foreground">Admin</span>
+                    <span className="text-xs font-medium">{user?.email}</span>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="rounded-full"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span className="hidden sm:inline">Sair</span>
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  as="a"
+                  href={portfolioRoutes.login}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Admin
+                </Button>
+              ))}
             <Button
               variant="ghost"
               size="icon"

@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, ExternalLink, Github, CheckCircle2, Play } from "lucide-react"
+import { X, ExternalLink, Github, CheckCircle2, Play, PencilLine, Trash2 } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
@@ -13,10 +13,13 @@ import type { Locale } from "@/lib/locale"
 interface ProjectModalProps {
   project: Project | null
   onClose: () => void
+  onEdit?: (project: Project) => void
+  onDelete?: (project: Project) => void | Promise<void>
+  canManage?: boolean
   locale: Locale
 }
 
-export function ProjectModal({ project, onClose, locale }: ProjectModalProps) {
+export function ProjectModal({ project, onClose, onEdit, onDelete, canManage = false, locale }: ProjectModalProps) {
   const projectContent = getProjectsContent(locale)
   const initial = project?.title?.charAt(0) || "P"
   const sections = [
@@ -162,6 +165,27 @@ export function ProjectModal({ project, onClose, locale }: ProjectModalProps) {
                     </Button>
                   )}
                 </div>
+
+                {canManage && project && (
+                  <div className="flex flex-wrap gap-3 pt-4 border-t border-border">
+                    <Button
+                      variant="outline"
+                      className="rounded-full"
+                      onClick={() => onEdit?.(project)}
+                    >
+                      <PencilLine className="h-4 w-4" />
+                      {locale === "en" ? "Edit project" : "Editar projeto"}
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      className="rounded-full"
+                      onClick={() => void onDelete?.(project)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      {locale === "en" ? "Delete project" : "Excluir projeto"}
+                    </Button>
+                  </div>
+                )}
               </div>
             </motion.div>
         </motion.div>

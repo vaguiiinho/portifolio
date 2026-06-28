@@ -7,6 +7,9 @@ import { UpdateProject } from '../application/update-project';
 import { DeleteProject } from '../application/delete-project';
 import { IProjectRepository } from '../domain/repositories/i-project-repository';
 import { Project } from '../domain/entities/project';
+import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
+import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
+import { Reflector } from '@nestjs/core';
 
 describe('ProjectsController', () => {
   let controller: ProjectsController;
@@ -28,6 +31,13 @@ describe('ProjectsController', () => {
       update: jest.fn(),
       delete: jest.fn(),
     };
+    const mockTokenService = {
+      sign: jest.fn(),
+      verify: jest.fn(),
+    };
+    const mockReflector = {
+      getAllAndOverride: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ProjectsController],
@@ -37,6 +47,10 @@ describe('ProjectsController', () => {
         { provide: UpdateProject, useValue: mockUpdate },
         { provide: DeleteProject, useValue: mockDelete },
         { provide: 'IProjectRepository', useValue: mockRepo },
+        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: Reflector, useValue: mockReflector },
+        AuthGuard,
+        RolesGuard,
       ],
     }).compile();
 

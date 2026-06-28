@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '../src/generated/prisma/client';
+import { randomUUID } from 'crypto';
+import { hashPassword } from '../src/modules/auth/infrastructure/services/password-hasher.service';
+import { UserRole } from '../src/modules/auth/domain/entities/user';
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({
@@ -34,6 +37,9 @@ const seedProjects = [
     liveUrl: 'https://shop.joaosilva.dev',
   },
 ];
+
+const adminEmail = process.env.AUTH_ADMIN_EMAIL ?? 'admin@portfolio.local';
+const adminPassword = process.env.AUTH_ADMIN_PASSWORD ?? 'admin123456';
 
 async function main() {
   await prisma.project.deleteMany();
@@ -78,8 +84,35 @@ async function main() {
     },
   });
 
+  const now = new Date();
+  const passwordHash = await hashPassword(adminPassword);
+
+  await prisma.$executeRaw`
+    INSERT INTO "users" (
+      id,
+      email,
+      "passwordHash",
+      role,
+      "createdAt",
+      "updatedAt"
+    )
+    VALUES (
+      ${randomUUID()},
+      ${adminEmail},
+      ${passwordHash},
+      ${UserRole.administrador},
+      ${now},
+      ${now}
+    )
+    ON CONFLICT ("email")
+    DO UPDATE SET
+      "passwordHash" = EXCLUDED."passwordHash",
+      role = EXCLUDED.role,
+      "updatedAt" = EXCLUDED."updatedAt"
+  `;
+
   console.log(
-    `Seed completed: ${seedProjects.length} projects, stats and config are ready.`,
+    `Seed completed: ${seedProjects.length} projects, stats, config and admin user are ready.`,
   );
 }
 

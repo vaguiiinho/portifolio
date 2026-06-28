@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/components/auth/auth-provider"
 import './globals.css'
 import { fetchSiteConfig, siteDefaults } from '@/lib/site-config'
 import { getLocale } from "@/lib/locale-server"
@@ -80,7 +81,9 @@ export default async function RootLayout({
   return (
     <html lang={locale === "en" ? "en" : "pt-br"} suppressHydrationWarning className="scroll-smooth">
       <body className="font-sans antialiased bg-background">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

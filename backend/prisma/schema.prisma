@@ -9,6 +9,11 @@ generator client {
   moduleFormat    = "cjs"
 }
 
+enum UserRole {
+  visitante
+  administrador
+}
+
 
 model Project {
   id                 String   @id @default(cuid())
@@ -57,4 +62,15 @@ model Config {
   updatedAt   DateTime @updatedAt
 
   @@map("config")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @db.VarChar(255)
+  role         UserRole @default(administrador)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
 }

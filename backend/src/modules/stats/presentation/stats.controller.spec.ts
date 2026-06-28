@@ -4,6 +4,9 @@ import { GetStats } from '../application/get-stats';
 import { UpdateStats } from '../application/update-stats';
 import { TrackStatsEvent } from '../application/track-stats-event';
 import { Stats } from '../domain/entities/stats';
+import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
+import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
+import { Reflector } from '@nestjs/core';
 
 describe('StatsController', () => {
   let controller: StatsController;
@@ -15,6 +18,13 @@ describe('StatsController', () => {
     const mockGet = { execute: jest.fn() };
     const mockUpdate = { execute: jest.fn() };
     const mockTrack = { execute: jest.fn() };
+    const mockTokenService = {
+      sign: jest.fn(),
+      verify: jest.fn(),
+    };
+    const mockReflector = {
+      getAllAndOverride: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [StatsController],
@@ -22,6 +32,10 @@ describe('StatsController', () => {
         { provide: GetStats, useValue: mockGet },
         { provide: UpdateStats, useValue: mockUpdate },
         { provide: TrackStatsEvent, useValue: mockTrack },
+        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: Reflector, useValue: mockReflector },
+        AuthGuard,
+        RolesGuard,
       ],
     }).compile();
 

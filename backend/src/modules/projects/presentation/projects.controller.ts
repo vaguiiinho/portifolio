@@ -13,6 +13,7 @@ import {
   UploadedFile,
   UseInterceptors,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { File as MulterFile } from 'multer';
@@ -22,6 +23,10 @@ import { UpdateProject } from '../application/update-project';
 import { DeleteProject } from '../application/delete-project';
 import { IProjectRepository } from '../domain/repositories/i-project-repository';
 import { CreateProjectDto, UpdateProjectDto } from './dtos';
+import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
+import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
+import { Roles } from '../../auth/presentation/decorators/roles.decorator';
+import { UserRole } from '../../auth/domain/entities/user';
 
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 
@@ -51,6 +56,8 @@ export class ProjectsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.administrador)
   @UseInterceptors(
     FileInterceptor('videoFile', {
       limits: {
@@ -70,6 +77,8 @@ export class ProjectsController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.administrador)
   @UseInterceptors(
     FileInterceptor('videoFile', {
       limits: {
@@ -90,6 +99,8 @@ export class ProjectsController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.administrador)
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string) {
     return this.deleteProject.execute(id);

@@ -18,6 +18,27 @@ export interface ApiProject {
   updatedAt: string
 }
 
+export interface AuthUser {
+  id: string
+  email: string
+  role: 'visitante' | 'administrador'
+}
+
+export interface AuthSession {
+  accessToken: string
+  user: AuthUser
+}
+
+export interface LoginPayload {
+  email: string
+  password: string
+}
+
+export interface LoginResponse {
+  accessToken: string
+  user: AuthUser
+}
+
 export interface ProjectPayload {
   title: string
   description: string
@@ -47,6 +68,59 @@ export interface ContactPayload {
   message: string
 }
 
+const AUTH_SESSION_KEY = 'portfolio-auth-session'
+
+function isBrowser() {
+  return typeof window !== 'undefined'
+}
+
+export function readAuthSession(): AuthSession | null {
+  if (!isBrowser()) {
+    return null
+  }
+
+  const stored = window.localStorage.getItem(AUTH_SESSION_KEY)
+
+  if (!stored) {
+    return null
+  }
+
+  try {
+    return JSON.parse(stored) as AuthSession
+  } catch {
+    window.localStorage.removeItem(AUTH_SESSION_KEY)
+    return null
+  }
+}
+
+export function writeAuthSession(session: AuthSession | null) {
+  if (!isBrowser()) {
+    return
+  }
+
+  if (!session) {
+    window.localStorage.removeItem(AUTH_SESSION_KEY)
+    return
+  }
+
+  window.localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session))
+}
+
+export function getStoredAuthToken() {
+  return readAuthSession()?.accessToken
+}
+
+function withAuthHeaders(headers?: HeadersInit) {
+  const mergedHeaders = new Headers(headers)
+  const token = getStoredAuthToken()
+
+  if (token && !mergedHeaders.has('Authorization')) {
+    mergedHeaders.set('Authorization', `Bearer ${token}`)
+  }
+
+  return mergedHeaders
+}
+
 function isFormDataBody(body: unknown): body is FormData {
   if (typeof FormData === 'undefined' || !body) {
     return false
@@ -57,16 +131,17 @@ function isFormDataBody(body: unknown): body is FormData {
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const isFormData = isFormDataBody(init?.body)
+  const headers = isFormData
+    ? withAuthHeaders(init?.headers)
+    : withAuthHeaders({
+        'Content-Type': 'application/json',
+        ...(init?.headers ?? {}),
+      })
 
   const response = await fetchFromApi(path, {
     ...init,
     cache: 'no-store',
-    headers: isFormData
-      ? init?.headers
-      : {
-          'Content-Type': 'application/json',
-          ...(init?.headers ?? {}),
-        },
+    headers,
   })
 
   if (!response.ok) {
@@ -121,6 +196,17 @@ export async function sendContact(payload: ContactPayload) {
     method: 'POST',
     body: JSON.stringify(payload),
   })
+}
+
+export async function login(payload: LoginPayload) {
+  return request<LoginResponse>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  })
+}
+
+export async function fetchCurrentUser() {
+  return request<AuthUser & { sub?: string }>('/auth/me')
 }
 
 export function resolveMediaUrl(value?: string | null) {
