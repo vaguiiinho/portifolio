@@ -88,7 +88,7 @@ Status atual:
 * Fases 1, 2 e 3: concluídas.
 * Fase 4: concluída.
 * Fase 5: concluída.
-* Fase 6: pendente.
+* Fase 6: concluída.
 
 ## Fase 1: Auditoria e limites
 ### Status
@@ -157,7 +157,7 @@ Status atual:
 
 ## Fase 6: Validação final
 ### Status
-* Pendente
+* Concluída
 ### Subtarefas
 * Rodar lint e typecheck.
 * Validar build.
