@@ -1,10 +1,9 @@
-import { FadeIn } from "@/components/ui/fade-in"
 import { socialLinks } from "@/data/navigation"
 import { AppLink } from "@/components/ui/app-link"
 
 export function SocialLinksCard() {
   return (
-    <FadeIn direction="left" className="space-y-4">
+    <div className="space-y-4">
       {socialLinks.map((link) => (
         <AppLink
           href={link.href}
@@ -21,6 +20,6 @@ export function SocialLinksCard() {
           </div>
         </AppLink>
       ))}
-    </FadeIn>
+    </div>
   )
 }

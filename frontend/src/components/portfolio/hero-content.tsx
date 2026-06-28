@@ -1,28 +1,23 @@
-"use client"
-
-import { ArrowRight, Loader2 } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { FadeIn } from "@/components/ui/fade-in"
 import { heroContent } from "@/lib/content"
-import { useStats } from "@/hooks/use-stats"
+import type { HeroStat } from "@/lib/stats"
 
-export function HeroContent() {
-  const { stats, isLoading } = useStats()
+interface HeroContentProps {
+  stats: HeroStat[]
+}
 
+export function HeroContent({ stats }: HeroContentProps) {
   return (
-    <FadeIn direction="left" className="space-y-8">
+    <div className="space-y-8">
       <div className="space-y-4">
-        <FadeIn
-          direction="up"
-          delay={0.2}
-          className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-sm text-muted-foreground"
-        >
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-sm text-muted-foreground">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
           </span>
           {heroContent.availabilityText}
-        </FadeIn>
+        </div>
 
         <h1 className="text-4xl font-bold tracking-tight leading-tight text-balance sm:text-5xl lg:text-6xl">
           {heroContent.title}{" "}
@@ -48,21 +43,14 @@ export function HeroContent() {
       </div>
 
       {/* Stats */}
-      <div className="flex gap-8 pt-4">
-        {isLoading ? (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Carregando métricas...
+      <div className="grid gap-6 pt-4 sm:grid-cols-3">
+        {stats.map((stat) => (
+          <div key={stat.label}>
+            <div className="text-2xl sm:text-3xl font-bold">{stat.value}</div>
+            <div className="text-sm text-muted-foreground">{stat.label}</div>
           </div>
-        ) : (
-          stats.map((stat, i) => (
-            <FadeIn key={stat.label} direction="up" delay={0.4 + i * 0.1}>
-              <div className="text-2xl sm:text-3xl font-bold">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </FadeIn>
-          ))
-        )}
+        ))}
       </div>
-    </FadeIn>
+    </div>
   )
 }

@@ -1,7 +1,7 @@
 import { Container } from "./container"
-import { FadeIn } from "@/components/ui/fade-in"
 import { Avatar } from "./avatar"
 import { TechStack } from "./tech-stack"
+import { SectionHeader } from "./section-header"
 import { aboutContent } from "@/lib/content"
 
 interface AboutProps {
@@ -12,23 +12,16 @@ export function About({ siteName }: AboutProps) {
   return (
     <section id="about" className="py-24 sm:py-32 bg-secondary/30">
       <Container>
-        <FadeIn className="mb-12 text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-balance">
-            {aboutContent.title}
-          </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-            {aboutContent.subtitle}
-          </p>
-        </FadeIn>
+        <SectionHeader className="mb-12" title={aboutContent.title} subtitle={aboutContent.subtitle} />
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Avatar / Image */}
-          <FadeIn className="relative">
+          <div className="relative">
             <Avatar siteName={siteName} />
-          </FadeIn>
+          </div>
 
           {/* Bio */}
-          <FadeIn direction="right" className="space-y-6">
+          <div className="space-y-6">
             <div className="prose prose-invert max-w-none">
               {aboutContent.bio.map((paragraph, index) => (
                 <p key={index} className="text-lg text-muted-foreground leading-relaxed text-pretty">
@@ -38,7 +31,7 @@ export function About({ siteName }: AboutProps) {
             </div>
 
             <TechStack />
-          </FadeIn>
+          </div>
         </div>
       </Container>
     </section>

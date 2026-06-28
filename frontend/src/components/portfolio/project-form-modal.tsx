@@ -6,7 +6,13 @@ import { X, Loader2, Plus, PencilLine, Upload } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
-import { createProject, updateProject, resolveMediaUrl, type ProjectPayload } from "@/lib/api"
+import { createProject, updateProject, resolveMediaUrl } from "@/lib/api"
+import {
+  buildInitialProjectFormState,
+  buildProjectFormData,
+  validateProjectForm,
+  type ProjectFormState,
+} from "./project-form-modal.utils"
 import type { Project } from "./project-card"
 
 interface ProjectFormModalProps {
@@ -16,154 +22,13 @@ interface ProjectFormModalProps {
   onSaved: () => Promise<void> | void
 }
 
-interface ProjectFormState {
-  title: string
-  description: string
-  techStack: string
-  githubUrl: string
-  liveUrl: string
-  videoUrl: string
-  problemTitle: string
-  problemDescription: string
-  solutionTitle: string
-  solutionDescription: string
-  resultTitle: string
-  resultDescription: string
-}
-
-function buildInitialState(project: Project | null): ProjectFormState {
-  return {
-    title: project?.title ?? "",
-    description: project?.description ?? "",
-    techStack: project?.techStack?.join(", ") ?? "",
-    githubUrl: project?.githubUrl ?? "",
-    liveUrl: project?.liveUrl ?? "",
-    videoUrl: "",
-    problemTitle: project?.problemTitle ?? "",
-    problemDescription: project?.problemDescription ?? "",
-    solutionTitle: project?.solutionTitle ?? "",
-    solutionDescription: project?.solutionDescription ?? "",
-    resultTitle: project?.resultTitle ?? "",
-    resultDescription: project?.resultDescription ?? "",
-  }
-}
-
-function parseTechStack(value: string) {
-  return value
-    .split(",")
-    .map((tech) => tech.trim())
-    .filter(Boolean)
-}
-
-function normalizeUrl(value: string) {
-  const trimmed = value.trim()
-  return trimmed.length > 0 ? trimmed : undefined
-}
-
-function isValidUrl(value: string) {
-  if (!value.trim()) {
-    return true
-  }
-
-  try {
-    new URL(value)
-    return true
-  } catch {
-    return false
-  }
-}
-
-function isValidVideoSource(value: string) {
-  if (!value.trim()) {
-    return true
-  }
-
-  return /^(https?:\/\/|data:video\/|\/uploads\/)/.test(value.trim())
-}
-
-function buildPayload(values: ProjectFormState): ProjectPayload {
-  const payload: ProjectPayload = {
-    title: values.title.trim(),
-    description: values.description.trim(),
-    techStack: parseTechStack(values.techStack),
-  }
-
-  const githubUrl = normalizeUrl(values.githubUrl)
-  const liveUrl = normalizeUrl(values.liveUrl)
-
-  if (githubUrl) {
-    payload.githubUrl = githubUrl
-  }
-
-  if (liveUrl) {
-    payload.liveUrl = liveUrl
-  }
-
-  const videoUrl = normalizeUrl(values.videoUrl)
-
-  if (videoUrl) {
-    payload.videoUrl = videoUrl
-  }
-
-  return payload
-}
-
-function buildFormData(values: ProjectFormState, videoFile: File | null) {
-  const payload = buildPayload(values)
-  const formData = new FormData()
-
-  formData.append("title", payload.title)
-  formData.append("description", payload.description)
-  formData.append("techStack", payload.techStack.join(","))
-
-  if (payload.githubUrl) {
-    formData.append("githubUrl", payload.githubUrl)
-  }
-
-  if (payload.liveUrl) {
-    formData.append("liveUrl", payload.liveUrl)
-  }
-
-  if (videoFile) {
-    formData.append("videoFile", videoFile)
-  } else if (payload.videoUrl) {
-    formData.append("videoUrl", payload.videoUrl)
-  }
-
-  if (values.problemTitle.trim()) {
-    formData.append("problemTitle", values.problemTitle.trim())
-  }
-
-  if (values.problemDescription.trim()) {
-    formData.append("problemDescription", values.problemDescription.trim())
-  }
-
-  if (values.solutionTitle.trim()) {
-    formData.append("solutionTitle", values.solutionTitle.trim())
-  }
-
-  if (values.solutionDescription.trim()) {
-    formData.append("solutionDescription", values.solutionDescription.trim())
-  }
-
-  if (values.resultTitle.trim()) {
-    formData.append("resultTitle", values.resultTitle.trim())
-  }
-
-  if (values.resultDescription.trim()) {
-    formData.append("resultDescription", values.resultDescription.trim())
-  }
-
-  return formData
-}
-
 export function ProjectFormModal({
   open,
   project,
   onClose,
   onSaved,
 }: ProjectFormModalProps) {
-  const [values, setValues] = useState<ProjectFormState>(buildInitialState(project))
+  const [values, setValues] = useState<ProjectFormState>(buildInitialProjectFormState(project))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null)
@@ -188,44 +53,17 @@ export function ProjectFormModal({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const payload = buildPayload(values)
-    const title = payload.title.trim()
-    const description = payload.description.trim()
+    const validationError = validateProjectForm(values)
 
-    if (title.length < 3) {
-      setError("Title must be at least 3 characters")
-      return
-    }
-
-    if (description.length < 10) {
-      setError("Description must be at least 10 characters")
-      return
-    }
-
-    if (payload.techStack.length === 0) {
-      setError("Add at least one technology")
-      return
-    }
-
-    if (!isValidUrl(payload.githubUrl ?? "")) {
-      setError("GitHub URL must be a valid URL")
-      return
-    }
-
-    if (!isValidUrl(payload.liveUrl ?? "")) {
-      setError("Live URL must be a valid URL")
-      return
-    }
-
-    if (!isValidVideoSource(payload.videoUrl ?? "")) {
-      setError("Video must be a valid URL, upload path, or video file")
+    if (validationError) {
+      setError(validationError)
       return
     }
 
     try {
       setIsSubmitting(true)
       setError(null)
-      const formData = buildFormData(values, selectedVideoFile)
+      const formData = buildProjectFormData(values, selectedVideoFile)
 
       if (project) {
         await updateProject(project.id, formData)
