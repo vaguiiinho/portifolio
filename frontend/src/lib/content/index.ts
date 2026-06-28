@@ -1,0 +1,7 @@
+export { aboutContent } from "./about"
+export { contactContent } from "./contact"
+export { footerContent } from "./footer"
+export { heroContent } from "./hero"
+export { projectModalContent, projectsContent } from "./projects"
+export { resumeContent } from "./resume"
+export { servicesContent } from "./services"

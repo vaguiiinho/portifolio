@@ -7,14 +7,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
   const siteName = config.siteName || siteDefaults.siteName
   const description = config.description || siteDefaults.description
-  const title = `${siteName} | Full Stack Developer`
+  const title = `${siteName} | Desenvolvedor Full Stack`
 
   return {
     metadataBase: new URL(`https://${siteDefaults.domain}`),
     title,
     description,
     generator: 'Next.js',
-    keywords: ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'Web Development'],
+    keywords: ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'NestJS', 'Portfólio'],
     authors: [{ name: siteName }],
     icons: {
       icon: '/favicon.ico',

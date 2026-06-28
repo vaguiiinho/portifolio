@@ -1,4 +1,4 @@
-import { Navbar, Hero, Projects, About, Contact, Footer } from "@/components/portfolio"
+import { Navbar, Hero, Services, Projects, About, Contact, Footer } from "@/components/portfolio"
 import { fetchSiteConfig } from "@/lib/site-config"
 
 /**
@@ -12,6 +12,7 @@ export default async function HomePage() {
     <main className="relative">
       <Navbar siteName={config.siteName} />
       <Hero siteName={config.siteName} />
+      <Services />
       <Projects />
       <About siteName={config.siteName} />
       <Contact />

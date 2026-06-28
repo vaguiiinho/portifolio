@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { AppLink } from "@/components/ui/app-link"
 import { navLinks } from "@/data/navigation"
 
 interface MobileNavProps {
@@ -20,14 +21,14 @@ export function MobileNav({ isOpen, onClose }: MobileNavProps) {
     >
       <div className="py-4 space-y-2">
         {navLinks.map((link) => (
-          <a
+          <AppLink
             key={link.name}
             href={link.href}
             onClick={onClose}
             className="block px-4 py-2 text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
           >
             {link.name}
-          </a>
+          </AppLink>
         ))}
       </div>
     </motion.div>

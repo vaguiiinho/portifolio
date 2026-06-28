@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from "react"
 import { motion } from "framer-motion"
-import { ExternalLink, Github, PencilLine, Trash2 } from "lucide-react"
+import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import { cn } from "@/lib/utils"
@@ -29,11 +29,9 @@ interface ProjectCardProps {
   project: Project
   index: number
   onClick?: () => void
-  onEdit?: () => void
-  onDelete?: () => void
 }
 
-export function ProjectCard({ project, index, onClick, onEdit, onDelete }: ProjectCardProps) {
+export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
   const initial = project.title?.charAt(0) || "P"
 
   return (
@@ -69,38 +67,10 @@ export function ProjectCard({ project, index, onClick, onEdit, onDelete }: Proje
             
             {/* Overlay on Hover */}
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-              {onEdit && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="rounded-full"
-                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                    e.stopPropagation()
-                    onEdit()
-                  }}
-                  >
-                    <PencilLine className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-              )}
-              {onDelete && (
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  className="rounded-full"
-                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
-                    e.stopPropagation()
-                    onDelete()
-                  }}
-                >
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete
-                </Button>
-              )}
               {project.liveUrl && (
                 <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <ExternalLink className="mr-2 h-4 w-4" />
-                  Live Demo
+                  Ver demo
                 </Button>
               )}
               {project.githubUrl && (
@@ -135,26 +105,26 @@ export function ProjectCard({ project, index, onClick, onEdit, onDelete }: Proje
             <div className="grid gap-3 border-t border-border pt-4 text-xs text-muted-foreground sm:grid-cols-3">
               <div className="space-y-1">
                 <p className="font-medium text-foreground">
-                  {project.problemTitle || "Problem"}
+                  {project.problemTitle || "Problema"}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.problemDescription || "Not defined yet."}
+                  {project.problemDescription || "Descrição não informada."}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-foreground">
-                  {project.solutionTitle || "Solution"}
+                  {project.solutionTitle || "Solução"}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.solutionDescription || "Not defined yet."}
+                  {project.solutionDescription || "Descrição não informada."}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-foreground">
-                  {project.resultTitle || "Result"}
+                  {project.resultTitle || "Resultado"}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.resultDescription || "Not defined yet."}
+                  {project.resultDescription || "Descrição não informada."}
                 </p>
               </div>
             </div>

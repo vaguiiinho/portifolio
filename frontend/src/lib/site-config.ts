@@ -12,7 +12,7 @@ export const siteDefaults = {
   linkedin: 'https://linkedin.com/in/joaosilva',
   siteName: 'João Silva',
   description:
-    'Full Stack Developer building scalable and modern applications. Specializing in React, Next.js, and cloud architecture.',
+    'Full Stack Developer focado em conversão, portfólios, dashboards e APIs com arquitetura limpa.',
 }
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'

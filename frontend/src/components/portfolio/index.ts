@@ -1,5 +1,6 @@
 export { Navbar } from "./navbar"
 export { Hero } from "./hero"
+export { Services } from "./services"
 export { Projects } from "./projects"
 export { About } from "./about"
 export { Contact } from "./contact"

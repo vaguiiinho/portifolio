@@ -1,35 +1,33 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, ExternalLink, Github, CheckCircle2, PencilLine, Trash2, Play } from "lucide-react"
+import { X, ExternalLink, Github, CheckCircle2, Play } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import type { Project } from "./project-card"
-import { projectModalData } from "@/data/site"
+import { projectModalContent } from "@/lib/content"
 import { resolveMediaUrl } from "@/lib/api"
 
 interface ProjectModalProps {
   project: Project | null
   onClose: () => void
-  onEdit?: () => void
-  onDelete?: () => void
 }
 
-export function ProjectModal({ project, onClose, onEdit, onDelete }: ProjectModalProps) {
+export function ProjectModal({ project, onClose }: ProjectModalProps) {
   const initial = project?.title?.charAt(0) || "P"
   const sections = [
     {
-      title: project?.problemTitle || "Problem",
-      description: project?.problemDescription || "Not defined yet.",
+      title: project?.problemTitle || projectModalContent.sections[0].title,
+      description: project?.problemDescription || projectModalContent.sections[0].description,
     },
     {
-      title: project?.solutionTitle || "Solution",
-      description: project?.solutionDescription || "Not defined yet.",
+      title: project?.solutionTitle || projectModalContent.sections[1].title,
+      description: project?.solutionDescription || projectModalContent.sections[1].description,
     },
     {
-      title: project?.resultTitle || "Result",
-      description: project?.resultDescription || "Not defined yet.",
+      title: project?.resultTitle || projectModalContent.sections[2].title,
+      description: project?.resultDescription || projectModalContent.sections[2].description,
     },
   ]
 
@@ -63,7 +61,7 @@ export function ProjectModal({ project, onClose, onEdit, onDelete }: ProjectModa
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 z-10 p-2 rounded-full bg-secondary/80 hover:bg-secondary transition-colors"
-                aria-label="Close modal"
+                aria-label="Fechar modal"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -89,7 +87,7 @@ export function ProjectModal({ project, onClose, onEdit, onDelete }: ProjectModa
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Play className="h-4 w-4 text-accent" />
-                      <h3 className="font-semibold">Presentation video</h3>
+                      <h3 className="font-semibold">Vídeo de apresentação</h3>
                     </div>
                     <div className="overflow-hidden rounded-2xl border border-border bg-black">
                       <video
@@ -119,7 +117,7 @@ export function ProjectModal({ project, onClose, onEdit, onDelete }: ProjectModa
 
                 {/* Tech Stack */}
                 <div>
-                  <h3 className="font-semibold mb-3">{projectModalData.technologiesTitle}</h3>
+                  <h3 className="font-semibold mb-3">{projectModalContent.technologiesTitle}</h3>
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.map((tech) => (
                       <Badge key={tech} variant="glow">
@@ -131,32 +129,29 @@ export function ProjectModal({ project, onClose, onEdit, onDelete }: ProjectModa
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-3 pt-4 border-t border-border">
-                  {onEdit && (
-                    <Button variant="outline" className="rounded-full" onClick={onEdit}>
-                      <PencilLine className="mr-2 h-4 w-4" />
-                      Edit Project
-                    </Button>
-                  )}
-                  {onDelete && (
-                    <Button
-                      variant="destructive"
-                      className="rounded-full"
-                      onClick={onDelete}
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete Project
-                    </Button>
-                  )}
                   {project.liveUrl && (
-                    <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="rounded-full">
+                    <Button
+                      as="a"
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-full"
+                    >
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      {projectModalData.viewLiveDemoText}
+                      {projectModalContent.viewLiveDemoText}
                     </Button>
                   )}
                   {project.githubUrl && (
-                    <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" className="rounded-full">
+                    <Button
+                      as="a"
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      variant="outline"
+                      className="rounded-full"
+                    >
                       <Github className="mr-2 h-4 w-4" />
-                      {projectModalData.viewSourceCodeText}
+                      {projectModalContent.viewSourceCodeText}
                     </Button>
                   )}
                 </div>

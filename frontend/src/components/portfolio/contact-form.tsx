@@ -5,7 +5,7 @@ import { AlertCircle, CheckCircle2, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/ui/fade-in"
 import { FormField } from "@/components/ui/form-field"
-import { contactData } from "@/data/site"
+import { contactContent } from "@/lib/content"
 import { useContact } from "@/hooks/use-contact"
 
 export function ContactForm() {
@@ -25,7 +25,7 @@ export function ContactForm() {
       message: subject ? `Subject: ${subject}\n\n${message}` : message,
     })
 
-    setStatusMessage("Message sent. I will get back to you soon.")
+    setStatusMessage("Mensagem enviada. Eu retorno em breve.")
     form.reset()
   }
 
@@ -33,19 +33,19 @@ export function ContactForm() {
     <FadeIn direction="right">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid sm:grid-cols-2 gap-4">
-          <FormField
+            <FormField
             id="name"
             name="name"
-            label={contactData.formLabels.name}
-            placeholder={contactData.formPlaceholders.name}
+            label={contactContent.formLabels.name}
+            placeholder={contactContent.formPlaceholders.name}
             required
           />
           <FormField
             id="email"
             name="email"
             type="email"
-            label={contactData.formLabels.email}
-            placeholder={contactData.formPlaceholders.email}
+            label={contactContent.formLabels.email}
+            placeholder={contactContent.formPlaceholders.email}
             required
           />
         </div>
@@ -53,16 +53,16 @@ export function ContactForm() {
         <FormField
           id="subject"
           name="subject"
-          label={contactData.formLabels.subject}
-          placeholder={contactData.formPlaceholders.subject}
+          label={contactContent.formLabels.subject}
+          placeholder={contactContent.formPlaceholders.subject}
           required
         />
 
         <FormField
           id="message"
           name="message"
-          label={contactData.formLabels.message}
-          placeholder={contactData.formPlaceholders.message}
+          label={contactContent.formLabels.message}
+          placeholder={contactContent.formPlaceholders.message}
           rows={5}
           required
         />
@@ -76,12 +76,12 @@ export function ContactForm() {
           {isSubmitting ? (
             <>
               <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              {contactData.submittingText}
+              {contactContent.submittingText}
             </>
           ) : (
             <>
               <Send className="mr-2 h-4 w-4" />
-              {contactData.submitButton}
+              {contactContent.submitButton}
             </>
           )}
         </Button>

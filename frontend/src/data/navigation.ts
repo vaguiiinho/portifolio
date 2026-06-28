@@ -1,17 +1,39 @@
-import { Github, Linkedin, Mail, Twitter } from "lucide-react"
+import { Github, Linkedin, Mail, MessageCircleMore } from "lucide-react"
 
 export const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "Projects", href: "#projects" },
-  { name: "About", href: "#about" },
-  { name: "Contact", href: "#contact" },
+  { name: "Início", href: "#home" },
+  { name: "Serviços", href: "#services" },
+  { name: "Cases", href: "#projects" },
+  { name: "Currículo", href: "/curriculo" },
+  { name: "Sobre", href: "#about" },
+  { name: "Contato", href: "#contact" },
 ]
 
 export const socialLinks = [
-  { name: "GitHub", href: "https://github.com", icon: Github, username: "@alexchen" },
-  { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin, username: "alexchen" },
-  { name: "Twitter", href: "https://twitter.com", icon: Twitter, username: "@alexchen" },
-  { name: "Email", href: "mailto:hello@alexchen.dev", icon: Mail, username: "hello@alexchen.dev" },
+  {
+    name: "GitHub",
+    href: "https://github.com/joaosilva",
+    icon: Github,
+    username: "github.com/joaosilva",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/in/joaosilva",
+    icon: Linkedin,
+    username: "linkedin.com/in/joaosilva",
+  },
+  {
+    name: "E-mail",
+    href: "mailto:hello@joaosilva.dev",
+    icon: Mail,
+    username: "hello@joaosilva.dev",
+  },
+  {
+    name: "WhatsApp",
+    href: "https://wa.me/5500000000000",
+    icon: MessageCircleMore,
+    username: "+55 00 00000-0000",
+  },
 ]
 
 export const techStack = [

@@ -40,7 +40,7 @@ export function useProjects() {
       }
     } catch (err) {
       if (!cancelledRef?.current) {
-        setError(err instanceof Error ? err.message : "Failed to load projects")
+        setError(err instanceof Error ? err.message : "Falha ao carregar os cases")
       }
     } finally {
       if (!cancelledRef?.current) {
@@ -61,7 +61,7 @@ export function useProjects() {
       })
       .catch((err) => {
         if (!cancelledRef.current) {
-          setError(err instanceof Error ? err.message : "Failed to load projects")
+          setError(err instanceof Error ? err.message : "Falha ao carregar os cases")
         }
       })
       .finally(() => {

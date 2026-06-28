@@ -1,12 +1,12 @@
 import { FadeIn } from "@/components/ui/fade-in"
 import { techStack } from "@/data/navigation"
-import { aboutData } from "@/data/site"
+import { aboutContent } from "@/lib/content"
 
 export function TechStack() {
   return (
     <div className="pt-6">
       <h3 className="text-sm font-medium text-muted-foreground mb-4">
-        {aboutData.techStackTitle}
+        {aboutContent.techStackTitle}
       </h3>
       <FadeIn direction="up" className="flex flex-wrap gap-2">
         {techStack.map((tech) => (

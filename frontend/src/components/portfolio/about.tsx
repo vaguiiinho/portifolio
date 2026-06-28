@@ -2,7 +2,7 @@ import { Container } from "./container"
 import { FadeIn } from "@/components/ui/fade-in"
 import { Avatar } from "./avatar"
 import { TechStack } from "./tech-stack"
-import { aboutData } from "@/data/site"
+import { aboutContent } from "@/lib/content"
 
 interface AboutProps {
   siteName: string
@@ -14,10 +14,10 @@ export function About({ siteName }: AboutProps) {
       <Container>
         <FadeIn className="mb-12 text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-balance">
-            {aboutData.title}
+            {aboutContent.title}
           </h2>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-            {aboutData.subtitle}
+            {aboutContent.subtitle}
           </p>
         </FadeIn>
 
@@ -30,7 +30,7 @@ export function About({ siteName }: AboutProps) {
           {/* Bio */}
           <FadeIn direction="right" className="space-y-6">
             <div className="prose prose-invert max-w-none">
-              {aboutData.bio.map((paragraph, index) => (
+              {aboutContent.bio.map((paragraph, index) => (
                 <p key={index} className="text-lg text-muted-foreground leading-relaxed text-pretty">
                   {paragraph}
                 </p>

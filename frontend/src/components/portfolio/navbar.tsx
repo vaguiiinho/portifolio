@@ -63,8 +63,12 @@ export function Navbar({ siteName }: NavbarProps) {
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
-            <Button as="a" href="#projects" className="hidden sm:inline-flex rounded-full">
-              View Projects
+            <Button as="a" href="#contact" className="hidden sm:inline-flex rounded-full">
+              Pedir orçamento
+            </Button>
+
+            <Button as="a" href="/curriculo" variant="outline" className="hidden lg:inline-flex rounded-full">
+              Ver currículo
             </Button>
 
             {/* Mobile Menu Toggle */}

@@ -14,9 +14,9 @@ export function useContact() {
       setError(null)
       setSuccess(null)
       await sendContact(payload)
-      setSuccess("Message sent successfully.")
+      setSuccess("Mensagem enviada com sucesso.")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send message")
+      setError(err instanceof Error ? err.message : "Falha ao enviar a mensagem")
       throw err
     } finally {
       setIsSubmitting(false)

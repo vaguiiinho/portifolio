@@ -3,7 +3,7 @@
 import { ArrowRight, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/ui/fade-in"
-import { heroData } from "@/data/site"
+import { heroContent } from "@/lib/content"
 import { useStats } from "@/hooks/use-stats"
 
 export function HeroContent() {
@@ -12,35 +12,39 @@ export function HeroContent() {
   return (
     <FadeIn direction="left" className="space-y-8">
       <div className="space-y-4">
-        <FadeIn direction="up" delay={0.2} className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-secondary/50 text-sm text-muted-foreground">
+        <FadeIn
+          direction="up"
+          delay={0.2}
+          className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-3 py-1 text-sm text-muted-foreground"
+        >
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
           </span>
-          {heroData.availabilityText}
+          {heroContent.availabilityText}
         </FadeIn>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-balance leading-tight">
-          {heroData.title}{" "}
+        <h1 className="text-4xl font-bold tracking-tight leading-tight text-balance sm:text-5xl lg:text-6xl">
+          {heroContent.title}{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent/60">
-            {heroData.titleHighlight}
+            {heroContent.titleHighlight}
           </span>{" "}
-          and modern applications
+          e produtos modernos
         </h1>
 
-        <p className="text-lg sm:text-xl text-muted-foreground max-w-xl text-pretty leading-relaxed">
-          {heroData.subtitle}
+        <p className="max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
+          {heroContent.subtitle}
         </p>
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <Button as="a" href="#projects" size="lg" className="rounded-full group">
-        {heroData.viewProjectsText}
-        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-      </Button>
-      <Button as="a" href="#contact" variant="outline" size="lg" className="rounded-full">
-        {heroData.contactMeText}
-      </Button>
+        <Button as="a" href="#services" size="lg" className="rounded-full group">
+          {heroContent.viewProjectsText}
+          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+        </Button>
+        <Button as="a" href="#contact" variant="outline" size="lg" className="rounded-full">
+          {heroContent.contactMeText}
+        </Button>
       </div>
 
       {/* Stats */}
@@ -48,7 +52,7 @@ export function HeroContent() {
         {isLoading ? (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" />
-            Loading stats...
+            Carregando métricas...
           </div>
         ) : (
           stats.map((stat, i) => (

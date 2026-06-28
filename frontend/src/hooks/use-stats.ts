@@ -24,18 +24,18 @@ export function useStats() {
 
         if (!cancelled) {
           setStats([
-            { value: `${data.projectsCount}+`, label: "Projects Delivered" },
-            { value: `${data.visitors}+`, label: "Visitors Tracked" },
-            { value: "5+", label: "Years Experience" },
+            { value: `${data.projectsCount}+`, label: "Cases publicados" },
+            { value: `${data.visitors}+`, label: "Visitas rastreadas" },
+            { value: "5+", label: "Anos de experiência" },
           ])
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to load stats")
+          setError(err instanceof Error ? err.message : "Falha ao carregar as métricas")
           setStats([
-            { value: "5+", label: "Years Experience" },
-            { value: "50+", label: "Projects Delivered" },
-            { value: "30+", label: "Happy Clients" },
+            { value: "5+", label: "Anos de experiência" },
+            { value: "50+", label: "Projetos entregues" },
+            { value: "30+", label: "Clientes atendidos" },
           ])
         }
       } finally {
