@@ -1,4 +1,6 @@
-# 🎯 Objetivo
+# PRD - Arquitetura do Frontend
+
+## Objetivo
 Elevar o padrão de código do frontend do portfólio para uma base mais modular, previsível e alinhada com Next.js moderno.
 
 O foco é reduzir componentes monolíticos, separar UI de lógica e dados, diminuir estado desnecessário no client e organizar o código para facilitar manutenção, testes manuais e evolução de conteúdo.
@@ -6,7 +8,7 @@ Também entra no escopo evoluir a navegação para páginas por rota quando isso
 
 ---
 
-# 🧱 Contexto Técnico
+## Contexto Técnico
 
 * Frontend: Next.js App Router
 * Linguagem: TypeScript
@@ -16,15 +18,15 @@ Também entra no escopo evoluir a navegação para páginas por rota quando isso
 
 ---
 
-# 📌 Problemas Observados
+## Problemas Observados
 
-## Código e responsabilidades
+### Código e responsabilidades
 * Há componentes que concentram mais responsabilidade do que o ideal.
 * Parte do conteúdo e das regras de exibição ainda fica espalhada entre `data/`, `hooks/` e `components/`.
 * Alguns componentes misturam renderização com montagem de estados/CTAs/decisões de fluxo.
 * Existem textos e blocos com regras repetidas para links internos e externos.
 
-## Organização
+### Organização
 * Ainda há chance de melhorar a separação entre:
   * UI pura
   * lógica de apresentação
@@ -36,7 +38,7 @@ Também entra no escopo evoluir a navegação para páginas por rota quando isso
   * `lib/content/`
   * `app/`
 
-## Next.js moderno
+### Next.js moderno
 * Alguns componentes client-side existem por necessidade real, mas outros podem ser convertidos para Server Components.
 * Conteúdo estático e partes sem estado podem ser renderizadas no servidor.
 * O formulário de contato e interações de tema/menu continuam justificando client-side.
@@ -44,7 +46,7 @@ Também entra no escopo evoluir a navegação para páginas por rota quando isso
 
 ---
 
-# ⚙️ Regras de Implementação
+## Regras de Implementação
 
 * Priorizar Server Components sempre que não houver estado, eventos ou APIs do navegador.
 * Usar Client Components somente para:
@@ -64,7 +66,7 @@ Também entra no escopo evoluir a navegação para páginas por rota quando isso
 
 ---
 
-# 📂 Estrutura Esperada
+## Estrutura Esperada
 
 frontend/
 src/app/
@@ -82,7 +84,7 @@ src/data/
 
 ---
 
-# 🚀 Fases de Execução
+## Fases de Execução
 
 Status atual:
 * Fases 1, 2 e 3: concluídas.
@@ -90,85 +92,85 @@ Status atual:
 * Fase 5: concluída.
 * Fase 6: concluída.
 
-## Fase 1: Auditoria e limites
-### Status
+### Fase 1: Auditoria e limites
+#### Status
 * Concluída
-### Subtarefas
+#### Subtarefas
 * Mapear componentes que podem virar Server Components.
 * Identificar componentes com múltiplas responsabilidades.
 * Listar duplicidades de CTA, links e mensagens.
 * Classificar arquivos em UI, lógica, dados e composição.
 * Marcar componentes com `use client` que podem ser removidos.
 
-### Critério de aceite
+#### Critério de aceite
 * Existe um inventário claro do que é UI, lógica e dado.
 
-## Fase 2: Separação de responsabilidades
-### Status
+### Fase 2: Separação de responsabilidades
+#### Status
 * Concluída
-### Subtarefas
+#### Subtarefas
 * Extrair conteúdo estático para módulos específicos.
 * Extrair lógica reutilizável para hooks ou helpers.
 * Dividir seções grandes em partes menores.
 * Extrair regras de CTA/link interno-externo para helper compartilhado.
 * Reduzir arquivos que misturam markup com montagem de conteúdo.
 
-### Critério de aceite
+#### Critério de aceite
 * Nenhuma seção principal depende de um componente monolítico.
 
-## Fase 3: Server Components primeiro
-### Status
+### Fase 3: Server Components primeiro
+#### Status
 * Concluída
-### Subtarefas
+#### Subtarefas
 * Converter para Server Components tudo o que não precisar de estado.
 * Manter client components apenas onde houver necessidade real.
 * Reduzir `use client` ao mínimo.
 * Separar blocos estáticos da página principal em componentes de servidor.
 * Manter a camada de interação isolada em pontos específicos.
 
-### Critério de aceite
+#### Critério de aceite
 * O número de client components cai sem perda funcional.
 
-## Fase 4: Estrutura por rotas e páginas
-### Status
+### Fase 4: Estrutura por rotas e páginas
+#### Status
 * Concluída
-### Subtarefas
+#### Subtarefas
 * Definir quais seções continuam na home e quais viram rotas próprias.
 * Criar páginas dedicadas para áreas com contexto próprio, como portfólio, currículo ou contato, quando fizer sentido.
 * Manter a home como landing page com visão geral e CTAs de navegação.
 * Reaproveitar componentes compartilhados entre as rotas sem duplicar layout.
 * Ajustar navegação e breadcrumbs/links para refletir a nova estrutura.
 
-### Critério de aceite
+#### Critério de aceite
 * O site deixa de depender de uma única página longa para tudo o que é relevante.
 
-## Fase 5: Consolidação de dados e fluxos
-### Status
+### Fase 5: Consolidação de dados e fluxos
+#### Status
 * Concluída
-### Subtarefas
+#### Subtarefas
 * Centralizar dados em módulos mais semânticos.
 * Padronizar links internos/externos.
 * Padronizar CTAs por persona e por objetivo.
 * Quebrar `data/site.ts` em fontes de conteúdo por domínio.
 * Remover textos duplicados de fallback e estado vazio.
 
-### Critério de aceite
+#### Critério de aceite
 * O conteúdo não fica duplicado em múltiplos arquivos.
 
-## Fase 6: Validação final
-### Status
+### Fase 6: Validação final
+#### Status
 * Concluída
-### Subtarefas
+#### Subtarefas
 * Rodar lint e typecheck.
 * Validar build.
 * Revisar responsividade e navegação.
 
-### Critério de aceite
+#### Critério de aceite
 * O frontend permanece estável e mais fácil de manter.
 
 ---
 
-# ✅ Resultado Esperado
+## Resultado Esperado
 
 * Base mais legível e modular.
 * Menor acoplamento entre dados, lógica e UI.

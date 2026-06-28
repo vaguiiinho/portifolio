@@ -1,16 +1,13 @@
-# 🎯 Objetivo
+# PRD - Backend da API
+
+## Objetivo
 
 Construir uma API REST profissional utilizando NestJS + Prisma + PostgreSQL, seguindo Clean Architecture e Domain-Driven Design (DDD), para servir dados dinâmicos a um frontend Next.js de portfólio.
 
 A API deve ser escalável, testável e organizada por módulos de domínio: Projects, Contact, Stats e Config.
-
-utilizar docker compose exec para rodar os comandos
-
-
-
 ---
 
-# 🧱 Contexto Técnico
+## Contexto Técnico
 
 * Backend: NestJS
 * ORM: Prisma
@@ -22,7 +19,7 @@ utilizar docker compose exec para rodar os comandos
 
 ---
 
-# 📂 Estrutura Esperada
+## Estrutura Esperada
 
 src/
 modules/
@@ -44,7 +41,7 @@ schema.prisma
 
 ---
 
-# ⚙️ Regras de Implementação
+## Regras de Implementação
 
 * Separar claramente camadas:
 
@@ -59,15 +56,15 @@ schema.prisma
 
 * Controllers SEM lógica de negócio
 
-* Services = UseCases
+* Services = casos de uso
 
 ---
 
-# 🚀 Execução por Tarefas
+## Execução por Tarefas
 
-## 🔹 Tarefa 1: Setup do Projeto
+### Tarefa 1: Setup do Projeto
 
-### Subtarefas
+#### Subtarefas
 
 * Criar projeto NestJS
 * Instalar dependências:
@@ -81,16 +78,16 @@ schema.prisma
 * Criar .env com DATABASE_URL
 * Inicializar Prisma (init + generate)
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Projeto roda com `npm run start:dev`
 * Prisma conectado ao banco
 
 ---
 
-## 🔹 Tarefa 2: Modelagem do Banco (Prisma)
+### Tarefa 2: Modelagem do Banco (Prisma)
 
-### Subtarefas
+#### Subtarefas
 
 Criar models:
 
@@ -126,16 +123,16 @@ Config:
 * description
 * updatedAt
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * `prisma migrate dev` executa sem erros
 * Banco criado corretamente
 
 ---
 
-## 🔹 Tarefa 3: Domain Layer
+### Tarefa 3: Domínio
 
-### Subtarefas
+#### Subtarefas
 
 * Criar entidades:
 
@@ -150,20 +147,20 @@ Config:
   * IContactRepository
   * etc.
 
-### Regras
+#### Regras
 
 * Sem dependência de NestJS ou Prisma
 * Entidades com métodos de domínio se necessário
 
-### Critério de Aceite
+#### Critério de Aceite
 
-* Domain isolado e reutilizável
+* Domínio isolado e reutilizável
 
 ---
 
-## 🔹 Tarefa 4: Infrastructure Layer
+### Tarefa 4: Infraestrutura
 
-### Subtarefas
+#### Subtarefas
 
 * Criar PrismaService
 * Implementar repositórios:
@@ -171,20 +168,20 @@ Config:
   * ProjectPrismaRepository
   * ContactPrismaRepository
 
-### Regras
+#### Regras
 
 * Implementar interfaces do domínio
 * Mapear Prisma ↔ Entidade
 
-### Critério de Aceite
+#### Critério de Aceite
 
-* Repositórios funcionando com banco
+* Repositórios funcionando com o banco
 
 ---
 
-## 🔹 Tarefa 5: Application Layer (Use Cases)
+### Tarefa 5: Casos de Uso
 
-### Subtarefas
+#### Subtarefas
 
 Projects:
 
@@ -202,20 +199,20 @@ Stats:
 * GetStats
 * UpdateStats
 
-### Regras
+#### Regras
 
-* Cada use case = 1 classe
+* Cada caso de uso = 1 classe
 * Injetar repositórios via interface
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Lógica isolada e testável
 
 ---
 
-## 🔹 Tarefa 6: Presentation Layer
+### Tarefa 6: Apresentação
 
-### Subtarefas
+#### Subtarefas
 
 Criar controllers:
 
@@ -234,26 +231,26 @@ StatsController:
 
 * GET /stats
 
-### DTOs
+#### DTOs
 
 * CreateProjectDto
 * UpdateProjectDto
 * ContactDto
 
-### Regras
+#### Regras
 
 * Validar dados com class-validator
 * Usar pipes globais
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Endpoints funcionando via Postman
 
 ---
 
-## 🔹 Tarefa 7: Tratamento de Erros
+### Tarefa 7: Tratamento de Erros
 
-### Subtarefas
+#### Subtarefas
 
 * Criar GlobalExceptionFilter
 * Padronizar resposta:
@@ -264,66 +261,66 @@ message,
 error
 }
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Erros consistentes em toda API
-* Endpoints funcionando via Postman o curl
+* Endpoints funcionando via Postman ou `curl`
 
 ---
 
-## 🔹 Tarefa 8: Testes
+### Tarefa 8: Testes
 
-### Subtarefas
+#### Subtarefas
 
 * Unitários:
   
   * domain
-  * UseCases
+  * Casos de uso
 
 * Integração:
-  * Repositories ultilizar testcontainer
+* Repositórios utilizando Testcontainers
   * Controllers
 
-### Meta
+#### Meta
 
 * Cobertura mínima: 80%
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * `npm run test` sem falhas
 
 ---
 
-## 🔹 Tarefa 9: Seed de Dados
+### Tarefa 9: Seed de Dados
 
-### Subtarefas
+#### Subtarefas
 
 * Criar seed.ts no Prisma
 * Inserir projetos iniciais
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Banco populado automaticamente
 
 ---
 
-## 🔹 Tarefa 10: Integração com Next.js
+### Tarefa 10: Integração com Next.js
 
-### Subtarefas
+#### Subtarefas
 
 * Criar client HTTP (fetch/axios)
 * Substituir dados mock por API
 * Criar hooks (useProjects, etc.)
 
-### Critério de Aceite
+#### Critério de Aceite
 
-* Front consumindo API corretamente
+* Frontend consumindo a API corretamente
 
 ---
 
-## 🔹 Tarefa 11: CRUD de Projetos no Frontend e Backend
+### Tarefa 11: CRUD de Projetos no Frontend e Backend
 
-### Subtarefas
+#### Subtarefas
 
 * Criar fluxo de cadastro de projeto
 * Criar fluxo de edição de projeto
@@ -331,7 +328,7 @@ error
 * Adicionar ações de criar e editar na interface de projetos
 * Validar título, descrição, tecnologias e URLs
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Projetos podem ser criados e editados pela interface
 * Backend persiste as alterações corretamente
@@ -339,22 +336,22 @@ error
 
 ---
 
-## 🔹 Tarefa 12: Vídeos de Apresentação dos Projetos
+### Tarefa 12: Vídeos de Apresentação dos Projetos
 
-### Subtarefas
+#### Subtarefas
 
 * Adicionar suporte a vídeo de apresentação por projeto
 * Exibir vídeo na visualização de detalhes do projeto
 * Permitir configurar URL ou arquivo de vídeo no cadastro/edição
 
-### Critério de Aceite
+#### Critério de Aceite
 
 * Cada projeto pode exibir um vídeo de demonstração
 * Vídeos ficam acessíveis na tela de detalhes do projeto
 
 ---
 
-# 📈 Melhorias Futuras (NÃO IMPLEMENTAR AGORA)
+## Melhorias Futuras
 
 * Autenticação JWT (admin)
 * GraphQL
@@ -364,7 +361,7 @@ error
 
 ---
 
-# ⚠️ Regras para o Copilot Agent
+## Regras para o Agente
 
 * Implementar UMA tarefa por vez
 * NÃO pular etapas
@@ -375,7 +372,7 @@ error
 
 ---
 
-# ✅ Resultado Esperado
+## Resultado Esperado
 
 Uma API:
 
