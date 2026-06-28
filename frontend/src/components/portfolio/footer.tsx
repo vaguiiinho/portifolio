@@ -46,7 +46,7 @@ export function Footer({ siteName, locale }: FooterProps) {
                 href={link.href}
                 target={link.href.startsWith("mailto:") ? undefined : "_blank"}
                 className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={`Visitar ${link.name}`}
+                aria-label={locale === "en" ? `Visit ${link.name}` : `Visitar ${link.name}`}
                 title={link.name}
               >
                 <link.icon className="h-5 w-5" aria-hidden="true" />

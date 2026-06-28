@@ -8,7 +8,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
   const locale = getLocale()
   const siteName = config.siteName || siteDefaults.siteName
-  const description = config.description || siteDefaults.description
+  const description =
+    config.description ||
+    (locale === "en"
+      ? "Full Stack Developer focused on conversion, portfolios, dashboards and APIs with clean architecture."
+      : siteDefaults.description)
   const title = locale === "en" ? `${siteName} | Full Stack Developer` : `${siteName} | Desenvolvedor Full Stack`
 
   return {

@@ -1,7 +1,21 @@
+import type { Metadata } from "next"
 import { Navbar, Hero, HomeHub, Testimonials, ConversionMetrics, Footer } from "@/components/portfolio"
 import { MetricBeacon } from "@/components/portfolio/metric-beacon"
 import { fetchSiteConfig } from "@/lib/site-config"
 import { getLocale } from "@/lib/locale"
+import { createRouteMetadata } from "@/lib/metadata"
+import { getHeroContent } from "@/lib/content/localized"
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getLocale()
+  const heroContent = getHeroContent(locale)
+
+  return createRouteMetadata({
+    title: locale === "en" ? "Home" : "Início",
+    description: heroContent.subtitle,
+    path: "/",
+  })
+}
 
 /**
  * Página principal do portfólio

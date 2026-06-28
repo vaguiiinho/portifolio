@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og"
+import { cookies } from "next/headers"
 import { siteDefaults } from "@/lib/site-config"
+import { getLocaleFromCookieValue, getLocaleCookieName } from "@/lib/locale"
 
 export const runtime = "edge"
-export const alt = "Portfólio de desenvolvimento full stack"
 export const size = {
   width: 1200,
   height: 630,
@@ -10,6 +11,30 @@ export const size = {
 export const contentType = "image/png"
 
 export default async function Image() {
+  const locale = getLocaleFromCookieValue(cookies().get(getLocaleCookieName())?.value)
+  const content =
+    locale === "en"
+      ? {
+          alt: "Full Stack development portfolio",
+          title: "Full Stack Developer",
+          titleHighlight: "focused on conversion",
+          description:
+            "Portfolio focused on cases, contractable services, resume and fast contact.",
+          tags: ["Context-rich cases", "Clear services", "Resume and contact"],
+          availability: "Available for",
+          channels: "LinkedIn and Workana",
+        }
+      : {
+          alt: "Portfólio de desenvolvimento full stack",
+          title: "Full Stack Developer",
+          titleHighlight: "focado em conversão",
+          description:
+            "Portfólio orientado a cases, serviços contratáveis, currículo e contato rápido.",
+          tags: ["Cases com contexto", "Serviços claros", "Currículo e contato"],
+          availability: "Disponível para",
+          channels: "LinkedIn e Workana",
+        }
+
   return new ImageResponse(
     (
       <div
@@ -67,9 +92,9 @@ export default async function Image() {
                   fontWeight: 800,
                 }}
               >
-                Full Stack Developer
+                {content.title}
                 <br />
-                focado em conversão
+                {content.titleHighlight}
               </h1>
               <p
                 style={{
@@ -80,14 +105,14 @@ export default async function Image() {
                   maxWidth: 900,
                 }}
               >
-                Portfólio orientado a cases, serviços contratáveis, currículo e contato rápido.
+                {content.description}
               </p>
             </div>
           </div>
 
           <div style={{ display: "flex", gap: 20, alignItems: "flex-end", justifyContent: "space-between" }}>
             <div style={{ display: "flex", gap: 14, flexWrap: "wrap", maxWidth: 760 }}>
-              {["Cases com contexto", "Serviços claros", "Currículo e contato"].map((item) => (
+              {content.tags.map((item) => (
                 <div
                   key={item}
                   style={{
@@ -114,8 +139,8 @@ export default async function Image() {
                 minWidth: 250,
               }}
             >
-              <div style={{ fontSize: 20, color: "rgba(226,232,240,0.72)" }}>Disponível para</div>
-              <div style={{ fontSize: 28, fontWeight: 700, marginTop: 6 }}>LinkedIn e Workana</div>
+              <div style={{ fontSize: 20, color: "rgba(226,232,240,0.72)" }}>{content.availability}</div>
+              <div style={{ fontSize: 28, fontWeight: 700, marginTop: 6 }}>{content.channels}</div>
             </div>
           </div>
         </div>
@@ -124,3 +149,5 @@ export default async function Image() {
     size,
   )
 }
+
+export const alt = "Full Stack portfolio / Portfólio de desenvolvimento full stack"

@@ -1,8 +1,9 @@
 import { ImageResponse } from "next/og"
+import { cookies } from "next/headers"
 import { siteDefaults } from "@/lib/site-config"
+import { getLocaleFromCookieValue, getLocaleCookieName } from "@/lib/locale"
 
 export const runtime = "edge"
-export const alt = "Portfólio de desenvolvimento full stack"
 export const size = {
   width: 1200,
   height: 600,
@@ -10,6 +11,26 @@ export const size = {
 export const contentType = "image/png"
 
 export default async function Image() {
+  const locale = getLocaleFromCookieValue(cookies().get(getLocaleCookieName())?.value)
+  const content =
+    locale === "en"
+      ? {
+          alt: "Full Stack development portfolio",
+          title: "Portfolio",
+          titleLine2: "focused on conversion",
+          description:
+            "Projects, services, resume and contact in a clear showcase for recruiters and clients.",
+          chips: ["Cases", "Services", "Resume", "Contact"],
+        }
+      : {
+          alt: "Portfólio de desenvolvimento full stack",
+          title: "Portfólio",
+          titleLine2: "com foco em conversão",
+          description:
+            "Projetos, serviços, currículo e contato em uma vitrine clara para recrutadores e clientes.",
+          chips: ["Cases", "Serviços", "Currículo", "Contato"],
+        }
+
   return new ImageResponse(
     (
       <div
@@ -51,9 +72,9 @@ export default async function Image() {
               fontWeight: 800,
             }}
           >
-            Portfólio
+            {content.title}
             <br />
-            com foco em conversão
+            {content.titleLine2}
           </h1>
 
           <p
@@ -65,12 +86,12 @@ export default async function Image() {
               maxWidth: 820,
             }}
           >
-            Projetos, serviços, currículo e contato em uma vitrine clara para recrutadores e clientes.
+            {content.description}
           </p>
         </div>
 
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
-          {["Cases", "Serviços", "Currículo", "Contato"].map((item) => (
+          {content.chips.map((item) => (
             <div
               key={item}
               style={{
@@ -90,3 +111,5 @@ export default async function Image() {
     size,
   )
 }
+
+export const alt = "Full Stack portfolio / Portfólio de desenvolvimento full stack"
