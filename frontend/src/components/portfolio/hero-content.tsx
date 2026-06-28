@@ -1,14 +1,19 @@
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { heroContent } from "@/lib/content"
 import { portfolioRoutes } from "@/lib/routes"
+import { getHeroContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 import type { HeroStat } from "@/lib/stats"
 
 interface HeroContentProps {
   stats: HeroStat[]
+  locale: Locale
 }
 
-export function HeroContent({ stats }: HeroContentProps) {
+export function HeroContent({ stats, locale }: HeroContentProps) {
+  const heroContent = getHeroContent(locale)
+  const titleSuffix = locale === "en" ? "and modern products" : "e produtos modernos"
+
   return (
     <div className="space-y-8">
       <div className="space-y-4">
@@ -25,7 +30,7 @@ export function HeroContent({ stats }: HeroContentProps) {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent/60">
             {heroContent.titleHighlight}
           </span>{" "}
-          e produtos modernos
+          {titleSuffix}
         </h1>
 
         <p className="max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
@@ -34,11 +39,24 @@ export function HeroContent({ stats }: HeroContentProps) {
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <Button as="a" href={portfolioRoutes.services} size="lg" className="rounded-full group">
+        <Button
+          as="a"
+          href={portfolioRoutes.services}
+          size="lg"
+          className="rounded-full group"
+          metricKey="cta:hero-services"
+        >
           {heroContent.viewProjectsText}
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
-        <Button as="a" href={portfolioRoutes.contact} variant="outline" size="lg" className="rounded-full">
+        <Button
+          as="a"
+          href={portfolioRoutes.contact}
+          variant="outline"
+          size="lg"
+          className="rounded-full"
+          metricKey="cta:hero-contact"
+        >
           {heroContent.contactMeText}
         </Button>
       </div>

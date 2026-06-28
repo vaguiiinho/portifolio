@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import { trackStatsEvent } from "@/lib/analytics"
 
 function isExternalHref(href: string) {
   return /^(https?:|mailto:|tel:)/.test(href)
@@ -10,14 +13,19 @@ function isInternalRoute(href: string) {
 
 interface AppLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
+  metricKey?: string
 }
 
-export function AppLink({ href, target, rel, download, children, ...props }: AppLinkProps) {
+export function AppLink({ href, target, rel, download, children, metricKey, onClick, ...props }: AppLinkProps) {
   const shouldUseAnchor = download || target === "_blank" || !isInternalRoute(href) || isExternalHref(href)
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    trackStatsEvent(metricKey ?? '')
+    onClick?.(event)
+  }
 
   if (!shouldUseAnchor) {
     return (
-      <Link href={href} {...props}>
+      <Link href={href} onClick={handleClick} {...props}>
         {children}
       </Link>
     )
@@ -29,6 +37,7 @@ export function AppLink({ href, target, rel, download, children, ...props }: App
       target={target}
       rel={target === "_blank" ? rel ?? "noopener noreferrer" : rel}
       download={download}
+      onClick={handleClick}
       {...props}
     >
       {children}

@@ -9,7 +9,9 @@ describe('Stats', () => {
   let stats: Stats;
 
   beforeEach(() => {
-    stats = new Stats(mockId, mockProjectsCount, mockVisitors, mockUpdatedAt);
+    stats = new Stats(mockId, mockProjectsCount, mockVisitors, mockUpdatedAt, {
+      'page:home': 3,
+    });
   });
 
   it('should create stats with correct properties', () => {
@@ -54,5 +56,18 @@ describe('Stats', () => {
     stats.updateVisitors(newCount);
     expect(stats.visitors).toBe(newCount);
     expect(stats.updatedAt.getTime()).toBeGreaterThan(mockUpdatedAt.getTime());
+  });
+
+  it('should track custom events', () => {
+    stats.trackEvent('cta:contact');
+    stats.trackEvent('cta:contact', 2);
+
+    expect(stats.events['cta:contact']).toBe(3);
+    expect(stats.updatedAt.getTime()).toBeGreaterThan(mockUpdatedAt.getTime());
+  });
+
+  it('should ignore empty event keys', () => {
+    stats.trackEvent('   ');
+    expect(stats.events).toEqual({ 'page:home': 3 });
   });
 });

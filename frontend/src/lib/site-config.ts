@@ -1,3 +1,5 @@
+import { fetchFromApi } from './api-base-url'
+
 export interface SiteConfig {
   id: string
   siteName: string
@@ -15,11 +17,9 @@ export const siteDefaults = {
     'Full Stack Developer focado em conversão, portfólios, dashboards e APIs com arquitetura limpa.',
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
-
 export async function fetchSiteConfig(): Promise<SiteConfig> {
   try {
-    const response = await fetch(`${API_BASE_URL}/config`, {
+    const response = await fetchFromApi('/config', {
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',

@@ -1,11 +1,10 @@
+import { fetchFromApi } from './api-base-url'
 import type { ApiStats } from "./api"
 
 export interface HeroStat {
   value: string
   label: string
 }
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.trim() || "http://localhost:3001"
 
 function mapHeroStats(data: ApiStats): HeroStat[] {
   return [
@@ -17,7 +16,7 @@ function mapHeroStats(data: ApiStats): HeroStat[] {
 
 export async function fetchHeroStats(): Promise<HeroStat[]> {
   try {
-    const response = await fetch(`${API_BASE_URL}/stats`, {
+    const response = await fetchFromApi('/stats', {
       cache: "no-store",
       headers: {
         "Content-Type": "application/json",

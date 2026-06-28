@@ -1,10 +1,14 @@
-import { resumePdfContent } from "@/lib/content"
+import { cookies } from "next/headers"
+import { getLocaleFromCookieValue, getLocaleCookieName } from "@/lib/locale"
+import { getResumePdfContent } from "@/lib/content/localized"
 
 function escapePdfText(value: string) {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)")
 }
 
 function buildPdf(): Uint8Array {
+  const locale = getLocaleFromCookieValue(cookies().get(getLocaleCookieName())?.value)
+  const resumePdfContent = getResumePdfContent(locale)
   const lines = [
     resumePdfContent.title,
     resumePdfContent.subtitle,

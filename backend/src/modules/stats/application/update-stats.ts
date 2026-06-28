@@ -22,6 +22,7 @@ export class UpdateStats {
       input.projectsCount ?? existingStats.projectsCount,
       input.visitors ?? existingStats.visitors,
       new Date(),
+      existingStats.events,
     );
 
     return this.statsRepository.update(updatedStats);

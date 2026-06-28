@@ -7,16 +7,21 @@ import { Navbar } from "@/components/portfolio/navbar"
 import { SectionHeader } from "@/components/portfolio/section-header"
 import { portfolioRoutes } from "@/lib/routes"
 import { fetchSiteConfig } from "@/lib/site-config"
-import { resumeContent, resumePageContent } from "@/lib/content"
 import { siteDefaults } from "@/lib/site-config"
+import { MetricBeacon } from "@/components/portfolio/metric-beacon"
+import { getLocale } from "@/lib/locale"
+import { getResumeContent, getResumePageContent } from "@/lib/content/localized"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
   const siteName = config.siteName || siteDefaults.siteName
-  const description = `${resumeContent.summary} ${resumeContent.ctaDescription}`
+  const locale = getLocale()
+  const resumePageDetails = getResumeContent(locale)
+  const description = `${resumePageDetails.summary} ${resumePageDetails.ctaDescription}`
+  const title = locale === "en" ? `${siteName} | Resume` : `${siteName} | Currículo`
 
   return {
-    title: `${siteName} | Currículo`,
+    title,
     description,
     alternates: {
       canonical: `https://${siteDefaults.domain}/curriculo`,
@@ -26,10 +31,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ResumePage() {
   const config = await fetchSiteConfig()
+  const locale = getLocale()
+  const resumePageContent = getResumePageContent(locale)
+  const resumeContent = getResumeContent(locale)
 
   return (
     <main className="relative">
-      <Navbar siteName={config.siteName} />
+      <MetricBeacon eventKey="page:resume" />
+      <Navbar siteName={config.siteName} locale={locale} />
 
       <section className="relative overflow-hidden pt-28 pb-20 sm:pt-32 sm:pb-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(84,130,255,0.16),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.06),_transparent_30%)]" />
@@ -50,12 +59,20 @@ export default async function ResumePage() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button as="a" href={portfolioRoutes.resumePdf} isExternal download size="lg" className="rounded-full">
+              <Button
+                as="a"
+                href={portfolioRoutes.resumePdf}
+                isExternal
+                download
+                size="lg"
+                className="rounded-full"
+                metricKey="cta:resume-download"
+              >
                 <ArrowDownToLine className="h-4 w-4" />
                 {resumePageContent.heroActions.downloadLabel}
               </Button>
               <Button as="a" href="#experiencia" variant="outline" size="lg" className="rounded-full">
-                Ver experiência
+                {resumePageContent.heroActions.experienceLabel}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </div>
@@ -89,7 +106,7 @@ export default async function ResumePage() {
             <div className="rounded-3xl border border-border bg-secondary/30 p-8">
               <div className="flex items-center gap-3">
                 <BriefcaseBusiness className="h-5 w-5 text-accent" />
-                <h2 className="text-2xl font-semibold tracking-tight">O que entrego melhor</h2>
+                <h2 className="text-2xl font-semibold tracking-tight">{resumeContent.skillsTitle}</h2>
               </div>
               <div className="mt-5 space-y-3">
                 {resumeContent.skills.map((skill) => (
@@ -156,11 +173,24 @@ export default async function ResumePage() {
                   subtitle={resumeContent.ctaDescription}
                 />
                 <div className="mt-6 flex flex-wrap gap-3">
-              <Button as="a" href={portfolioRoutes.resumePdf} isExternal download className="rounded-full">
-                <ArrowDownToLine className="h-4 w-4" />
-                {resumePageContent.ctaActions.downloadLabel}
-              </Button>
-                  <Button as="a" href={portfolioRoutes.contact} variant="outline" className="rounded-full">
+                  <Button
+                    as="a"
+                    href={portfolioRoutes.resumePdf}
+                    isExternal
+                    download
+                    className="rounded-full"
+                    metricKey="cta:resume-download-secondary"
+                  >
+                    <ArrowDownToLine className="h-4 w-4" />
+                    {resumePageContent.ctaActions.downloadLabel}
+                  </Button>
+                  <Button
+                    as="a"
+                    href={portfolioRoutes.contact}
+                    variant="outline"
+                    className="rounded-full"
+                    metricKey="cta:resume-contact"
+                  >
                     {resumePageContent.ctaActions.contactLabel}
                   </Button>
                 </div>
@@ -170,7 +200,7 @@ export default async function ResumePage() {
         </Container>
       </section>
 
-      <Footer siteName={config.siteName} />
+      <Footer siteName={config.siteName} locale={locale} />
     </main>
   )
 }

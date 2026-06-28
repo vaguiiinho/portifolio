@@ -17,6 +17,7 @@ export class StatsPrismaRepository implements IStatsRepository {
           id: '1',
           projectsCount: 0,
           visitors: 0,
+          events: {},
           updatedAt: new Date(),
         },
       });
@@ -29,6 +30,7 @@ export class StatsPrismaRepository implements IStatsRepository {
     const data = {
       projectsCount: stats.projectsCount,
       visitors: stats.visitors,
+      events: stats.events,
       updatedAt: stats.updatedAt,
     };
     const prismaStats = await this.prisma.stats.update({
@@ -38,12 +40,19 @@ export class StatsPrismaRepository implements IStatsRepository {
     return this.mapToDomain(prismaStats);
   }
 
+  async trackEvent(key: string, increment = 1): Promise<Stats> {
+    const stats = await this.find();
+    stats.trackEvent(key, increment);
+    return this.update(stats);
+  }
+
   private mapToDomain(prismaStats: PrismaStats): Stats {
     return new Stats(
       prismaStats.id,
       prismaStats.projectsCount,
       prismaStats.visitors,
       prismaStats.updatedAt,
+      (prismaStats.events as Record<string, number> | null) ?? {},
     );
   }
 }

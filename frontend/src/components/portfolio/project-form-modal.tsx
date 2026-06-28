@@ -13,7 +13,8 @@ import {
   validateProjectForm,
   type ProjectFormState,
 } from "./project-form-modal.utils"
-import { projectFormContent } from "@/lib/content"
+import { getProjectFormContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 import type { Project } from "./project-card"
 
 interface ProjectFormModalProps {
@@ -21,6 +22,7 @@ interface ProjectFormModalProps {
   project: Project | null
   onClose: () => void
   onSaved: () => Promise<void> | void
+  locale: Locale
 }
 
 export function ProjectFormModal({
@@ -28,15 +30,17 @@ export function ProjectFormModal({
   project,
   onClose,
   onSaved,
+  locale,
 }: ProjectFormModalProps) {
   const [values, setValues] = useState<ProjectFormState>(buildInitialProjectFormState(project))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null)
+  const projectFormContent = getProjectFormContent(locale)
   const isEditing = Boolean(project)
   const currentVideoUrl = resolveMediaUrl(project?.videoUrl)
-  const title = isEditing ? "Edit Project" : "New Project"
-  const submitLabel = isEditing ? "Save changes" : "Create project"
+  const title = isEditing ? projectFormContent.titleEdit : projectFormContent.titleNew
+  const submitLabel = isEditing ? projectFormContent.submitLabelEdit : projectFormContent.submitLabelNew
   const Icon = isEditing ? PencilLine : Plus
 
   async function handleVideoFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -54,7 +58,7 @@ export function ProjectFormModal({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const validationError = validateProjectForm(values)
+    const validationError = validateProjectForm(values, locale)
 
     if (validationError) {
       setError(validationError)
@@ -75,7 +79,7 @@ export function ProjectFormModal({
       await onSaved()
       onClose()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save project")
+      setError(err instanceof Error ? err.message : locale === "en" ? "Failed to save project" : "Falha ao salvar o projeto")
     } finally {
       setIsSubmitting(false)
     }
@@ -110,7 +114,7 @@ export function ProjectFormModal({
                 type="button"
                 onClick={onClose}
                 className="absolute top-4 right-4 z-10 p-2 rounded-full bg-secondary/80 hover:bg-secondary transition-colors"
-                aria-label="Close modal"
+                aria-label={projectFormContent.closeLabel}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -133,8 +137,8 @@ export function ProjectFormModal({
                   <FormField
                     id="project-title"
                     name="title"
-                    label="Title"
-                    placeholder="Project title"
+                    label={projectFormContent.labels.title}
+                    placeholder={projectFormContent.placeholders.title}
                     required
                     value={values.title}
                     onChange={(event) =>
@@ -144,8 +148,8 @@ export function ProjectFormModal({
                   <FormField
                     id="project-description"
                     name="description"
-                    label="Description"
-                    placeholder="Project description"
+                    label={projectFormContent.labels.description}
+                    placeholder={projectFormContent.placeholders.description}
                     rows={5}
                     required
                     value={values.description}
@@ -156,8 +160,8 @@ export function ProjectFormModal({
                   <FormField
                     id="project-tech-stack"
                     name="techStack"
-                    label="Technologies"
-                    placeholder="React, Next.js, NestJS"
+                    label={projectFormContent.labels.techStack}
+                    placeholder={projectFormContent.placeholders.techStack}
                     required
                     value={values.techStack}
                     onChange={(event) =>
@@ -168,8 +172,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-github-url"
                       name="githubUrl"
-                      label="GitHub URL"
-                      placeholder="https://github.com/..."
+                      label={projectFormContent.labels.githubUrl}
+                      placeholder={projectFormContent.placeholders.githubUrl}
                       type="url"
                       value={values.githubUrl}
                       onChange={(event) =>
@@ -179,8 +183,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-live-url"
                       name="liveUrl"
-                      label="Live URL"
-                      placeholder="https://..."
+                      label={projectFormContent.labels.liveUrl}
+                      placeholder={projectFormContent.placeholders.liveUrl}
                       type="url"
                       value={values.liveUrl}
                       onChange={(event) =>
@@ -190,8 +194,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-video-url"
                       name="videoUrl"
-                      label="Video URL"
-                      placeholder="https://... or data:video/..."
+                      label={projectFormContent.labels.videoUrl}
+                      placeholder={projectFormContent.placeholders.videoUrl}
                       type="text"
                       value={values.videoUrl}
                       onChange={(event) =>
@@ -218,7 +222,7 @@ export function ProjectFormModal({
                     )}
                     <label htmlFor="project-video-file" className="flex items-center gap-2 text-sm font-medium">
                       <Upload className="h-4 w-4" />
-                      Upload video file
+                      {projectFormContent.labels.videoFile}
                     </label>
                     <input
                       id="project-video-file"
@@ -230,7 +234,7 @@ export function ProjectFormModal({
                     />
                     <p className="text-xs text-muted-foreground">
                       {selectedVideoFile
-                        ? `Selected file: ${selectedVideoFile.name}`
+                        ? `${projectFormContent.helperText.selectedFilePrefix}: ${selectedVideoFile.name}`
                         : projectFormContent.helperText.videoUpload}
                     </p>
                   </div>
@@ -245,8 +249,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-problem-title"
                       name="problemTitle"
-                      label="Problem title"
-                      placeholder="Problem"
+                      label={projectFormContent.labels.problemTitle}
+                      placeholder={projectFormContent.placeholders.problemTitle}
                       value={values.problemTitle}
                       onChange={(event) =>
                         setValues((current) => ({ ...current, problemTitle: event.target.value }))
@@ -255,8 +259,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-problem-description"
                       name="problemDescription"
-                      label="Problem description"
-                      placeholder="What needed to be solved?"
+                      label={projectFormContent.labels.problemDescription}
+                      placeholder={projectFormContent.placeholders.problemDescription}
                       rows={3}
                       value={values.problemDescription}
                       onChange={(event) =>
@@ -269,8 +273,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-solution-title"
                       name="solutionTitle"
-                      label="Solution title"
-                      placeholder="Solution"
+                      label={projectFormContent.labels.solutionTitle}
+                      placeholder={projectFormContent.placeholders.solutionTitle}
                       value={values.solutionTitle}
                       onChange={(event) =>
                         setValues((current) => ({ ...current, solutionTitle: event.target.value }))
@@ -279,8 +283,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-solution-description"
                       name="solutionDescription"
-                      label="Solution description"
-                      placeholder="How was it approached?"
+                      label={projectFormContent.labels.solutionDescription}
+                      placeholder={projectFormContent.placeholders.solutionDescription}
                       rows={3}
                       value={values.solutionDescription}
                       onChange={(event) =>
@@ -293,8 +297,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-result-title"
                       name="resultTitle"
-                      label="Result title"
-                      placeholder="Result"
+                      label={projectFormContent.labels.resultTitle}
+                      placeholder={projectFormContent.placeholders.resultTitle}
                       value={values.resultTitle}
                       onChange={(event) =>
                         setValues((current) => ({ ...current, resultTitle: event.target.value }))
@@ -303,8 +307,8 @@ export function ProjectFormModal({
                     <FormField
                       id="project-result-description"
                       name="resultDescription"
-                      label="Result description"
-                      placeholder="What changed?"
+                      label={projectFormContent.labels.resultDescription}
+                      placeholder={projectFormContent.placeholders.resultDescription}
                       rows={3}
                       value={values.resultDescription}
                       onChange={(event) =>
@@ -325,13 +329,13 @@ export function ProjectFormModal({
 
                 <div className="flex flex-wrap items-center justify-end gap-3 pt-4 border-t border-border">
                   <Button type="button" variant="outline" onClick={onClose} className="rounded-full">
-                    Cancel
+                    {projectFormContent.helperText.cancel}
                   </Button>
                   <Button type="submit" className="rounded-full" disabled={isSubmitting}>
                     {isSubmitting ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        Saving...
+                        {projectFormContent.helperText.saving}
                       </>
                     ) : (
                       <>

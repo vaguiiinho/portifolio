@@ -44,6 +44,7 @@ model Stats {
   id            String   @id @default(cuid())
   projectsCount Int      @default(0)
   visitors      Int      @default(0)
+  events        Json     @default("{}")
   updatedAt     DateTime @updatedAt
 
   @@map("stats")

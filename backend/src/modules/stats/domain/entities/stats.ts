@@ -2,6 +2,7 @@ export class Stats {
   private _id: string;
   private _projectsCount: number;
   private _visitors: number;
+  private _events: Record<string, number>;
   private _updatedAt: Date;
 
   constructor(
@@ -9,10 +10,12 @@ export class Stats {
     projectsCount: number,
     visitors: number,
     updatedAt: Date,
+    events: Record<string, number> = {},
   ) {
     this._id = id;
     this._projectsCount = projectsCount;
     this._visitors = visitors;
+    this._events = { ...events };
     this._updatedAt = updatedAt;
   }
 
@@ -30,6 +33,10 @@ export class Stats {
 
   get updatedAt(): Date {
     return this._updatedAt;
+  }
+
+  get events(): Record<string, number> {
+    return { ...this._events };
   }
 
   incrementProjectsCount(): void {
@@ -59,11 +66,21 @@ export class Stats {
     this._updatedAt = new Date();
   }
 
+  trackEvent(key: string, increment = 1): void {
+    if (!key.trim()) {
+      return;
+    }
+
+    this._events[key] = (this._events[key] ?? 0) + increment;
+    this._updatedAt = new Date();
+  }
+
   toJSON() {
     return {
       id: this.id,
       projectsCount: this.projectsCount,
       visitors: this.visitors,
+      events: this.events,
       updatedAt: this.updatedAt,
     };
   }

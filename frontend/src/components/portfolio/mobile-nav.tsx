@@ -1,14 +1,17 @@
 import { motion } from "framer-motion"
 import { AppLink } from "@/components/ui/app-link"
-import { navLinks } from "@/lib/content"
+import { getNavLinks } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
 interface MobileNavProps {
   isOpen: boolean
   onClose: () => void
+  locale: Locale
 }
 
-export function MobileNav({ isOpen, onClose }: MobileNavProps) {
+export function MobileNav({ isOpen, onClose, locale }: MobileNavProps) {
   if (!isOpen) return null
+  const navLinks = getNavLinks(locale)
 
   return (
     <motion.div

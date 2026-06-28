@@ -5,10 +5,17 @@ import { AlertCircle, CheckCircle2, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/ui/fade-in"
 import { FormField } from "@/components/ui/form-field"
-import { contactContent } from "@/lib/content"
+import { getContactContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 import { useContact } from "@/hooks/use-contact"
+import { trackStatsEvent } from "@/lib/analytics"
 
-export function ContactForm() {
+interface ContactFormProps {
+  locale: Locale
+}
+
+export function ContactForm({ locale }: ContactFormProps) {
+  const contactContent = getContactContent(locale)
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const { submitContact, isSubmitting, error, success } = useContact()
 
@@ -25,7 +32,9 @@ export function ContactForm() {
       message: subject ? `Subject: ${subject}\n\n${message}` : message,
     })
 
-    setStatusMessage("Mensagem enviada. Eu retorno em breve.")
+    trackStatsEvent("cta:contact-submit")
+
+    setStatusMessage(locale === "en" ? "Message sent. I'll get back to you soon." : "Mensagem enviada. Eu retorno em breve.")
     form.reset()
   }
 
@@ -72,6 +81,7 @@ export function ContactForm() {
           size="lg"
           className="w-full rounded-full"
           disabled={isSubmitting}
+          metricKey="cta:contact-submit-click"
         >
           {isSubmitting ? (
             <>

@@ -2,13 +2,19 @@ import { ArrowDownToLine, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
 import { AppLink } from "@/components/ui/app-link"
-import { footerContent, shellCtaContent, socialLinks } from "@/lib/content"
+import { socialLinks } from "@/lib/content"
+import { getFooterContent, getShellCtaContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
 interface FooterProps {
   siteName: string
+  locale: Locale
 }
 
-export function Footer({ siteName }: FooterProps) {
+export function Footer({ siteName, locale }: FooterProps) {
+  const footerContent = getFooterContent(locale)
+  const shellCtaContent = getShellCtaContent(locale)
+
   return (
     <footer className="py-8 border-t border-border">
       <Container>

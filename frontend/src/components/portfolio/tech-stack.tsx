@@ -1,6 +1,14 @@
-import { aboutContent, techStack } from "@/lib/content"
+import { techStack } from "@/lib/content"
+import { getAboutContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
-export function TechStack() {
+interface TechStackProps {
+  locale: Locale
+}
+
+export function TechStack({ locale }: TechStackProps) {
+  const aboutContent = getAboutContent(locale)
+
   return (
     <div className="pt-6">
       <h3 className="text-sm font-medium text-muted-foreground mb-4">

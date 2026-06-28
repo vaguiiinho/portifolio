@@ -1,7 +1,14 @@
 import { AppLink } from "@/components/ui/app-link"
-import { navLinks } from "@/lib/content"
+import { getNavLinks } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
-export function DesktopNav() {
+interface DesktopNavProps {
+  locale: Locale
+}
+
+export function DesktopNav({ locale }: DesktopNavProps) {
+  const navLinks = getNavLinks(locale)
+
   return (
     <div className="hidden md:flex items-center gap-8">
       {navLinks.map((link) => (

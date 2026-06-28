@@ -6,40 +6,59 @@ import { RouteIntro } from "@/components/portfolio/route-intro"
 import { PortfolioRouteShell } from "@/components/portfolio/portfolio-route-shell"
 import { createRouteMetadata } from "@/lib/metadata"
 import { fetchSiteConfig } from "@/lib/site-config"
-import { contactContent, routeCtaContent } from "@/lib/content"
+import { routeCtaContent } from "@/lib/content"
+import { getLocale } from "@/lib/locale"
+import { getContactContent } from "@/lib/content/localized"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
+  const locale = getLocale()
+  const contactPageContent = getContactContent(locale)
 
   return createRouteMetadata({
     siteName: config.siteName,
-    title: "Contato",
-    description: contactContent.subtitle,
+    title: locale === "en" ? "Contact" : "Contato",
+    description: contactPageContent.subtitle,
     path: "/contato",
   })
 }
 
 export default async function ContactPage() {
   const config = await fetchSiteConfig()
+  const locale = getLocale()
+  const contactPageContent = getContactContent(locale)
 
   return (
-    <PortfolioRouteShell siteName={config.siteName}>
+    <PortfolioRouteShell siteName={config.siteName} locale={locale} pageMetricKey="page:contact">
       <RouteIntro
-        title={contactContent.title}
-        subtitle={contactContent.subtitle}
+        title={contactPageContent.title}
+        subtitle={contactPageContent.subtitle}
         actions={
           <div className="flex flex-wrap gap-3">
-            <Button as="a" href={routeCtaContent.contact.primaryHref} size="lg" className="rounded-full">
-              {routeCtaContent.contact.primaryLabel}
+            <Button
+              as="a"
+              href={routeCtaContent.contact.primaryHref}
+              size="lg"
+              className="rounded-full"
+              metricKey="cta:contact-resume"
+            >
+              {locale === "en" ? "View resume" : routeCtaContent.contact.primaryLabel}
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button as="a" href={routeCtaContent.contact.secondaryHref} variant="outline" size="lg" className="rounded-full">
-              {routeCtaContent.contact.secondaryLabel}
+            <Button
+              as="a"
+              href={routeCtaContent.contact.secondaryHref}
+              variant="outline"
+              size="lg"
+              className="rounded-full"
+              metricKey="cta:contact-projects"
+            >
+              {locale === "en" ? "View projects" : routeCtaContent.contact.secondaryLabel}
             </Button>
           </div>
         }
       />
-      <Contact showHeader={false} />
+      <Contact showHeader={false} locale={locale} />
     </PortfolioRouteShell>
   )
 }

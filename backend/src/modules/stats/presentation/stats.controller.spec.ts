@@ -2,28 +2,33 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { StatsController } from './stats.controller';
 import { GetStats } from '../application/get-stats';
 import { UpdateStats } from '../application/update-stats';
+import { TrackStatsEvent } from '../application/track-stats-event';
 import { Stats } from '../domain/entities/stats';
 
 describe('StatsController', () => {
   let controller: StatsController;
   let mockGetStats: jest.Mocked<GetStats>;
   let mockUpdateStats: jest.Mocked<UpdateStats>;
+  let mockTrackStatsEvent: jest.Mocked<TrackStatsEvent>;
 
   beforeEach(async () => {
     const mockGet = { execute: jest.fn() };
     const mockUpdate = { execute: jest.fn() };
+    const mockTrack = { execute: jest.fn() };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [StatsController],
       providers: [
         { provide: GetStats, useValue: mockGet },
         { provide: UpdateStats, useValue: mockUpdate },
+        { provide: TrackStatsEvent, useValue: mockTrack },
       ],
     }).compile();
 
     controller = module.get<StatsController>(StatsController);
     mockGetStats = module.get(GetStats);
     mockUpdateStats = module.get(UpdateStats);
+    mockTrackStatsEvent = module.get(TrackStatsEvent);
   });
 
   it('should be defined', () => {
@@ -51,6 +56,21 @@ describe('StatsController', () => {
       const result = await controller.update(dto);
 
       expect(mockUpdateStats.execute).toHaveBeenCalledWith(dto);
+      expect(result).toBe(mockStats);
+    });
+  });
+
+  describe('trackEvent', () => {
+    it('should track event', async () => {
+      const dto = { key: 'cta:contact', increment: 2 };
+      const mockStats = new Stats('1', 5, 100, new Date(), {
+        'cta:contact': 2,
+      });
+      mockTrackStatsEvent.execute.mockResolvedValue(mockStats);
+
+      const result = await controller.trackEvent(dto);
+
+      expect(mockTrackStatsEvent.execute).toHaveBeenCalledWith(dto);
       expect(result).toBe(mockStats);
     });
   });

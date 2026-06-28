@@ -1,6 +1,9 @@
+"use client"
+
 import * as React from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { trackStatsEvent } from '@/lib/analytics'
 
 type ButtonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
 
@@ -28,6 +31,7 @@ type ButtonBaseProps = {
   variant?: ButtonVariant
   size?: ButtonSize
   className?: string
+  metricKey?: string
 }
 
 type ButtonAsButtonProps = ButtonBaseProps &
@@ -37,8 +41,8 @@ type ButtonAsButtonProps = ButtonBaseProps &
 
 type ButtonAsAnchorProps = ButtonBaseProps &
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  as: 'a'
-  href: string
+    as: 'a'
+    href: string
     isExternal?: boolean
   }
 
@@ -49,6 +53,7 @@ export function Button({
   size = 'default',
   as = 'button',
   className,
+  metricKey,
   ...props
 }: ButtonProps) {
   const classNames = cn(
@@ -59,18 +64,24 @@ export function Button({
   )
 
   if (as === 'a') {
-    const { isExternal = false, ...anchorProps } = props as ButtonAsAnchorProps & { isExternal?: boolean }
-
-    if (isExternal) {
-      return <a className={classNames} {...anchorProps} />
+    const { isExternal = false, onClick, ...anchorProps } = props as ButtonAsAnchorProps & { isExternal?: boolean }
+    const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+      trackStatsEvent(metricKey ?? '')
+      onClick?.(event)
     }
 
-    return (
-      <Link className={classNames} {...anchorProps} />
-    )
+    if (isExternal) {
+      return <a className={classNames} onClick={handleClick} {...anchorProps} />
+    }
+
+    return <Link className={classNames} onClick={handleClick} {...anchorProps} />
   }
 
-  return (
-    <button className={classNames} {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)} />
-  )
+  const { onClick, ...buttonProps } = props as React.ButtonHTMLAttributes<HTMLButtonElement>
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    trackStatsEvent(metricKey ?? '')
+    onClick?.(event)
+  }
+
+  return <button className={classNames} onClick={handleClick} {...buttonProps} />
 }

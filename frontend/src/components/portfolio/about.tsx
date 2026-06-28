@@ -2,14 +2,18 @@ import { Container } from "./container"
 import { Avatar } from "./avatar"
 import { TechStack } from "./tech-stack"
 import { SectionHeader } from "./section-header"
-import { aboutContent } from "@/lib/content"
+import { getAboutContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
 interface AboutProps {
   siteName: string
   showHeader?: boolean
+  locale: Locale
 }
 
-export function About({ siteName, showHeader = true }: AboutProps) {
+export function About({ siteName, showHeader = true, locale }: AboutProps) {
+  const aboutContent = getAboutContent(locale)
+
   return (
     <section id="about" className="py-24 sm:py-32 bg-secondary/30">
       <Container>
@@ -33,7 +37,7 @@ export function About({ siteName, showHeader = true }: AboutProps) {
               ))}
             </div>
 
-            <TechStack />
+            <TechStack locale={locale} />
           </div>
         </div>
       </Container>

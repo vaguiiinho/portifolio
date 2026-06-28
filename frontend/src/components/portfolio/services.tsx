@@ -1,18 +1,24 @@
 import { ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Container } from "./container"
+import { MetricBeacon } from "./metric-beacon"
 import { SectionHeader } from "./section-header"
-import { servicesContent } from "@/lib/content"
+import { getServicesContent } from "@/lib/content/localized"
 import { portfolioRoutes } from "@/lib/routes"
+import type { Locale } from "@/lib/locale"
 
 interface ServicesProps {
   showHeader?: boolean
   showActions?: boolean
+  locale: Locale
 }
 
-export function Services({ showHeader = true, showActions = true }: ServicesProps) {
+export function Services({ showHeader = true, showActions = true, locale }: ServicesProps) {
+  const servicesContent = getServicesContent(locale)
+
   return (
     <section id="services" className="py-24 sm:py-32">
+      <MetricBeacon eventKey="section:services" />
       <Container>
         {showHeader && (
           <SectionHeader className="mb-12" title={servicesContent.title} subtitle={servicesContent.subtitle} />
@@ -25,7 +31,7 @@ export function Services({ showHeader = true, showActions = true }: ServicesProp
               className="h-full rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5"
             >
               <div className="mb-5 inline-flex rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
-                Serviço {index + 1}
+                {locale === "en" ? `Service ${index + 1}` : `Serviço ${index + 1}`}
               </div>
 
               <h3 className="text-xl font-semibold tracking-tight">{service.title}</h3>
@@ -56,7 +62,13 @@ export function Services({ showHeader = true, showActions = true }: ServicesProp
               </p>
             </div>
 
-            <Button as="a" href={portfolioRoutes.contact} size="lg" className="rounded-full shrink-0">
+            <Button
+              as="a"
+              href={portfolioRoutes.contact}
+              size="lg"
+              className="rounded-full shrink-0"
+              metricKey="cta:services-contact"
+            >
               {servicesContent.ctaLabel}
               <ArrowRight className="h-4 w-4" />
             </Button>

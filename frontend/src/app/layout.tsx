@@ -2,33 +2,38 @@ import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from "@/components/theme-provider"
 import './globals.css'
 import { fetchSiteConfig, siteDefaults } from '@/lib/site-config'
+import { getLocale } from "@/lib/locale"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
+  const locale = getLocale()
   const siteName = config.siteName || siteDefaults.siteName
   const description = config.description || siteDefaults.description
-  const title = `${siteName} | Desenvolvedor Full Stack`
+  const title = locale === "en" ? `${siteName} | Full Stack Developer` : `${siteName} | Desenvolvedor Full Stack`
 
   return {
     metadataBase: new URL(`https://${siteDefaults.domain}`),
     title,
     description,
     generator: 'Next.js',
-    keywords: ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'NestJS', 'Portfólio'],
+    keywords:
+      locale === "en"
+        ? ['Full Stack Developer', 'React', 'Next.js', 'TypeScript', 'NestJS', 'Portfolio']
+        : ['Desenvolvedor Full Stack', 'React', 'Next.js', 'TypeScript', 'NestJS', 'Portfólio'],
     authors: [{ name: siteName }],
     icons: {
       icon: '/favicon.ico',
     },
     openGraph: {
       type: 'website',
-      locale: 'pt_BR',
+      locale: locale === "en" ? 'en_US' : 'pt_BR',
       url: `https://${siteDefaults.domain}`,
       siteName: title,
       title,
       description,
       images: [
         {
-          url: `https://${siteDefaults.domain}/og-image.png`,
+          url: '/opengraph-image',
           width: 1200,
           height: 630,
           alt: title,
@@ -39,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title,
       description,
-      images: [`https://${siteDefaults.domain}/og-image.png`],
+      images: ['/twitter-image'],
     },
     robots: {
       index: true,
@@ -66,8 +71,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = getLocale()
+
   return (
-    <html lang="pt-br" suppressHydrationWarning className="scroll-smooth">
+    <html lang={locale === "en" ? "en" : "pt-br"} suppressHydrationWarning className="scroll-smooth">
       <body className="font-sans antialiased bg-background">
         <ThemeProvider>{children}</ThemeProvider>
       </body>

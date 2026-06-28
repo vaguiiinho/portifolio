@@ -1,1 +1,0 @@
-globalThis.__RSC_MANIFEST=(globalThis.__RSC_MANIFEST||{});globalThis.__RSC_MANIFEST["/curriculo.pdf/route"]={"moduleLoading":{"prefix":"/_next/"},"ssrModuleMapping":{},"edgeSSRModuleMapping":{},"clientModules":{},"entryCSSFiles":{"/home/vagner/workspace/portifolio/frontend/src/app/curriculo.pdf/route":[]},"rscModuleMapping":{},"edgeRscModuleMapping":{}};

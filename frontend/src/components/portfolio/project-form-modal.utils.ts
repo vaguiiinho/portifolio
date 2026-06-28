@@ -1,5 +1,6 @@
 import type { ProjectPayload } from "@/lib/api"
-import { projectFormContent } from "@/lib/content"
+import { getProjectFormContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 import type { Project } from "./project-card"
 
 export interface ProjectFormState {
@@ -142,7 +143,8 @@ export function buildProjectFormData(values: ProjectFormState, videoFile: File |
   return formData
 }
 
-export function validateProjectForm(values: ProjectFormState) {
+export function validateProjectForm(values: ProjectFormState, locale: Locale) {
+  const projectFormContent = getProjectFormContent(locale)
   const payload = buildProjectPayload(values)
   const title = payload.title.trim()
   const description = payload.description.trim()

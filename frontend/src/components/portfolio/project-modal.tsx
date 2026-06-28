@@ -6,28 +6,31 @@ import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import type { Project } from "./project-card"
-import { projectCopy, projectModalContent } from "@/lib/content"
+import { getProjectsContent } from "@/lib/content/localized"
 import { resolveMediaUrl } from "@/lib/api"
+import type { Locale } from "@/lib/locale"
 
 interface ProjectModalProps {
   project: Project | null
   onClose: () => void
+  locale: Locale
 }
 
-export function ProjectModal({ project, onClose }: ProjectModalProps) {
+export function ProjectModal({ project, onClose, locale }: ProjectModalProps) {
+  const projectContent = getProjectsContent(locale)
   const initial = project?.title?.charAt(0) || "P"
   const sections = [
     {
-      title: project?.problemTitle || projectCopy.card.fallbackSectionTitles.problem,
-      description: project?.problemDescription || projectModalContent.sections[0].description,
+      title: project?.problemTitle || projectContent.modal.sections[0].title,
+      description: project?.problemDescription || projectContent.modal.sections[0].description,
     },
     {
-      title: project?.solutionTitle || projectCopy.card.fallbackSectionTitles.solution,
-      description: project?.solutionDescription || projectModalContent.sections[1].description,
+      title: project?.solutionTitle || projectContent.modal.sections[1].title,
+      description: project?.solutionDescription || projectContent.modal.sections[1].description,
     },
     {
-      title: project?.resultTitle || projectCopy.card.fallbackSectionTitles.result,
-      description: project?.resultDescription || projectModalContent.sections[2].description,
+      title: project?.resultTitle || projectContent.modal.sections[2].title,
+      description: project?.resultDescription || projectContent.modal.sections[2].description,
     },
   ]
 
@@ -61,7 +64,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 z-10 p-2 rounded-full bg-secondary/80 hover:bg-secondary transition-colors"
-                aria-label="Fechar modal"
+                aria-label={locale === "en" ? "Close modal" : "Fechar modal"}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -87,7 +90,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Play className="h-4 w-4 text-accent" />
-                      <h3 className="font-semibold">{projectCopy.modal.videoTitle}</h3>
+                      <h3 className="font-semibold">{locale === "en" ? "Presentation video" : "Vídeo de apresentação"}</h3>
                     </div>
                     <div className="overflow-hidden rounded-2xl border border-border bg-black">
                       <video
@@ -117,7 +120,9 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
                 {/* Tech Stack */}
                 <div>
-                  <h3 className="font-semibold mb-3">{projectCopy.modal.technologiesTitle}</h3>
+                  <h3 className="mb-3 font-semibold">
+                    {locale === "en" ? "Technologies used" : "Tecnologias usadas"}
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {project.techStack.map((tech) => (
                       <Badge key={tech} variant="glow">
@@ -136,9 +141,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="rounded-full"
+                      metricKey={`project:live:${project.id}`}
                     >
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      {projectModalContent.viewLiveDemoText}
+                      {locale === "en" ? "View demo" : "Ver demo"}
                     </Button>
                   )}
                   {project.githubUrl && (
@@ -149,9 +155,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                       rel="noopener noreferrer"
                       variant="outline"
                       className="rounded-full"
+                      metricKey={`project:source:${project.id}`}
                     >
                       <Github className="mr-2 h-4 w-4" />
-                      {projectModalContent.viewSourceCodeText}
+                      {locale === "en" ? "View code" : "Ver código"}
                     </Button>
                   )}
                 </div>

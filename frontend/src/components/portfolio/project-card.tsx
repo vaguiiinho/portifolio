@@ -6,7 +6,8 @@ import { ExternalLink, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import { cn } from "@/lib/utils"
-import { projectCopy } from "@/lib/content"
+import { getProjectsContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
 export interface Project {
   id: string
@@ -30,10 +31,26 @@ interface ProjectCardProps {
   project: Project
   index: number
   onClick?: () => void
+  locale: Locale
 }
 
-export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
-  const initial = project.title?.charAt(0) || projectCopy.card.emptyTitle.charAt(0)
+export function ProjectCard({ project, index, onClick, locale }: ProjectCardProps) {
+  const projectContent = getProjectsContent(locale)
+  const initial = project.title?.charAt(0) || "P"
+  const fallbackDescriptions =
+    locale === "en"
+      ? {
+          problem: "Problem",
+          solution: "Solution",
+          result: "Result",
+          emptyDescription: "Description not provided.",
+        }
+      : {
+          problem: "Problema",
+          solution: "Solução",
+          result: "Resultado",
+          emptyDescription: "Descrição não informada.",
+        }
 
   return (
     <motion.article
@@ -71,13 +88,13 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
               {project.liveUrl && (
                 <Button as="a" href={project.liveUrl} target="_blank" rel="noopener noreferrer" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <ExternalLink className="mr-2 h-4 w-4" />
-                  {projectCopy.card.demoLabel}
+                  {projectContent.modal.viewLiveDemoText}
                 </Button>
               )}
               {project.githubUrl && (
                 <Button as="a" href={project.githubUrl} target="_blank" rel="noopener noreferrer" variant="outline" size="sm" className="rounded-full" onClick={(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation()}>
                   <Github className="mr-2 h-4 w-4" />
-                  {projectCopy.card.sourceLabel}
+                  {projectContent.modal.viewSourceCodeText}
                 </Button>
               )}
             </div>
@@ -106,26 +123,26 @@ export function ProjectCard({ project, index, onClick }: ProjectCardProps) {
             <div className="grid gap-3 border-t border-border pt-4 text-xs text-muted-foreground sm:grid-cols-3">
               <div className="space-y-1">
                 <p className="font-medium text-foreground">
-                  {project.problemTitle || "Problema"}
+                  {project.problemTitle || fallbackDescriptions.problem}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.problemDescription || projectCopy.card.emptyDescription}
+                  {project.problemDescription || fallbackDescriptions.emptyDescription}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-foreground">
-                  {project.solutionTitle || "Solução"}
+                  {project.solutionTitle || fallbackDescriptions.solution}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.solutionDescription || projectCopy.card.emptyDescription}
+                  {project.solutionDescription || fallbackDescriptions.emptyDescription}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="font-medium text-foreground">
-                  {project.resultTitle || "Resultado"}
+                  {project.resultTitle || fallbackDescriptions.result}
                 </p>
                 <p className="line-clamp-2 text-pretty">
-                  {project.resultDescription || projectCopy.card.emptyDescription}
+                  {project.resultDescription || fallbackDescriptions.emptyDescription}
                 </p>
               </div>
             </div>

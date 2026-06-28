@@ -1,3 +1,5 @@
+import { fetchFromApi, getApiBaseUrl } from './api-base-url'
+
 export interface ApiProject {
   id: string
   title: string
@@ -35,6 +37,7 @@ export interface ApiStats {
   id: string
   projectsCount: number
   visitors: number
+  events: Record<string, number>
   updatedAt: string
 }
 
@@ -42,20 +45,6 @@ export interface ContactPayload {
   name: string
   email: string
   message: string
-}
-
-function getApiBaseUrl() {
-  const configured = process.env.NEXT_PUBLIC_API_URL?.trim()
-
-  if (configured && /^https?:\/\//.test(configured)) {
-    return configured.replace(/\/$/, '')
-  }
-
-  if (typeof window !== 'undefined') {
-    return `${window.location.protocol}//${window.location.hostname}:3001`
-  }
-
-  return 'http://localhost:3001'
 }
 
 function isFormDataBody(body: unknown): body is FormData {
@@ -69,8 +58,9 @@ function isFormDataBody(body: unknown): body is FormData {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const isFormData = isFormDataBody(init?.body)
 
-  const response = await fetch(`${getApiBaseUrl()}${path}`, {
+  const response = await fetchFromApi(path, {
     ...init,
+    cache: 'no-store',
     headers: isFormData
       ? init?.headers
       : {

@@ -1,5 +1,7 @@
-import { Navbar, Hero, HomeHub, Footer } from "@/components/portfolio"
+import { Navbar, Hero, HomeHub, Testimonials, ConversionMetrics, Footer } from "@/components/portfolio"
+import { MetricBeacon } from "@/components/portfolio/metric-beacon"
 import { fetchSiteConfig } from "@/lib/site-config"
+import { getLocale } from "@/lib/locale"
 
 /**
  * Página principal do portfólio
@@ -7,13 +9,17 @@ import { fetchSiteConfig } from "@/lib/site-config"
  */
 export default async function HomePage() {
   const config = await fetchSiteConfig()
+  const locale = getLocale()
 
   return (
     <main className="relative">
-      <Navbar siteName={config.siteName} />
-      <Hero siteName={config.siteName} />
-      <HomeHub />
-      <Footer siteName={config.siteName} />
+      <MetricBeacon eventKey="page:home" />
+      <Navbar siteName={config.siteName} locale={locale} />
+      <Hero siteName={config.siteName} locale={locale} />
+      <HomeHub locale={locale} />
+      <Testimonials locale={locale} />
+      <ConversionMetrics locale={locale} />
+      <Footer siteName={config.siteName} locale={locale} />
     </main>
   )
 }

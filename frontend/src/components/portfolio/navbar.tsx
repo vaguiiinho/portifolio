@@ -11,18 +11,22 @@ import { useTheme } from "next-themes"
 import { useMobileMenu } from "./use-mobile-menu"
 import { DesktopNav } from "./desktop-nav"
 import { MobileNav } from "./mobile-nav"
-import { shellCtaContent } from "@/lib/content"
+import { LocaleToggle } from "./locale-toggle"
+import type { Locale } from "@/lib/locale"
+import { getShellCtaContent } from "@/lib/content/localized"
 
 interface NavbarProps {
   siteName: string
+  locale: Locale
 }
 
-export function Navbar({ siteName }: NavbarProps) {
+export function Navbar({ siteName, locale }: NavbarProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const isDark = resolvedTheme === "dark"
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
   const [isScrolled, setIsScrolled] = useState(false)
   const { scrollY } = useScroll()
+  const shellCtaContent = getShellCtaContent(locale)
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 0)
@@ -51,10 +55,11 @@ export function Navbar({ siteName }: NavbarProps) {
             {siteName}
           </AppLink>
 
-          <DesktopNav />
+          <DesktopNav locale={locale} />
 
           {/* Actions */}
           <div className="flex items-center gap-3">
+            <LocaleToggle locale={locale} />
             <Button
               variant="ghost"
               size="icon"
@@ -65,11 +70,22 @@ export function Navbar({ siteName }: NavbarProps) {
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
-            <Button as="a" href={shellCtaContent.navbar.primaryHref} className="hidden sm:inline-flex rounded-full">
+            <Button
+              as="a"
+              href={shellCtaContent.navbar.primaryHref}
+              className="hidden sm:inline-flex rounded-full"
+              metricKey="cta:navbar-primary"
+            >
               {shellCtaContent.navbar.primaryLabel}
             </Button>
 
-            <Button as="a" href={shellCtaContent.navbar.secondaryHref} variant="outline" className="hidden lg:inline-flex rounded-full">
+            <Button
+              as="a"
+              href={shellCtaContent.navbar.secondaryHref}
+              variant="outline"
+              className="hidden lg:inline-flex rounded-full"
+              metricKey="cta:navbar-secondary"
+            >
               {shellCtaContent.navbar.secondaryLabel}
             </Button>
 
@@ -88,7 +104,7 @@ export function Navbar({ siteName }: NavbarProps) {
           </div>
         </nav>
 
-        <MobileNav isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
+        <MobileNav isOpen={isMobileMenuOpen} onClose={closeMobileMenu} locale={locale} />
       </Container>
     </motion.header>
   )

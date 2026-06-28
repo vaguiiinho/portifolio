@@ -2,9 +2,16 @@ import { ArrowRight, BriefcaseBusiness, MessageSquareMore } from "lucide-react"
 import { AppLink } from "@/components/ui/app-link"
 import { FadeIn } from "@/components/ui/fade-in"
 import { SocialLinksCard } from "./social-links-card"
-import { contactContent } from "@/lib/content"
+import { getContactContent } from "@/lib/content/localized"
+import type { Locale } from "@/lib/locale"
 
-export function ContactInfo() {
+interface ContactInfoProps {
+  locale: Locale
+}
+
+export function ContactInfo({ locale }: ContactInfoProps) {
+  const contactContent = getContactContent(locale)
+
   const ctaBaseClass =
     "inline-flex items-center justify-center transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 h-8 px-3 py-2 gap-1.5 rounded-full text-sm"
   const primaryCtaClass = `${ctaBaseClass} bg-primary text-primary-foreground hover:bg-primary/90`
