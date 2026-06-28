@@ -9,6 +9,13 @@ export interface UpdateProjectInput {
   techStack?: string[];
   githubUrl?: string;
   liveUrl?: string;
+  videoUrl?: string;
+  problemTitle?: string;
+  problemDescription?: string;
+  solutionTitle?: string;
+  solutionDescription?: string;
+  resultTitle?: string;
+  resultDescription?: string;
 }
 
 @Injectable()
@@ -32,6 +39,13 @@ export class UpdateProject {
       input.githubUrl ?? existingProject.githubUrl,
       input.liveUrl ?? existingProject.liveUrl,
       existingProject.createdAt,
+      input.videoUrl ?? existingProject.videoUrl,
+      input.problemTitle ?? existingProject.problemTitle,
+      input.problemDescription ?? existingProject.problemDescription,
+      input.solutionTitle ?? existingProject.solutionTitle,
+      input.solutionDescription ?? existingProject.solutionDescription,
+      input.resultTitle ?? existingProject.resultTitle,
+      input.resultDescription ?? existingProject.resultDescription,
     );
 
     return this.projectRepository.update(updatedProject);

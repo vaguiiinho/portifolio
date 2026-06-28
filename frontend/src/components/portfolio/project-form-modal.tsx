@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useState, type FormEvent } from "react"
+import { useState, type ChangeEvent, type FormEvent } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Loader2, Plus, PencilLine } from "lucide-react"
+import { X, Loader2, Plus, PencilLine, Upload } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
-import { createProject, updateProject, type ProjectPayload } from "@/lib/api"
+import { createProject, updateProject, resolveMediaUrl, type ProjectPayload } from "@/lib/api"
 import type { Project } from "./project-card"
 
 interface ProjectFormModalProps {
@@ -22,6 +22,13 @@ interface ProjectFormState {
   techStack: string
   githubUrl: string
   liveUrl: string
+  videoUrl: string
+  problemTitle: string
+  problemDescription: string
+  solutionTitle: string
+  solutionDescription: string
+  resultTitle: string
+  resultDescription: string
 }
 
 function buildInitialState(project: Project | null): ProjectFormState {
@@ -31,6 +38,13 @@ function buildInitialState(project: Project | null): ProjectFormState {
     techStack: project?.techStack?.join(", ") ?? "",
     githubUrl: project?.githubUrl ?? "",
     liveUrl: project?.liveUrl ?? "",
+    videoUrl: "",
+    problemTitle: project?.problemTitle ?? "",
+    problemDescription: project?.problemDescription ?? "",
+    solutionTitle: project?.solutionTitle ?? "",
+    solutionDescription: project?.solutionDescription ?? "",
+    resultTitle: project?.resultTitle ?? "",
+    resultDescription: project?.resultDescription ?? "",
   }
 }
 
@@ -44,6 +58,27 @@ function parseTechStack(value: string) {
 function normalizeUrl(value: string) {
   const trimmed = value.trim()
   return trimmed.length > 0 ? trimmed : undefined
+}
+
+function isValidUrl(value: string) {
+  if (!value.trim()) {
+    return true
+  }
+
+  try {
+    new URL(value)
+    return true
+  } catch {
+    return false
+  }
+}
+
+function isValidVideoSource(value: string) {
+  if (!value.trim()) {
+    return true
+  }
+
+  return /^(https?:\/\/|data:video\/|\/uploads\/)/.test(value.trim())
 }
 
 function buildPayload(values: ProjectFormState): ProjectPayload {
@@ -64,7 +99,62 @@ function buildPayload(values: ProjectFormState): ProjectPayload {
     payload.liveUrl = liveUrl
   }
 
+  const videoUrl = normalizeUrl(values.videoUrl)
+
+  if (videoUrl) {
+    payload.videoUrl = videoUrl
+  }
+
   return payload
+}
+
+function buildFormData(values: ProjectFormState, videoFile: File | null) {
+  const payload = buildPayload(values)
+  const formData = new FormData()
+
+  formData.append("title", payload.title)
+  formData.append("description", payload.description)
+  formData.append("techStack", payload.techStack.join(","))
+
+  if (payload.githubUrl) {
+    formData.append("githubUrl", payload.githubUrl)
+  }
+
+  if (payload.liveUrl) {
+    formData.append("liveUrl", payload.liveUrl)
+  }
+
+  if (videoFile) {
+    formData.append("videoFile", videoFile)
+  } else if (payload.videoUrl) {
+    formData.append("videoUrl", payload.videoUrl)
+  }
+
+  if (values.problemTitle.trim()) {
+    formData.append("problemTitle", values.problemTitle.trim())
+  }
+
+  if (values.problemDescription.trim()) {
+    formData.append("problemDescription", values.problemDescription.trim())
+  }
+
+  if (values.solutionTitle.trim()) {
+    formData.append("solutionTitle", values.solutionTitle.trim())
+  }
+
+  if (values.solutionDescription.trim()) {
+    formData.append("solutionDescription", values.solutionDescription.trim())
+  }
+
+  if (values.resultTitle.trim()) {
+    formData.append("resultTitle", values.resultTitle.trim())
+  }
+
+  if (values.resultDescription.trim()) {
+    formData.append("resultDescription", values.resultDescription.trim())
+  }
+
+  return formData
 }
 
 export function ProjectFormModal({
@@ -76,36 +166,71 @@ export function ProjectFormModal({
   const [values, setValues] = useState<ProjectFormState>(buildInitialState(project))
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [selectedVideoFile, setSelectedVideoFile] = useState<File | null>(null)
   const isEditing = Boolean(project)
+  const currentVideoUrl = resolveMediaUrl(project?.videoUrl)
   const title = isEditing ? "Edit Project" : "New Project"
   const submitLabel = isEditing ? "Save changes" : "Create project"
   const Icon = isEditing ? PencilLine : Plus
 
-  useEffect(() => {
-    if (open) {
-      setValues(buildInitialState(project))
-      setError(null)
+  async function handleVideoFileChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+
+    if (!file) {
+      setSelectedVideoFile(null)
+      return
     }
-  }, [open, project])
+
+    setSelectedVideoFile(file)
+    setValues((current) => ({ ...current, videoUrl: "" }))
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
     const payload = buildPayload(values)
+    const title = payload.title.trim()
+    const description = payload.description.trim()
+
+    if (title.length < 3) {
+      setError("Title must be at least 3 characters")
+      return
+    }
+
+    if (description.length < 10) {
+      setError("Description must be at least 10 characters")
+      return
+    }
 
     if (payload.techStack.length === 0) {
       setError("Add at least one technology")
       return
     }
 
+    if (!isValidUrl(payload.githubUrl ?? "")) {
+      setError("GitHub URL must be a valid URL")
+      return
+    }
+
+    if (!isValidUrl(payload.liveUrl ?? "")) {
+      setError("Live URL must be a valid URL")
+      return
+    }
+
+    if (!isValidVideoSource(payload.videoUrl ?? "")) {
+      setError("Video must be a valid URL, upload path, or video file")
+      return
+    }
+
     try {
       setIsSubmitting(true)
       setError(null)
+      const formData = buildFormData(values, selectedVideoFile)
 
       if (project) {
-        await updateProject(project.id, payload)
+        await updateProject(project.id, formData)
       } else {
-        await createProject(payload)
+        await createProject(formData)
       }
 
       await onSaved()
@@ -221,6 +346,133 @@ export function ProjectFormModal({
                       value={values.liveUrl}
                       onChange={(event) =>
                         setValues((current) => ({ ...current, liveUrl: event.target.value }))
+                      }
+                    />
+                    <FormField
+                      id="project-video-url"
+                      name="videoUrl"
+                      label="Video URL"
+                      placeholder="https://... or data:video/..."
+                      type="text"
+                      value={values.videoUrl}
+                      onChange={(event) =>
+                        setValues((current) => ({ ...current, videoUrl: event.target.value }))
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    {currentVideoUrl && (
+                      <div className="space-y-2 rounded-2xl border border-border bg-secondary/20 p-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-sm font-medium">Current video</p>
+                          <span className="text-xs text-muted-foreground">
+                            Leave the URL empty to keep it unchanged
+                          </span>
+                        </div>
+                        <video
+                          controls
+                          preload="metadata"
+                          className="aspect-video w-full rounded-xl bg-black"
+                          src={currentVideoUrl}
+                        />
+                      </div>
+                    )}
+                    <label htmlFor="project-video-file" className="flex items-center gap-2 text-sm font-medium">
+                      <Upload className="h-4 w-4" />
+                      Upload video file
+                    </label>
+                    <input
+                      id="project-video-file"
+                      name="videoFile"
+                      type="file"
+                      accept="video/*"
+                      onChange={handleVideoFileChange}
+                      className="block w-full text-sm text-muted-foreground file:mr-4 file:rounded-full file:border-0 file:bg-secondary file:px-4 file:py-2 file:text-sm file:font-medium file:text-foreground hover:file:bg-secondary/80"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {selectedVideoFile
+                        ? `Selected file: ${selectedVideoFile.name}`
+                        : "Optional. Uploading a file avoids the JSON body size limit."}
+                    </p>
+                  </div>
+                  <div className="space-y-4 rounded-2xl border border-border bg-secondary/20 p-4">
+                    <div>
+                      <h3 className="text-sm font-semibold">Project blocks</h3>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Edit the three sections shown inside the project detail modal.
+                      </p>
+                    </div>
+
+                    <FormField
+                      id="project-problem-title"
+                      name="problemTitle"
+                      label="Problem title"
+                      placeholder="Problem"
+                      value={values.problemTitle}
+                      onChange={(event) =>
+                        setValues((current) => ({ ...current, problemTitle: event.target.value }))
+                      }
+                    />
+                    <FormField
+                      id="project-problem-description"
+                      name="problemDescription"
+                      label="Problem description"
+                      placeholder="What needed to be solved?"
+                      rows={3}
+                      value={values.problemDescription}
+                      onChange={(event) =>
+                        setValues((current) => ({
+                          ...current,
+                          problemDescription: event.target.value,
+                        }))
+                      }
+                    />
+                    <FormField
+                      id="project-solution-title"
+                      name="solutionTitle"
+                      label="Solution title"
+                      placeholder="Solution"
+                      value={values.solutionTitle}
+                      onChange={(event) =>
+                        setValues((current) => ({ ...current, solutionTitle: event.target.value }))
+                      }
+                    />
+                    <FormField
+                      id="project-solution-description"
+                      name="solutionDescription"
+                      label="Solution description"
+                      placeholder="How was it approached?"
+                      rows={3}
+                      value={values.solutionDescription}
+                      onChange={(event) =>
+                        setValues((current) => ({
+                          ...current,
+                          solutionDescription: event.target.value,
+                        }))
+                      }
+                    />
+                    <FormField
+                      id="project-result-title"
+                      name="resultTitle"
+                      label="Result title"
+                      placeholder="Result"
+                      value={values.resultTitle}
+                      onChange={(event) =>
+                        setValues((current) => ({ ...current, resultTitle: event.target.value }))
+                      }
+                    />
+                    <FormField
+                      id="project-result-description"
+                      name="resultDescription"
+                      label="Result description"
+                      placeholder="What changed?"
+                      rows={3}
+                      value={values.resultDescription}
+                      onChange={(event) =>
+                        setValues((current) => ({
+                          ...current,
+                          resultDescription: event.target.value,
+                        }))
                       }
                     />
                   </div>

@@ -1,9 +1,4 @@
-import {
-  Controller,
-  Get,
-  Put,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Put, Body } from '@nestjs/common';
 import { GetStats } from '../application/get-stats';
 import { UpdateStats } from '../application/update-stats';
 import { UpdateStatsDto } from './dtos';

@@ -10,6 +10,7 @@ import { ProjectFormModal } from "./project-form-modal"
 import { FadeIn } from "@/components/ui/fade-in"
 import { projectsData } from "@/data/site"
 import { useProjects } from "@/hooks/use-projects"
+import { deleteProject } from "@/lib/api"
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -31,6 +32,25 @@ export function Projects() {
 
   async function handleSavedProject() {
     await reloadProjects()
+  }
+
+  async function handleDeleteProject(project: Project) {
+    const confirmed = window.confirm(`Delete "${project.title}"?`)
+
+    if (!confirmed) {
+      return
+    }
+
+    try {
+      await deleteProject(project.id)
+      await reloadProjects()
+
+      if (selectedProject?.id === project.id) {
+        setSelectedProject(null)
+      }
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Failed to delete project")
+    }
   }
 
   return (
@@ -80,6 +100,7 @@ export function Projects() {
                 index={index}
                 onClick={() => setSelectedProject(project)}
                 onEdit={() => handleEditProject(project)}
+                onDelete={() => handleDeleteProject(project)}
               />
             ))}
           </div>
@@ -90,9 +111,11 @@ export function Projects() {
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
         onEdit={selectedProject ? () => handleEditProject(selectedProject) : undefined}
+        onDelete={selectedProject ? () => handleDeleteProject(selectedProject) : undefined}
       />
 
       <ProjectFormModal
+        key={`${editingProject?.id ?? "new"}-${projectFormOpen ? "open" : "closed"}`}
         open={projectFormOpen}
         project={editingProject}
         onClose={() => {

@@ -2,7 +2,7 @@
 
 import type { MouseEvent } from "react"
 import { motion } from "framer-motion"
-import { ExternalLink, Github, PencilLine } from "lucide-react"
+import { ExternalLink, Github, PencilLine, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import { cn } from "@/lib/utils"
@@ -15,6 +15,13 @@ export interface Project {
   techStack: string[]
   liveUrl?: string
   githubUrl?: string
+  videoUrl?: string
+  problemTitle?: string
+  problemDescription?: string
+  solutionTitle?: string
+  solutionDescription?: string
+  resultTitle?: string
+  resultDescription?: string
   featured?: boolean
 }
 
@@ -23,9 +30,10 @@ interface ProjectCardProps {
   index: number
   onClick?: () => void
   onEdit?: () => void
+  onDelete?: () => void
 }
 
-export function ProjectCard({ project, index, onClick, onEdit }: ProjectCardProps) {
+export function ProjectCard({ project, index, onClick, onEdit, onDelete }: ProjectCardProps) {
   const initial = project.title?.charAt(0) || "P"
 
   return (
@@ -70,9 +78,23 @@ export function ProjectCard({ project, index, onClick, onEdit }: ProjectCardProp
                     e.stopPropagation()
                     onEdit()
                   }}
+                  >
+                    <PencilLine className="mr-2 h-4 w-4" />
+                    Edit
+                  </Button>
+              )}
+              {onDelete && (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="rounded-full"
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation()
+                    onDelete()
+                  }}
                 >
-                  <PencilLine className="mr-2 h-4 w-4" />
-                  Edit
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete
                 </Button>
               )}
               {project.liveUrl && (
@@ -108,6 +130,33 @@ export function ProjectCard({ project, index, onClick, onEdit }: ProjectCardProp
                   {tech}
                 </Badge>
               ))}
+            </div>
+
+            <div className="grid gap-3 border-t border-border pt-4 text-xs text-muted-foreground sm:grid-cols-3">
+              <div className="space-y-1">
+                <p className="font-medium text-foreground">
+                  {project.problemTitle || "Problem"}
+                </p>
+                <p className="line-clamp-2 text-pretty">
+                  {project.problemDescription || "Not defined yet."}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-foreground">
+                  {project.solutionTitle || "Solution"}
+                </p>
+                <p className="line-clamp-2 text-pretty">
+                  {project.solutionDescription || "Not defined yet."}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="font-medium text-foreground">
+                  {project.resultTitle || "Result"}
+                </p>
+                <p className="line-clamp-2 text-pretty">
+                  {project.resultDescription || "Not defined yet."}
+                </p>
+              </div>
             </div>
           </div>
         </div>

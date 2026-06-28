@@ -5,6 +5,13 @@ export interface ApiProject {
   techStack: string[]
   githubUrl?: string | null
   liveUrl?: string | null
+  videoUrl?: string | null
+  problemTitle?: string | null
+  problemDescription?: string | null
+  solutionTitle?: string | null
+  solutionDescription?: string | null
+  resultTitle?: string | null
+  resultDescription?: string | null
   createdAt: string
   updatedAt: string
 }
@@ -15,6 +22,13 @@ export interface ProjectPayload {
   techStack: string[]
   githubUrl?: string
   liveUrl?: string
+  videoUrl?: string
+  problemTitle?: string
+  problemDescription?: string
+  solutionTitle?: string
+  solutionDescription?: string
+  resultTitle?: string
+  resultDescription?: string
 }
 
 export interface ApiStats {
@@ -30,15 +44,39 @@ export interface ContactPayload {
   message: string
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
+function getApiBaseUrl() {
+  const configured = process.env.NEXT_PUBLIC_API_URL?.trim()
+
+  if (configured && /^https?:\/\//.test(configured)) {
+    return configured.replace(/\/$/, '')
+  }
+
+  if (typeof window !== 'undefined') {
+    return `${window.location.protocol}//${window.location.hostname}:3001`
+  }
+
+  return 'http://localhost:3001'
+}
+
+function isFormDataBody(body: unknown): body is FormData {
+  if (typeof FormData === 'undefined' || !body) {
+    return false
+  }
+
+  return body instanceof FormData || Object.prototype.toString.call(body) === '[object FormData]'
+}
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const isFormData = isFormDataBody(init?.body)
+
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(init?.headers ?? {}),
-    },
+    headers: isFormData
+      ? init?.headers
+      : {
+          'Content-Type': 'application/json',
+          ...(init?.headers ?? {}),
+        },
   })
 
   if (!response.ok) {
@@ -64,17 +102,23 @@ export async function fetchProjects() {
   return request<ApiProject[]>('/projects')
 }
 
-export async function createProject(payload: ProjectPayload) {
+export async function createProject(payload: ProjectPayload | FormData) {
   return request<ApiProject>('/projects', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    body: payload instanceof FormData ? payload : JSON.stringify(payload),
   })
 }
 
-export async function updateProject(id: string, payload: ProjectPayload) {
+export async function updateProject(id: string, payload: ProjectPayload | FormData) {
   return request<ApiProject>(`/projects/${id}`, {
     method: 'PUT',
-    body: JSON.stringify(payload),
+    body: payload instanceof FormData ? payload : JSON.stringify(payload),
+  })
+}
+
+export async function deleteProject(id: string) {
+  return request<void>(`/projects/${id}`, {
+    method: 'DELETE',
   })
 }
 
@@ -87,4 +131,20 @@ export async function sendContact(payload: ContactPayload) {
     method: 'POST',
     body: JSON.stringify(payload),
   })
+}
+
+export function resolveMediaUrl(value?: string | null) {
+  if (!value) {
+    return undefined
+  }
+
+  if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('data:')) {
+    return value
+  }
+
+  if (value.startsWith('/uploads/')) {
+    return `${getApiBaseUrl()}${value}`
+  }
+
+  return value
 }

@@ -75,7 +75,9 @@ describe('UpdateProject', () => {
   it('should throw error if project not found', async () => {
     mockRepository.findById.mockResolvedValue(null);
 
-    await expect(service.execute({ id: '1' })).rejects.toThrow('Project not found');
+    await expect(service.execute({ id: '1' })).rejects.toThrow(
+      'Project not found',
+    );
   });
 
   it('should keep existing values if not provided', async () => {

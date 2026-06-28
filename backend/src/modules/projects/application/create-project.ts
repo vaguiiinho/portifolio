@@ -8,6 +8,13 @@ export interface CreateProjectInput {
   techStack: string[];
   githubUrl?: string;
   liveUrl?: string;
+  videoUrl?: string;
+  problemTitle?: string;
+  problemDescription?: string;
+  solutionTitle?: string;
+  solutionDescription?: string;
+  resultTitle?: string;
+  resultDescription?: string;
 }
 
 @Injectable()
@@ -29,6 +36,13 @@ export class CreateProject {
       input.githubUrl || '',
       input.liveUrl || '',
       createdAt,
+      input.videoUrl,
+      input.problemTitle,
+      input.problemDescription,
+      input.solutionTitle,
+      input.solutionDescription,
+      input.resultTitle,
+      input.resultDescription,
     );
 
     return this.projectRepository.create(project);

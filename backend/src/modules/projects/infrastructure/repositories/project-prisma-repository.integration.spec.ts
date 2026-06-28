@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import {
+  PostgreSqlContainer,
+  StartedPostgreSqlContainer,
+} from '@testcontainers/postgresql';
 import { execSync } from 'child_process';
 import { ProjectPrismaRepository } from './project-prisma-repository';
 import { PrismaService } from '../../../../shared/infrastructure/prisma.service';
@@ -28,7 +31,7 @@ describe('ProjectPrismaRepository (Integration)', () => {
         DATABASE_URL: databaseUrl,
       },
     });
- 
+
     // Create PrismaService
     prismaService = new PrismaService();
 
@@ -45,7 +48,6 @@ describe('ProjectPrismaRepository (Integration)', () => {
     // Clean up database
     await prismaService.project.deleteMany();
   });
-
 
   it('should create and find a project', async () => {
     const project = new Project(
@@ -67,40 +69,80 @@ describe('ProjectPrismaRepository (Integration)', () => {
     expect(found!.title).toBe('Test Project');
   });
 
-    it('should find all projects', async () => {
-      const project1 = new Project('1', 'Project 1', 'Desc1', ['Tech1'], '', '', new Date());
-      const project2 = new Project('2', 'Project 2', 'Desc2', ['Tech2'], '', '', new Date());
+  it('should find all projects', async () => {
+    const project1 = new Project(
+      '1',
+      'Project 1',
+      'Desc1',
+      ['Tech1'],
+      '',
+      '',
+      new Date(),
+    );
+    const project2 = new Project(
+      '2',
+      'Project 2',
+      'Desc2',
+      ['Tech2'],
+      '',
+      '',
+      new Date(),
+    );
 
-      await repository.create(project1);
-      await repository.create(project2);
+    await repository.create(project1);
+    await repository.create(project2);
 
-      const all = await repository.findAll();
-      expect(all).toHaveLength(2);
-      expect(all.map(p => p.title)).toEqual(['Project 1', 'Project 2']);
-    });
+    const all = await repository.findAll();
+    expect(all).toHaveLength(2);
+    expect(all.map((p) => p.title)).toEqual(['Project 1', 'Project 2']);
+  });
 
-    it('should update a project', async () => {
-      const project = new Project('1', 'Old Title', 'Desc', ['Tech'], '', '', new Date());
-      await repository.create(project);
+  it('should update a project', async () => {
+    const project = new Project(
+      '1',
+      'Old Title',
+      'Desc',
+      ['Tech'],
+      '',
+      '',
+      new Date(),
+    );
+    await repository.create(project);
 
-      const updatedProject = new Project('1', 'New Title', 'Desc', ['Tech'], '', '', new Date());
-      const result = await repository.update(updatedProject);
+    const updatedProject = new Project(
+      '1',
+      'New Title',
+      'Desc',
+      ['Tech'],
+      '',
+      '',
+      new Date(),
+    );
+    const result = await repository.update(updatedProject);
 
-      expect(result.title).toBe('New Title');
-    });
+    expect(result.title).toBe('New Title');
+  });
 
-    it('should delete a project', async () => {
-      const project = new Project('1', 'Title', 'Desc', ['Tech'], '', '', new Date());
-      await repository.create(project);
+  it('should delete a project', async () => {
+    const project = new Project(
+      '1',
+      'Title',
+      'Desc',
+      ['Tech'],
+      '',
+      '',
+      new Date(),
+    );
+    await repository.create(project);
 
-      await repository.delete('1');
+    await repository.delete('1');
 
-      const found = await repository.findById('1');
-      expect(found).toBeNull();
-    });
+    const found = await repository.findById('1');
+    expect(found).toBeNull();
+  });
 
-    it('should return null for non-existent project', async () => {
-      const found = await repository.findById('non-existent');
-      expect(found).toBeNull();
-    });
+  it('should return null for non-existent project', async () => {
+    const found = await repository.findById('non-existent');
+    expect(found).toBeNull();
+  });
 });

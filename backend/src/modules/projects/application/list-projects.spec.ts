@@ -36,8 +36,24 @@ describe('ListProjects', () => {
 
   it('should return all projects', async () => {
     const mockProjects = [
-      new Project('1', 'Project 1', 'Desc 1', ['Tech1'], 'url1', 'url2', new Date()),
-      new Project('2', 'Project 2', 'Desc 2', ['Tech2'], 'url3', 'url4', new Date()),
+      new Project(
+        '1',
+        'Project 1',
+        'Desc 1',
+        ['Tech1'],
+        'url1',
+        'url2',
+        new Date(),
+      ),
+      new Project(
+        '2',
+        'Project 2',
+        'Desc 2',
+        ['Tech2'],
+        'url3',
+        'url4',
+        new Date(),
+      ),
     ];
 
     mockRepository.findAll.mockResolvedValue(mockProjects);

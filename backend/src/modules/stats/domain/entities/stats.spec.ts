@@ -9,12 +9,7 @@ describe('Stats', () => {
   let stats: Stats;
 
   beforeEach(() => {
-    stats = new Stats(
-      mockId,
-      mockProjectsCount,
-      mockVisitors,
-      mockUpdatedAt,
-    );
+    stats = new Stats(mockId, mockProjectsCount, mockVisitors, mockUpdatedAt);
   });
 
   it('should create stats with correct properties', () => {

@@ -13,6 +13,13 @@ function mapProject(project: ApiProject): Project {
     techStack: project.techStack,
     liveUrl: project.liveUrl ?? undefined,
     githubUrl: project.githubUrl ?? undefined,
+    videoUrl: project.videoUrl ?? undefined,
+    problemTitle: project.problemTitle ?? undefined,
+    problemDescription: project.problemDescription ?? undefined,
+    solutionTitle: project.solutionTitle ?? undefined,
+    solutionDescription: project.solutionDescription ?? undefined,
+    resultTitle: project.resultTitle ?? undefined,
+    resultDescription: project.resultDescription ?? undefined,
     featured: false,
   }
 }
@@ -44,7 +51,24 @@ export function useProjects() {
 
   useEffect(() => {
     const cancelledRef = { current: false }
-    loadProjects(cancelledRef)
+
+    fetchProjects()
+      .then((data) => {
+        if (!cancelledRef.current) {
+          setProjects(data.map(mapProject))
+          setError(null)
+        }
+      })
+      .catch((err) => {
+        if (!cancelledRef.current) {
+          setError(err instanceof Error ? err.message : "Failed to load projects")
+        }
+      })
+      .finally(() => {
+        if (!cancelledRef.current) {
+          setIsLoading(false)
+        }
+      })
 
     return () => {
       cancelledRef.current = true

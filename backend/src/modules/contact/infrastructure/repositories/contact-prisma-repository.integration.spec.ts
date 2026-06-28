@@ -1,4 +1,7 @@
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import {
+  PostgreSqlContainer,
+  StartedPostgreSqlContainer,
+} from '@testcontainers/postgresql';
 import { execSync } from 'child_process';
 import { ContactPrismaRepository } from './contact-prisma-repository';
 import { PrismaService } from '../../../../shared/infrastructure/prisma.service';
@@ -10,30 +13,30 @@ describe('ContactPrismaRepository (Integration)', () => {
   let repository: ContactPrismaRepository;
 
   beforeAll(async () => {
-      // Start PostgreSQL container
-      container = await new PostgreSqlContainer('postgres:15').start();
-  
-      const host = container.getHost();
-      const port = container.getMappedPort(5432);
-  
-      const databaseUrl = `postgresql://test:test@${host}:${port}/test`;
-  
-      process.env.DATABASE_URL = databaseUrl;
-  
-      execSync('npx prisma db push', {
-        stdio: 'inherit',
-        env: {
-          ...process.env,
-          DATABASE_URL: databaseUrl,
-        },
-      });
-   
-      // Create PrismaService
-      prismaService = new PrismaService();
-  
-      // Create repository
-      repository = new ContactPrismaRepository(prismaService);
-    }, 60000); // Increase timeout for container startup
+    // Start PostgreSQL container
+    container = await new PostgreSqlContainer('postgres:15').start();
+
+    const host = container.getHost();
+    const port = container.getMappedPort(5432);
+
+    const databaseUrl = `postgresql://test:test@${host}:${port}/test`;
+
+    process.env.DATABASE_URL = databaseUrl;
+
+    execSync('npx prisma db push', {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        DATABASE_URL: databaseUrl,
+      },
+    });
+
+    // Create PrismaService
+    prismaService = new PrismaService();
+
+    // Create repository
+    repository = new ContactPrismaRepository(prismaService);
+  }, 60000); // Increase timeout for container startup
 
   afterAll(async () => {
     await prismaService.$disconnect();
@@ -64,29 +67,59 @@ describe('ContactPrismaRepository (Integration)', () => {
   });
 
   it('should find all contacts', async () => {
-    const contact1 = new Contact('1', 'John', 'john@example.com', 'Msg1', new Date());
-    const contact2 = new Contact('2', 'Jane', 'jane@example.com', 'Msg2', new Date());
+    const contact1 = new Contact(
+      '1',
+      'John',
+      'john@example.com',
+      'Msg1',
+      new Date(),
+    );
+    const contact2 = new Contact(
+      '2',
+      'Jane',
+      'jane@example.com',
+      'Msg2',
+      new Date(),
+    );
 
     await repository.create(contact1);
     await repository.create(contact2);
 
     const all = await repository.findAll();
     expect(all).toHaveLength(2);
-    expect(all.map(c => c.name)).toEqual(['John', 'Jane']);
+    expect(all.map((c) => c.name)).toEqual(['John', 'Jane']);
   });
 
   it('should update a contact', async () => {
-    const contact = new Contact('1', 'Old Name', 'old@example.com', 'Msg', new Date());
+    const contact = new Contact(
+      '1',
+      'Old Name',
+      'old@example.com',
+      'Msg',
+      new Date(),
+    );
     await repository.create(contact);
 
-    const updatedContact = new Contact('1', 'New Name', 'new@example.com', 'Msg', new Date());
+    const updatedContact = new Contact(
+      '1',
+      'New Name',
+      'new@example.com',
+      'Msg',
+      new Date(),
+    );
     const result = await repository.update(updatedContact);
 
     expect(result.name).toBe('New Name');
   });
 
   it('should delete a contact', async () => {
-    const contact = new Contact('1', 'Name', 'email@example.com', 'Msg', new Date());
+    const contact = new Contact(
+      '1',
+      'Name',
+      'email@example.com',
+      'Msg',
+      new Date(),
+    );
     await repository.create(contact);
 
     await repository.delete('1');

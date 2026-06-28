@@ -1,4 +1,7 @@
-import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import {
+  PostgreSqlContainer,
+  StartedPostgreSqlContainer,
+} from '@testcontainers/postgresql';
 import { execSync } from 'child_process';
 import { StatsPrismaRepository } from './stats-prisma-repository';
 import { PrismaService } from '../../../../shared/infrastructure/prisma.service';
@@ -9,31 +12,31 @@ describe('StatsPrismaRepository (Integration)', () => {
   let prismaService: PrismaService;
   let repository: StatsPrismaRepository;
 
- beforeAll(async () => {
-     // Start PostgreSQL container
-     container = await new PostgreSqlContainer('postgres:15').start();
- 
-     const host = container.getHost();
-     const port = container.getMappedPort(5432);
- 
-     const databaseUrl = `postgresql://test:test@${host}:${port}/test`;
- 
-     process.env.DATABASE_URL = databaseUrl;
- 
-     execSync('npx prisma db push', {
-       stdio: 'inherit',
-       env: {
-         ...process.env,
-         DATABASE_URL: databaseUrl,
-       },
-     });
-  
-     // Create PrismaService
-     prismaService = new PrismaService();
- 
-     // Create repository
-     repository = new StatsPrismaRepository(prismaService);
-   }, 60000); // Increase timeout for container startup
+  beforeAll(async () => {
+    // Start PostgreSQL container
+    container = await new PostgreSqlContainer('postgres:15').start();
+
+    const host = container.getHost();
+    const port = container.getMappedPort(5432);
+
+    const databaseUrl = `postgresql://test:test@${host}:${port}/test`;
+
+    process.env.DATABASE_URL = databaseUrl;
+
+    execSync('npx prisma db push', {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        DATABASE_URL: databaseUrl,
+      },
+    });
+
+    // Create PrismaService
+    prismaService = new PrismaService();
+
+    // Create repository
+    repository = new StatsPrismaRepository(prismaService);
+  }, 60000); // Increase timeout for container startup
   afterAll(async () => {
     await prismaService.$disconnect();
     await container.stop();

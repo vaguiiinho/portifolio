@@ -37,7 +37,7 @@ describe('GlobalExceptionFilter', () => {
       HttpStatus.BAD_REQUEST,
     );
 
-    filter.catch(exception, mockHost as ArgumentsHost);
+    filter.catch(exception, mockHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -53,7 +53,7 @@ describe('GlobalExceptionFilter', () => {
       HttpStatus.UNAUTHORIZED,
     );
 
-    filter.catch(exception, mockHost as ArgumentsHost);
+    filter.catch(exception, mockHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.UNAUTHORIZED);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -66,7 +66,7 @@ describe('GlobalExceptionFilter', () => {
   it('should handle generic Error', () => {
     const exception = new Error('Generic error message');
 
-    filter.catch(exception, mockHost as ArgumentsHost);
+    filter.catch(exception, mockHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({
@@ -79,7 +79,7 @@ describe('GlobalExceptionFilter', () => {
   it('should handle unknown exception', () => {
     const exception = 'Unknown error';
 
-    filter.catch(exception, mockHost as ArgumentsHost);
+    filter.catch(exception, mockHost);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({

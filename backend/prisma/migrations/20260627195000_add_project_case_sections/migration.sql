@@ -1,0 +1,7 @@
+ALTER TABLE "projects"
+ADD COLUMN IF NOT EXISTS "problemTitle" VARCHAR(255),
+ADD COLUMN IF NOT EXISTS "problemDescription" TEXT,
+ADD COLUMN IF NOT EXISTS "solutionTitle" VARCHAR(255),
+ADD COLUMN IF NOT EXISTS "solutionDescription" TEXT,
+ADD COLUMN IF NOT EXISTS "resultTitle" VARCHAR(255),
+ADD COLUMN IF NOT EXISTS "resultDescription" TEXT;

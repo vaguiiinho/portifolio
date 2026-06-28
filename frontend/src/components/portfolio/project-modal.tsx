@@ -1,21 +1,37 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, ExternalLink, Github, CheckCircle2, PencilLine } from "lucide-react"
+import { X, ExternalLink, Github, CheckCircle2, PencilLine, Trash2, Play } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { Badge } from "./badge"
 import type { Project } from "./project-card"
 import { projectModalData } from "@/data/site"
+import { resolveMediaUrl } from "@/lib/api"
 
 interface ProjectModalProps {
   project: Project | null
   onClose: () => void
   onEdit?: () => void
+  onDelete?: () => void
 }
 
-export function ProjectModal({ project, onClose, onEdit }: ProjectModalProps) {
+export function ProjectModal({ project, onClose, onEdit, onDelete }: ProjectModalProps) {
   const initial = project?.title?.charAt(0) || "P"
+  const sections = [
+    {
+      title: project?.problemTitle || "Problem",
+      description: project?.problemDescription || "Not defined yet.",
+    },
+    {
+      title: project?.solutionTitle || "Solution",
+      description: project?.solutionDescription || "Not defined yet.",
+    },
+    {
+      title: project?.resultTitle || "Result",
+      description: project?.resultDescription || "Not defined yet.",
+    },
+  ]
 
   return (
     <AnimatePresence>
@@ -69,9 +85,26 @@ export function ProjectModal({ project, onClose, onEdit }: ProjectModalProps) {
                   </p>
                 </div>
 
+                {project.videoUrl && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <Play className="h-4 w-4 text-accent" />
+                      <h3 className="font-semibold">Presentation video</h3>
+                    </div>
+                    <div className="overflow-hidden rounded-2xl border border-border bg-black">
+                      <video
+                        controls
+                        preload="metadata"
+                        className="aspect-video w-full"
+                        src={resolveMediaUrl(project.videoUrl)}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Problem / Solution / Result */}
                 <div className="grid gap-6 sm:grid-cols-3">
-                  {projectModalData.sections.map((item) => (
+                  {sections.map((item) => (
                     <div key={item.title} className="space-y-2">
                       <div className="flex items-center gap-2">
                         <CheckCircle2 className="h-4 w-4 text-accent" />
@@ -102,6 +135,16 @@ export function ProjectModal({ project, onClose, onEdit }: ProjectModalProps) {
                     <Button variant="outline" className="rounded-full" onClick={onEdit}>
                       <PencilLine className="mr-2 h-4 w-4" />
                       Edit Project
+                    </Button>
+                  )}
+                  {onDelete && (
+                    <Button
+                      variant="destructive"
+                      className="rounded-full"
+                      onClick={onDelete}
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete Project
                     </Button>
                   )}
                   {project.liveUrl && (

@@ -56,16 +56,16 @@ export const projectModalData = {
   viewSourceCodeText: "View Source Code",
   sections: [
     {
-      title: "Problem",
-      description: "Users needed a faster, more intuitive way to manage their workflows without technical complexity."
+      title: "Context",
+      description: "A short summary of the project, its purpose, and the main constraint it needed to solve."
     },
     {
-      title: "Solution",
-      description: "Built a modern web application with real-time collaboration features and an intuitive drag-and-drop interface."
+      title: "Approach",
+      description: "How the frontend, backend, and data flow were structured to keep the experience simple and maintainable."
     },
     {
-      title: "Result",
-      description: "Increased user productivity by 40% and reduced onboarding time from days to hours."
+      title: "Outcome",
+      description: "The final result, including the features delivered and the value the project adds."
     }
   ]
 }

@@ -9,12 +9,7 @@ describe('Config', () => {
   let config: Config;
 
   beforeEach(() => {
-    config = new Config(
-      mockId,
-      mockSiteName,
-      mockDescription,
-      mockUpdatedAt,
-    );
+    config = new Config(mockId, mockSiteName, mockDescription, mockUpdatedAt);
   });
 
   it('should create config with correct properties', () => {

@@ -12,9 +12,7 @@ describe('ContactController', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ContactController],
-      providers: [
-        { provide: SendContact, useValue: mockSend },
-      ],
+      providers: [{ provide: SendContact, useValue: mockSend }],
     }).compile();
 
     controller = module.get<ContactController>(ContactController);
@@ -28,7 +26,13 @@ describe('ContactController', () => {
   describe('send', () => {
     it('should send contact', async () => {
       const dto = { name: 'John', email: 'john@example.com', message: 'Hello' };
-      const mockContact = new Contact('1', 'John', 'john@example.com', 'Hello', new Date());
+      const mockContact = new Contact(
+        '1',
+        'John',
+        'john@example.com',
+        'Hello',
+        new Date(),
+      );
       mockSendContact.execute.mockResolvedValue(mockContact);
 
       const result = await controller.send(dto);

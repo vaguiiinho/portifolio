@@ -54,7 +54,9 @@ describe('ProjectsController', () => {
 
   describe('list', () => {
     it('should return projects', async () => {
-      const mockProjects = [new Project('1', 'Title', 'Desc', ['Tech'], '', '', new Date())];
+      const mockProjects = [
+        new Project('1', 'Title', 'Desc', ['Tech'], '', '', new Date()),
+      ];
       mockListProjects.execute.mockResolvedValue(mockProjects);
 
       const result = await controller.list();
@@ -66,7 +68,15 @@ describe('ProjectsController', () => {
 
   describe('findById', () => {
     it('should return project if found', async () => {
-      const mockProject = new Project('1', 'Title', 'Desc', ['Tech'], '', '', new Date());
+      const mockProject = new Project(
+        '1',
+        'Title',
+        'Desc',
+        ['Tech'],
+        '',
+        '',
+        new Date(),
+      );
       mockRepository.findById.mockResolvedValue(mockProject);
 
       const result = await controller.findById('1');
@@ -85,7 +95,15 @@ describe('ProjectsController', () => {
   describe('create', () => {
     it('should create project', async () => {
       const dto = { title: 'Title', description: 'Desc', techStack: ['Tech'] };
-      const mockProject = new Project('1', 'Title', 'Desc', ['Tech'], '', '', new Date());
+      const mockProject = new Project(
+        '1',
+        'Title',
+        'Desc',
+        ['Tech'],
+        '',
+        '',
+        new Date(),
+      );
       mockCreateProject.execute.mockResolvedValue(mockProject);
 
       const result = await controller.create(dto);
@@ -98,12 +116,23 @@ describe('ProjectsController', () => {
   describe('update', () => {
     it('should update project', async () => {
       const dto = { title: 'New Title' };
-      const mockProject = new Project('1', 'New Title', 'Desc', ['Tech'], '', '', new Date());
+      const mockProject = new Project(
+        '1',
+        'New Title',
+        'Desc',
+        ['Tech'],
+        '',
+        '',
+        new Date(),
+      );
       mockUpdateProject.execute.mockResolvedValue(mockProject);
 
       const result = await controller.update('1', dto);
 
-      expect(mockUpdateProject.execute).toHaveBeenCalledWith({ id: '1', ...dto });
+      expect(mockUpdateProject.execute).toHaveBeenCalledWith({
+        id: '1',
+        ...dto,
+      });
       expect(result).toBe(mockProject);
     });
   });
