@@ -15,7 +15,7 @@ interface LoginFormProps {
 
 export function LoginForm({ locale }: LoginFormProps) {
   const router = useRouter()
-  const { login, isAuthenticated, isLoading, user } = useAuth()
+  const { login, isAuthenticated, isLoading, user, authErrorStatus } = useAuth()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -57,6 +57,17 @@ export function LoginForm({ locale }: LoginFormProps) {
     )
   }
 
+  const authNotice =
+    authErrorStatus === 401
+      ? locale === "en"
+        ? "Your session expired. Sign in again to continue."
+        : "Sua sessão expirou. Entre novamente para continuar."
+      : authErrorStatus === 403
+        ? locale === "en"
+          ? "Your session no longer has permission. Sign in again."
+          : "Sua sessão não tem mais permissão. Entre novamente."
+        : null
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 rounded-3xl border border-border bg-card/90 p-8 shadow-xl backdrop-blur">
       <div className="space-y-2">
@@ -73,6 +84,12 @@ export function LoginForm({ locale }: LoginFormProps) {
             : "Use sua conta de administrador para criar, editar e excluir projetos."}
         </p>
       </div>
+
+      {authNotice && (
+        <p className="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
+          {authNotice}
+        </p>
+      )}
 
       <div className="grid gap-4">
         <FormField

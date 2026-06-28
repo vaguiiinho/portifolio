@@ -68,6 +68,26 @@ export interface ContactPayload {
   message: string
 }
 
+export class ApiError extends Error {
+  readonly status: number
+  readonly responseMessage: string
+
+  constructor(status: number, message: string, responseMessage?: string) {
+    super(message)
+    this.name = "ApiError"
+    this.status = status
+    this.responseMessage = responseMessage ?? message
+  }
+
+  get isUnauthorized() {
+    return this.status === 401
+  }
+
+  get isForbidden() {
+    return this.status === 403
+  }
+}
+
 const AUTH_SESSION_KEY = 'portfolio-auth-session'
 
 function isBrowser() {
@@ -121,6 +141,10 @@ function withAuthHeaders(headers?: HeadersInit) {
   return mergedHeaders
 }
 
+function isAuthError(status: number) {
+  return status === 401 || status === 403
+}
+
 function isFormDataBody(body: unknown): body is FormData {
   if (typeof FormData === 'undefined' || !body) {
     return false
@@ -153,7 +177,24 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       message = body?.message || body?.error || fallbackMessage
     } catch {}
 
-    throw new Error(message)
+    if (isAuthError(response.status)) {
+      const error = new ApiError(response.status, message, message)
+
+      if (isBrowser()) {
+        window.dispatchEvent(
+          new CustomEvent("portfolio:auth-error", {
+            detail: {
+              status: response.status,
+              message,
+            },
+          }),
+        )
+      }
+
+      throw error
+    }
+
+    throw new ApiError(response.status, message)
   }
 
   if (response.status === 204) {

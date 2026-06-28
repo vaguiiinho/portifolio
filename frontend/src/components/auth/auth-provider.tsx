@@ -22,6 +22,7 @@ interface AuthContextValue {
   accessToken: string | null
   isLoading: boolean
   isAuthenticated: boolean
+  authErrorStatus: number | null
   login: (payload: LoginPayload) => Promise<AuthSession>
   logout: () => void
   refreshSession: () => Promise<void>
@@ -46,6 +47,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState<AuthUser | null>(initialSession?.user ?? null)
   const [accessToken, setAccessToken] = useState<string | null>(initialSession?.accessToken ?? null)
   const [isLoading, setIsLoading] = useState(Boolean(initialSession))
+  const [authErrorStatus, setAuthErrorStatus] = useState<number | null>(null)
 
   useEffect(() => {
     if (!accessToken) {
@@ -54,6 +56,28 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     void refreshStoredSession(accessToken)
   }, [accessToken])
+
+  useEffect(() => {
+    function handleAuthError(event: Event) {
+      const customEvent = event as CustomEvent<{ status?: number }>
+      const status = customEvent.detail?.status
+
+      if (status !== 401 && status !== 403) {
+        return
+      }
+
+      setAuthErrorStatus(status)
+      writeAuthSession(null)
+      setUser(null)
+      setAccessToken(null)
+    }
+
+    window.addEventListener("portfolio:auth-error", handleAuthError)
+
+    return () => {
+      window.removeEventListener("portfolio:auth-error", handleAuthError)
+    }
+  }, [])
 
   async function refreshStoredSession(token: string) {
     try {
@@ -85,6 +109,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     setUser(normalizedSession.user)
     setAccessToken(normalizedSession.accessToken)
+    setAuthErrorStatus(null)
     writeAuthSession(normalizedSession)
 
     return normalizedSession
@@ -94,6 +119,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     writeAuthSession(null)
     setUser(null)
     setAccessToken(null)
+    setAuthErrorStatus(null)
   }
 
   async function refreshSession() {
@@ -113,6 +139,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         accessToken,
         isLoading,
         isAuthenticated: Boolean(user && accessToken),
+        authErrorStatus,
         login: handleLogin,
         logout,
         refreshSession,
