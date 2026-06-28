@@ -2,12 +2,12 @@ import type { Metadata } from "next"
 import { Navbar, Hero, HomeHub, Testimonials, ConversionMetrics, Footer } from "@/components/portfolio"
 import { MetricBeacon } from "@/components/portfolio/metric-beacon"
 import { fetchSiteConfig } from "@/lib/site-config"
-import { getLocale } from "@/lib/locale"
+import { getLocale } from "@/lib/locale-server"
 import { createRouteMetadata } from "@/lib/metadata"
 import { getHeroContent } from "@/lib/content/localized"
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = getLocale()
+  const locale = await getLocale()
   const heroContent = getHeroContent(locale)
 
   return createRouteMetadata({
@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default async function HomePage() {
   const config = await fetchSiteConfig()
-  const locale = getLocale()
+  const locale = await getLocale()
 
   return (
     <main className="relative">

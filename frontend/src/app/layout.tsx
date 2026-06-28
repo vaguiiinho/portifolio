@@ -2,11 +2,11 @@ import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from "@/components/theme-provider"
 import './globals.css'
 import { fetchSiteConfig, siteDefaults } from '@/lib/site-config'
-import { getLocale } from "@/lib/locale"
+import { getLocale } from "@/lib/locale-server"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
-  const locale = getLocale()
+  const locale = await getLocale()
   const siteName = config.siteName || siteDefaults.siteName
   const description =
     config.description ||
@@ -70,12 +70,12 @@ export const viewport: Viewport = {
   ],
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const locale = getLocale()
+  const locale = await getLocale()
 
   return (
     <html lang={locale === "en" ? "en" : "pt-br"} suppressHydrationWarning className="scroll-smooth">

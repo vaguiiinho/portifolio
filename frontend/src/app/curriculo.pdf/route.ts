@@ -6,8 +6,9 @@ function escapePdfText(value: string) {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)")
 }
 
-function buildPdf(): Uint8Array {
-  const locale = getLocaleFromCookieValue(cookies().get(getLocaleCookieName())?.value)
+async function buildPdf(): Promise<Uint8Array> {
+  const cookieStore = await cookies()
+  const locale = getLocaleFromCookieValue(cookieStore.get(getLocaleCookieName())?.value)
   const resumePdfContent = getResumePdfContent(locale)
   const lines = [
     resumePdfContent.title,
@@ -76,7 +77,7 @@ function buildPdf(): Uint8Array {
 }
 
 export async function GET() {
-  const pdf = buildPdf()
+  const pdf = await buildPdf()
   const body = pdf as unknown as BodyInit
 
   return new Response(body, {

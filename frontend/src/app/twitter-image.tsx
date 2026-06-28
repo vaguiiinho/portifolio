@@ -3,7 +3,6 @@ import { cookies } from "next/headers"
 import { siteDefaults } from "@/lib/site-config"
 import { getLocaleFromCookieValue, getLocaleCookieName } from "@/lib/locale"
 
-export const runtime = "edge"
 export const size = {
   width: 1200,
   height: 600,
@@ -11,7 +10,8 @@ export const size = {
 export const contentType = "image/png"
 
 export default async function Image() {
-  const locale = getLocaleFromCookieValue(cookies().get(getLocaleCookieName())?.value)
+  const cookieStore = await cookies()
+  const locale = getLocaleFromCookieValue(cookieStore.get(getLocaleCookieName())?.value)
   const content =
     locale === "en"
       ? {

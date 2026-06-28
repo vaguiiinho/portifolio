@@ -9,13 +9,13 @@ import { portfolioRoutes } from "@/lib/routes"
 import { fetchSiteConfig } from "@/lib/site-config"
 import { siteDefaults } from "@/lib/site-config"
 import { MetricBeacon } from "@/components/portfolio/metric-beacon"
-import { getLocale } from "@/lib/locale"
+import { getLocale } from "@/lib/locale-server"
 import { getResumeContent, getResumePageContent } from "@/lib/content/localized"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
   const siteName = config.siteName || siteDefaults.siteName
-  const locale = getLocale()
+  const locale = await getLocale()
   const resumePageDetails = getResumeContent(locale)
   const description = `${resumePageDetails.summary} ${resumePageDetails.ctaDescription}`
   const title = locale === "en" ? `${siteName} | Resume` : `${siteName} | Currículo`
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ResumePage() {
   const config = await fetchSiteConfig()
-  const locale = getLocale()
+  const locale = await getLocale()
   const resumePageContent = getResumePageContent(locale)
   const resumeContent = getResumeContent(locale)
 

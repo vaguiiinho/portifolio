@@ -7,12 +7,12 @@ import { PortfolioRouteShell } from "@/components/portfolio/portfolio-route-shel
 import { createRouteMetadata } from "@/lib/metadata"
 import { fetchSiteConfig } from "@/lib/site-config"
 import { routeCtaContent } from "@/lib/content"
-import { getLocale } from "@/lib/locale"
+import { getLocale } from "@/lib/locale-server"
 import { getAboutContent } from "@/lib/content/localized"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
-  const locale = getLocale()
+  const locale = await getLocale()
   const aboutPageContent = getAboutContent(locale)
 
   return createRouteMetadata({
@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   const config = await fetchSiteConfig()
-  const locale = getLocale()
+  const locale = await getLocale()
   const aboutPageContent = getAboutContent(locale)
 
   return (
