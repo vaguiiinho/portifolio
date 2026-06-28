@@ -90,7 +90,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
               ) : (
                 <Button
                   as="a"
-                  href={portfolioRoutes.login}
+                  href={portfolioRoutes.admin}
                   variant="outline"
                   size="sm"
                   className="rounded-full"

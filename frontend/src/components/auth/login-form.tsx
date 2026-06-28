@@ -28,7 +28,7 @@ export function LoginForm({ locale }: LoginFormProps) {
       setIsSubmitting(true)
       setError(null)
       await login({ email, password })
-      router.push(portfolioRoutes.projects)
+      router.push(portfolioRoutes.admin)
       router.refresh()
     } catch (err) {
       setError(err instanceof Error ? err.message : locale === "en" ? "Failed to sign in" : "Falha ao entrar")
@@ -50,8 +50,8 @@ export function LoginForm({ locale }: LoginFormProps) {
           </div>
         </div>
 
-        <Button as="a" href={portfolioRoutes.projects} className="rounded-full">
-          {locale === "en" ? "Go to projects" : "Ir para projetos"}
+        <Button as="a" href={portfolioRoutes.admin} className="rounded-full">
+          {locale === "en" ? "Go to dashboard" : "Ir para o painel"}
         </Button>
       </div>
     )
