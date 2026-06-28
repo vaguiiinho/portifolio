@@ -9,7 +9,13 @@ import { ConfigModule } from './modules/config/config.module';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
-  imports: [ProjectsModule, ContactModule, StatsModule, ConfigModule, AuthModule],
+  imports: [
+    ProjectsModule,
+    ContactModule,
+    StatsModule,
+    ConfigModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
 })

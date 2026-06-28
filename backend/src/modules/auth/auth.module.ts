@@ -28,6 +28,6 @@ import { PrismaService } from '../../shared/infrastructure/prisma.service';
     },
     PrismaService,
   ],
-  exports: [AuthGuard, RolesGuard],
+  exports: [AuthGuard, RolesGuard, 'ITokenService'],
 })
 export class AuthModule {}

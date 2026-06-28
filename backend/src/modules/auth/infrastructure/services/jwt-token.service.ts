@@ -36,7 +36,8 @@ function toSeconds(expiresIn: string | number): number {
 
 @Injectable()
 export class JwtTokenService implements ITokenService {
-  private readonly secret = process.env.AUTH_JWT_SECRET ?? 'portfolio-auth-secret';
+  private readonly secret =
+    process.env.AUTH_JWT_SECRET ?? 'portfolio-auth-secret';
   private readonly expiresInSeconds = toSeconds(
     process.env.AUTH_JWT_EXPIRES_IN_SECONDS ?? '86400',
   );
