@@ -20,7 +20,7 @@ export const contactContent = {
       description:
         "Tenho uma ideia, uma página ou um produto para colocar no ar com foco em conversão e clareza de escopo.",
       ctaLabel: "Pedir orçamento",
-      ctaHref: "#contact-form",
+      ctaHref: "/contato#contact-form",
       secondaryLabel: "WhatsApp",
       secondaryHref: "https://wa.me/5500000000000",
     },

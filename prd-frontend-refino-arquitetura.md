@@ -2,6 +2,7 @@
 Elevar o padrão de código do frontend do portfólio para uma base mais modular, previsível e alinhada com Next.js moderno.
 
 O foco é reduzir componentes monolíticos, separar UI de lógica e dados, diminuir estado desnecessário no client e organizar o código para facilitar manutenção, testes manuais e evolução de conteúdo.
+Também entra no escopo evoluir a navegação para páginas por rota quando isso trouxer mais clareza, SEO e compartilhamento de links.
 
 ---
 
@@ -39,6 +40,7 @@ O foco é reduzir componentes monolíticos, separar UI de lógica e dados, dimin
 * Alguns componentes client-side existem por necessidade real, mas outros podem ser convertidos para Server Components.
 * Conteúdo estático e partes sem estado podem ser renderizadas no servidor.
 * O formulário de contato e interações de tema/menu continuam justificando client-side.
+* Seções com identidade própria podem virar páginas dedicadas em rotas separadas, mantendo a home mais enxuta.
 
 ---
 
@@ -115,7 +117,18 @@ src/data/
 ### Critério de aceite
 * O número de client components cai sem perda funcional.
 
-## Fase 4: Consolidação de dados e fluxos
+## Fase 4: Estrutura por rotas e páginas
+### Subtarefas
+* Definir quais seções continuam na home e quais viram rotas próprias.
+* Criar páginas dedicadas para áreas com contexto próprio, como portfólio, currículo ou contato, quando fizer sentido.
+* Manter a home como landing page com visão geral e CTAs de navegação.
+* Reaproveitar componentes compartilhados entre as rotas sem duplicar layout.
+* Ajustar navegação e breadcrumbs/links para refletir a nova estrutura.
+
+### Critério de aceite
+* O site deixa de depender de uma única página longa para tudo o que é relevante.
+
+## Fase 5: Consolidação de dados e fluxos
 ### Subtarefas
 * Centralizar dados em módulos mais semânticos.
 * Padronizar links internos/externos.
@@ -126,7 +139,7 @@ src/data/
 ### Critério de aceite
 * O conteúdo não fica duplicado em múltiplos arquivos.
 
-## Fase 5: Validação final
+## Fase 6: Validação final
 ### Subtarefas
 * Rodar lint e typecheck.
 * Validar build.

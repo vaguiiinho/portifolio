@@ -159,7 +159,7 @@ export default async function ResumePage() {
                     <ArrowDownToLine className="h-4 w-4" />
                     Baixar PDF
                   </Button>
-                  <Button as="a" href="/#contact" variant="outline" className="rounded-full">
+                  <Button as="a" href="/contato" variant="outline" className="rounded-full">
                     Falar comigo
                   </Button>
                 </div>

@@ -1,12 +1,12 @@
 import { Github, Linkedin, Mail, MessageCircleMore } from "lucide-react"
 
 export const navLinks = [
-  { name: "Início", href: "#home" },
-  { name: "Serviços", href: "#services" },
-  { name: "Cases", href: "#projects" },
+  { name: "Início", href: "/" },
+  { name: "Serviços", href: "/servicos" },
+  { name: "Projetos", href: "/projetos" },
   { name: "Currículo", href: "/curriculo" },
-  { name: "Sobre", href: "#about" },
-  { name: "Contato", href: "#contact" },
+  { name: "Sobre", href: "/sobre" },
+  { name: "Contato", href: "/contato" },
 ]
 
 export const socialLinks = [

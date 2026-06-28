@@ -4,11 +4,18 @@ import { Container } from "./container"
 import { SectionHeader } from "./section-header"
 import { servicesContent } from "@/lib/content"
 
-export function Services() {
+interface ServicesProps {
+  showHeader?: boolean
+  showActions?: boolean
+}
+
+export function Services({ showHeader = true, showActions = true }: ServicesProps) {
   return (
     <section id="services" className="py-24 sm:py-32">
       <Container>
-        <SectionHeader className="mb-12" title={servicesContent.title} subtitle={servicesContent.subtitle} />
+        {showHeader && (
+          <SectionHeader className="mb-12" title={servicesContent.title} subtitle={servicesContent.subtitle} />
+        )}
 
         <div className="grid gap-6 md:grid-cols-2">
           {servicesContent.cards.map((service, index) => (
@@ -39,21 +46,23 @@ export function Services() {
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border bg-secondary/30 px-6 py-6 text-center md:flex-row md:text-left">
-          <div className="max-w-2xl">
-            <h3 className="text-xl font-semibold tracking-tight">
-              Quer um escopo mais preciso?
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground text-pretty">
-              Eu posso adaptar a entrega para uma landing page, case study, painel interno ou API sob medida.
-            </p>
-          </div>
+        {showActions && (
+          <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border bg-secondary/30 px-6 py-6 text-center md:flex-row md:text-left">
+            <div className="max-w-2xl">
+              <h3 className="text-xl font-semibold tracking-tight">
+                Quer um escopo mais preciso?
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground text-pretty">
+                Eu posso adaptar a entrega para uma landing page, case study, painel interno ou API sob medida.
+              </p>
+            </div>
 
-          <Button as="a" href="#contact" size="lg" className="rounded-full shrink-0">
-            Pedir orçamento
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </div>
+            <Button as="a" href="/contato" size="lg" className="rounded-full shrink-0">
+              Pedir orçamento
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </Container>
     </section>
   )

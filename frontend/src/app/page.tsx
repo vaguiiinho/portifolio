@@ -1,9 +1,9 @@
-import { Navbar, Hero, Services, Projects, About, Contact, Footer } from "@/components/portfolio"
+import { Navbar, Hero, HomeHub, Footer } from "@/components/portfolio"
 import { fetchSiteConfig } from "@/lib/site-config"
 
 /**
  * Página principal do portfólio
- * Renderiza todas as seções em ordem
+ * Funciona como landing page e porta de entrada para as rotas principais
  */
 export default async function HomePage() {
   const config = await fetchSiteConfig()
@@ -12,10 +12,7 @@ export default async function HomePage() {
     <main className="relative">
       <Navbar siteName={config.siteName} />
       <Hero siteName={config.siteName} />
-      <Services />
-      <Projects />
-      <About siteName={config.siteName} />
-      <Contact />
+      <HomeHub />
       <Footer siteName={config.siteName} />
     </main>
   )

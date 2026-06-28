@@ -6,13 +6,16 @@ import { aboutContent } from "@/lib/content"
 
 interface AboutProps {
   siteName: string
+  showHeader?: boolean
 }
 
-export function About({ siteName }: AboutProps) {
+export function About({ siteName, showHeader = true }: AboutProps) {
   return (
     <section id="about" className="py-24 sm:py-32 bg-secondary/30">
       <Container>
-        <SectionHeader className="mb-12" title={aboutContent.title} subtitle={aboutContent.subtitle} />
+        {showHeader && (
+          <SectionHeader className="mb-12" title={aboutContent.title} subtitle={aboutContent.subtitle} />
+        )}
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Avatar / Image */}

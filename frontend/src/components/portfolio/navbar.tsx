@@ -4,6 +4,7 @@ import { useState } from "react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { Menu, X, Moon, Sun } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { AppLink } from "@/components/ui/app-link"
 import { Container } from "./container"
 import { cn } from "@/lib/utils"
 import { useTheme } from "next-themes"
@@ -45,9 +46,9 @@ export function Navbar({ siteName }: NavbarProps) {
       <Container>
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#home" className="text-xl font-bold tracking-tight">
+          <AppLink href="/" className="text-xl font-bold tracking-tight">
             {siteName}
-          </a>
+          </AppLink>
 
           <DesktopNav />
 
@@ -63,7 +64,7 @@ export function Navbar({ siteName }: NavbarProps) {
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
-            <Button as="a" href="#contact" className="hidden sm:inline-flex rounded-full">
+            <Button as="a" href="/contato" className="hidden sm:inline-flex rounded-full">
               Pedir orçamento
             </Button>
 

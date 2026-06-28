@@ -27,7 +27,7 @@ export function Footer({ siteName }: FooterProps) {
                 <ArrowDownToLine className="h-4 w-4" />
                 Baixar PDF
               </Button>
-              <Button as="a" href="#contact" size="sm" className="rounded-full">
+              <Button as="a" href="/contato" size="sm" className="rounded-full">
                 Falar comigo
                 <ArrowRight className="h-4 w-4" />
               </Button>
