@@ -86,8 +86,9 @@ src/data/
 
 Status atual:
 * Fases 1, 2 e 3: concluídas.
-* Fase 4: em andamento.
-* Fases 5 e 6: pendentes.
+* Fase 4: concluída.
+* Fase 5: concluída.
+* Fase 6: pendente.
 
 ## Fase 1: Auditoria e limites
 ### Status
@@ -130,7 +131,7 @@ Status atual:
 
 ## Fase 4: Estrutura por rotas e páginas
 ### Status
-* Em andamento
+* Concluída
 ### Subtarefas
 * Definir quais seções continuam na home e quais viram rotas próprias.
 * Criar páginas dedicadas para áreas com contexto próprio, como portfólio, currículo ou contato, quando fizer sentido.
@@ -143,7 +144,7 @@ Status atual:
 
 ## Fase 5: Consolidação de dados e fluxos
 ### Status
-* Pendente
+* Concluída
 ### Subtarefas
 * Centralizar dados em módulos mais semânticos.
 * Padronizar links internos/externos.

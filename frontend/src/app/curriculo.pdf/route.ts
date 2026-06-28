@@ -1,26 +1,25 @@
+import { resumePdfContent } from "@/lib/content"
+
 function escapePdfText(value: string) {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)")
 }
 
 function buildPdf(): Uint8Array {
   const lines = [
-    "Joao Silva",
-    "Full Stack Developer",
+    resumePdfContent.title,
+    resumePdfContent.subtitle,
     "",
-    "Resumo",
-    "Desenvolvedor focado em conversao, interfaces claras e backends modulares.",
+    resumePdfContent.summaryTitle,
+    resumePdfContent.summary,
     "",
-    "Stacks",
-    "Next.js, React, TypeScript, NestJS, Prisma, PostgreSQL",
+    resumePdfContent.stacksTitle,
+    resumePdfContent.stacks,
     "",
-    "Experiencia",
-    "2021 - Atual | Freelance e projetos sob demanda",
-    "2021 - Atual | Landing pages, dashboards, APIs e integracoes",
+    resumePdfContent.experienceTitle,
+    ...resumePdfContent.experienceLines,
     "",
-    "Contatos",
-    "linkedin.com/in/joaosilva",
-    "github.com/joaosilva",
-    "hello@joaosilva.dev",
+    resumePdfContent.contactsTitle,
+    ...resumePdfContent.contacts,
   ]
 
   const textCommands = [

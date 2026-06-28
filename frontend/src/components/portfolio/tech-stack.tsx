@@ -1,5 +1,4 @@
-import { techStack } from "@/data/navigation"
-import { aboutContent } from "@/lib/content"
+import { aboutContent, techStack } from "@/lib/content"
 
 export function TechStack() {
   return (

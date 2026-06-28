@@ -50,16 +50,14 @@ export function Services({ showHeader = true, showActions = true }: ServicesProp
         {showActions && (
           <div className="mt-10 flex flex-col items-center justify-between gap-4 rounded-3xl border border-border bg-secondary/30 px-6 py-6 text-center md:flex-row md:text-left">
             <div className="max-w-2xl">
-              <h3 className="text-xl font-semibold tracking-tight">
-                Quer um escopo mais preciso?
-              </h3>
+              <h3 className="text-xl font-semibold tracking-tight">{servicesContent.ctaTitle}</h3>
               <p className="mt-2 text-sm text-muted-foreground text-pretty">
-                Eu posso adaptar a entrega para uma landing page, case study, painel interno ou API sob medida.
+                {servicesContent.ctaDescription}
               </p>
             </div>
 
             <Button as="a" href={portfolioRoutes.contact} size="lg" className="rounded-full shrink-0">
-              Pedir orçamento
+              {servicesContent.ctaLabel}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>

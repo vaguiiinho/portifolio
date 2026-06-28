@@ -1,5 +1,5 @@
 import { AppLink } from "@/components/ui/app-link"
-import { navLinks } from "@/data/navigation"
+import { navLinks } from "@/lib/content"
 
 export function DesktopNav() {
   return (

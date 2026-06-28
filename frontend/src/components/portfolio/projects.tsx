@@ -24,7 +24,7 @@ export function Projects({ showHeader = true, showActions = true }: ProjectsProp
             </div>
             {showActions && (
               <Button as="a" href={portfolioRoutes.contact} className="rounded-full shrink-0">
-                Quero um case assim
+                {projectsContent.ctaLabel}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             )}

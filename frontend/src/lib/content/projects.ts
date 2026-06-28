@@ -2,6 +2,7 @@ export const projectsContent = {
   title: "Cases em destaque",
   subtitle:
     "Cada projeto abaixo conta o problema, a solução e o impacto. Não é uma lista de tecnologias; é um histórico de entrega.",
+  ctaLabel: "Quero um case assim",
   modal: {
     technologiesTitle: "Tecnologias usadas",
     viewLiveDemoText: "Ver demo",

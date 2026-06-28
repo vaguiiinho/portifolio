@@ -2,6 +2,10 @@ export const servicesContent = {
   title: "Serviços contratáveis",
   subtitle:
     "Pacotes pensados para contratação direta, com escopo claro e foco em entrega que ajuda a vender, captar ou operar melhor.",
+  ctaTitle: "Quer um escopo mais preciso?",
+  ctaDescription:
+    "Eu posso adaptar a entrega para uma landing page, case study, painel interno ou API sob medida.",
+  ctaLabel: "Pedir orçamento",
   cards: [
     {
       title: "Landing pages e portfólios",

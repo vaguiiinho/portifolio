@@ -11,7 +11,7 @@ import { useTheme } from "next-themes"
 import { useMobileMenu } from "./use-mobile-menu"
 import { DesktopNav } from "./desktop-nav"
 import { MobileNav } from "./mobile-nav"
-import { portfolioRoutes } from "@/lib/routes"
+import { shellCtaContent } from "@/lib/content"
 
 interface NavbarProps {
   siteName: string
@@ -47,7 +47,7 @@ export function Navbar({ siteName }: NavbarProps) {
       <Container>
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
-          <AppLink href={portfolioRoutes.home} className="text-xl font-bold tracking-tight">
+          <AppLink href="/" className="text-xl font-bold tracking-tight">
             {siteName}
           </AppLink>
 
@@ -65,12 +65,12 @@ export function Navbar({ siteName }: NavbarProps) {
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </Button>
 
-            <Button as="a" href={portfolioRoutes.contact} className="hidden sm:inline-flex rounded-full">
-              Pedir orçamento
+            <Button as="a" href={shellCtaContent.navbar.primaryHref} className="hidden sm:inline-flex rounded-full">
+              {shellCtaContent.navbar.primaryLabel}
             </Button>
 
-            <Button as="a" href={portfolioRoutes.resume} variant="outline" className="hidden lg:inline-flex rounded-full">
-              Ver currículo
+            <Button as="a" href={shellCtaContent.navbar.secondaryHref} variant="outline" className="hidden lg:inline-flex rounded-full">
+              {shellCtaContent.navbar.secondaryLabel}
             </Button>
 
             {/* Mobile Menu Toggle */}

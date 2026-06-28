@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { AppLink } from "@/components/ui/app-link"
-import { navLinks } from "@/data/navigation"
+import { navLinks } from "@/lib/content"
 
 interface MobileNavProps {
   isOpen: boolean

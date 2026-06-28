@@ -1,5 +1,5 @@
-import { socialLinks } from "@/data/navigation"
 import { AppLink } from "@/components/ui/app-link"
+import { socialLinks } from "@/lib/content"
 
 export function SocialLinksCard() {
   return (
