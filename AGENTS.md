@@ -40,3 +40,6 @@ For pull requests, include:
 
 ## Configuration Tips
 Keep secrets out of the repo. Frontend API configuration comes from `NEXT_PUBLIC_API_URL`; backend changes that affect persistence usually require Prisma migration updates in `backend/prisma/migrations/`. When changing Prisma models or running migrations, prefer `docker compose exec backend ...` so the database tooling uses the same container environment as the app.
+
+## Planning Docs
+Use `prd.md` for backend/API implementation work and `prd-portfolio-linkedin-workana.md` for product and conversion work on the portfolio site. Follow the task order in the active PRD when planning or executing changes.
