@@ -19,7 +19,9 @@ export class AuthGuard implements CanActivate {
     const request = context
       .switchToHttp()
       .getRequest<Request & { user?: unknown }>();
-    const token = this.extractBearerToken(request.headers.authorization);
+    const token =
+      this.extractBearerToken(request.headers.authorization) ??
+      this.extractCookieToken(request.headers.cookie);
 
     if (!token) {
       throw new UnauthorizedException('Missing authorization token');
@@ -43,5 +45,24 @@ export class AuthGuard implements CanActivate {
     }
 
     return token;
+  }
+
+  private extractCookieToken(cookieHeader: string | undefined): string | null {
+    if (!cookieHeader) {
+      return null;
+    }
+
+    const cookies = cookieHeader.split(';').map((item) => item.trim());
+    const authCookie = cookies.find((item) =>
+      item.startsWith('portfolio-auth-token='),
+    );
+
+    if (!authCookie) {
+      return null;
+    }
+
+    const [, token] = authCookie.split('=');
+
+    return token ?? null;
   }
 }

@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -10,27 +11,26 @@ import {
 import {
   fetchCurrentUser,
   login as loginRequest,
-  type AuthSession,
+  logout as logoutRequest,
   type AuthUser,
   type LoginPayload,
-  readAuthSession,
-  writeAuthSession,
 } from "@/lib/api"
 
 interface AuthContextValue {
   user: AuthUser | null
-  accessToken: string | null
   isLoading: boolean
   isAuthenticated: boolean
   authErrorStatus: number | null
-  login: (payload: LoginPayload) => Promise<AuthSession>
-  logout: () => void
+  login: (payload: LoginPayload) => Promise<AuthUser>
+  logout: () => Promise<void>
   refreshSession: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-function normalizeUser(user: AuthSession["user"] | { sub: string; email: string; role: AuthUser["role"] }): AuthUser {
+function normalizeUser(
+  user: AuthUser | { sub: string; email: string; role: AuthUser["role"] },
+): AuthUser {
   if ("sub" in user) {
     return {
       id: user.sub,
@@ -43,19 +43,9 @@ function normalizeUser(user: AuthSession["user"] | { sub: string; email: string;
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const initialSession = typeof window !== "undefined" ? readAuthSession() : null
-  const [user, setUser] = useState<AuthUser | null>(initialSession?.user ?? null)
-  const [accessToken, setAccessToken] = useState<string | null>(initialSession?.accessToken ?? null)
-  const [isLoading, setIsLoading] = useState(Boolean(initialSession))
+  const [user, setUser] = useState<AuthUser | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [authErrorStatus, setAuthErrorStatus] = useState<number | null>(null)
-
-  useEffect(() => {
-    if (!accessToken) {
-      return
-    }
-
-    void refreshStoredSession(accessToken)
-  }, [accessToken])
 
   useEffect(() => {
     function handleAuthError(event: Event) {
@@ -67,9 +57,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
 
       setAuthErrorStatus(status)
-      writeAuthSession(null)
       setUser(null)
-      setAccessToken(null)
+      void logoutRequest()
     }
 
     window.addEventListener("portfolio:auth-error", handleAuthError)
@@ -79,22 +68,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }
   }, [])
 
-  async function refreshStoredSession(token: string) {
+  async function refreshStoredSession() {
     try {
       const currentUser = await fetchCurrentUser()
-      const normalizedUser = normalizeUser(currentUser)
-      const nextSession = {
-        accessToken: token,
-        user: normalizedUser,
-      }
-
-      setUser(normalizedUser)
-      setAccessToken(token)
-      writeAuthSession(nextSession)
+      setUser(normalizeUser(currentUser))
     } catch {
-      writeAuthSession(null)
       setUser(null)
-      setAccessToken(null)
     } finally {
       setIsLoading(false)
     }
@@ -102,43 +81,37 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
   async function handleLogin(payload: LoginPayload) {
     const session = await loginRequest(payload)
-    const normalizedSession = {
-      accessToken: session.accessToken,
-      user: normalizeUser(session.user),
-    }
 
-    setUser(normalizedSession.user)
-    setAccessToken(normalizedSession.accessToken)
     setAuthErrorStatus(null)
-    writeAuthSession(normalizedSession)
+    setUser(normalizeUser(session.user))
 
-    return normalizedSession
+    return normalizeUser(session.user)
   }
 
-  function logout() {
-    writeAuthSession(null)
+  async function logout() {
+    await logoutRequest().catch(() => undefined)
     setUser(null)
-    setAccessToken(null)
     setAuthErrorStatus(null)
   }
 
-  async function refreshSession() {
-    if (!accessToken) {
-      setIsLoading(false)
-      return
-    }
+  const refreshSession = useCallback(async () => {
+    await refreshStoredSession()
+  }, [])
 
-    setIsLoading(true)
-    await refreshStoredSession(accessToken)
-  }
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      void refreshSession()
+    }, 0)
+
+    return () => window.clearTimeout(timer)
+  }, [refreshSession])
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        accessToken,
         isLoading,
-        isAuthenticated: Boolean(user && accessToken),
+        isAuthenticated: Boolean(user),
         authErrorStatus,
         login: handleLogin,
         logout,

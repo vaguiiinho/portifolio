@@ -42,7 +42,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
   }
 
   function handleLogout() {
-    logout()
+    void logout()
     router.push(portfolioRoutes.home)
   }
 

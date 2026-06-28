@@ -5,31 +5,63 @@ import { AuthGuard } from './guards/auth.guard';
 
 describe('AuthController', () => {
   let controller: AuthController;
-  let mockLogin: jest.Mocked<Login>;
+  let mockLogin: {
+    execute: jest.Mock;
+  };
+  let response: {
+    cookie: jest.Mock;
+    clearCookie: jest.Mock;
+  };
 
   beforeEach(async () => {
-    const mockLoginProvider = { execute: jest.fn() };
+    mockLogin = { execute: jest.fn() };
     const mockTokenService = { sign: jest.fn(), verify: jest.fn() };
+    response = {
+      cookie: jest.fn(),
+      clearCookie: jest.fn(),
+    };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
-        { provide: Login, useValue: mockLoginProvider },
+        { provide: Login, useValue: mockLogin },
         { provide: 'ITokenService', useValue: mockTokenService },
         AuthGuard,
       ],
     }).compile();
 
     controller = module.get(AuthController);
-    mockLogin = module.get(Login);
   });
 
   it('should sign in', async () => {
     const dto = { email: 'admin@portfolio.local', password: 'secret' };
-    const response = { accessToken: 'token', user: { id: '1' } };
-    mockLogin.execute.mockResolvedValue(response as never);
+    const loginResult = { accessToken: 'token', user: { id: '1' } };
+    mockLogin.execute.mockResolvedValue(loginResult);
 
-    await expect(controller.signIn(dto)).resolves.toBe(response);
+    await expect(controller.signIn(dto, response as never)).resolves.toEqual({
+      user: { id: '1' },
+    });
     expect(mockLogin.execute).toHaveBeenCalledWith(dto);
+    expect(response.cookie).toHaveBeenCalledWith(
+      'portfolio-auth-token',
+      'token',
+      expect.objectContaining({
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+      }),
+    );
+  });
+
+  it('should logout by clearing the auth cookie', () => {
+    controller.logout(response as never);
+
+    expect(response.clearCookie).toHaveBeenCalledWith(
+      'portfolio-auth-token',
+      expect.objectContaining({
+        path: '/',
+        sameSite: 'lax',
+      }),
+    );
   });
 });

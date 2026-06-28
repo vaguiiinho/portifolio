@@ -220,7 +220,6 @@ describe('Auth and permissions e2e', () => {
     new Date('2026-06-28T00:00:00.000Z'),
   );
   type LoginResponseBody = {
-    accessToken: string;
     user: {
       id: string;
       email: string;
@@ -296,24 +295,24 @@ describe('Auth and permissions e2e', () => {
   });
 
   it('authenticates and resolves the current user', async () => {
-    const loginResponse = await request(app.getHttpServer())
+    const agent = request.agent(app.getHttpServer());
+    const loginResponse = await agent
       .post('/auth/login')
       .send({ email: adminUser.email, password: 'secret123' })
       .expect(201);
     const loginBody = loginResponse.body as LoginResponseBody;
 
     expect(loginBody).toMatchObject({
-      accessToken: tokenService.getAdminToken(adminUser.id),
       user: {
         id: adminUser.id,
         email: adminUser.email,
         role: UserRole.administrador,
       },
     });
+    expect(loginResponse.headers['set-cookie']).toBeDefined();
 
-    await request(app.getHttpServer())
+    await agent
       .get('/auth/me')
-      .set('Authorization', `Bearer ${loginBody.accessToken}`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toMatchObject({
@@ -329,15 +328,14 @@ describe('Auth and permissions e2e', () => {
   });
 
   it('allows the administrator to write content', async () => {
-    const loginResponse = await request(app.getHttpServer())
+    const agent = request.agent(app.getHttpServer());
+    await agent
       .post('/auth/login')
       .send({ email: adminUser.email, password: 'secret123' })
       .expect(201);
-    const loginBody = loginResponse.body as LoginResponseBody;
 
-    await request(app.getHttpServer())
+    await agent
       .post('/projects')
-      .set('Authorization', `Bearer ${loginBody.accessToken}`)
       .send({
         title: 'New project',
         description: 'This project was created by the admin e2e test.',
@@ -353,9 +351,11 @@ describe('Auth and permissions e2e', () => {
   });
 
   it('forbids non-admin tokens on administrative routes', async () => {
+    const visitorToken = tokenService.getVisitorToken();
+
     await request(app.getHttpServer())
       .put('/config')
-      .set('Authorization', `Bearer ${tokenService.getVisitorToken()}`)
+      .set('Cookie', [`portfolio-auth-token=${visitorToken}`])
       .send({
         siteName: 'Blocked',
       })

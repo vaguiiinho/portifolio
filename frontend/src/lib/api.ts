@@ -24,18 +24,12 @@ export interface AuthUser {
   role: 'visitante' | 'administrador'
 }
 
-export interface AuthSession {
-  accessToken: string
-  user: AuthUser
-}
-
 export interface LoginPayload {
   email: string
   password: string
 }
 
 export interface LoginResponse {
-  accessToken: string
   user: AuthUser
 }
 
@@ -88,61 +82,12 @@ export class ApiError extends Error {
   }
 }
 
-const AUTH_SESSION_KEY = 'portfolio-auth-session'
+function isAuthError(status: number) {
+  return status === 401 || status === 403
+}
 
 function isBrowser() {
   return typeof window !== 'undefined'
-}
-
-export function readAuthSession(): AuthSession | null {
-  if (!isBrowser()) {
-    return null
-  }
-
-  const stored = window.localStorage.getItem(AUTH_SESSION_KEY)
-
-  if (!stored) {
-    return null
-  }
-
-  try {
-    return JSON.parse(stored) as AuthSession
-  } catch {
-    window.localStorage.removeItem(AUTH_SESSION_KEY)
-    return null
-  }
-}
-
-export function writeAuthSession(session: AuthSession | null) {
-  if (!isBrowser()) {
-    return
-  }
-
-  if (!session) {
-    window.localStorage.removeItem(AUTH_SESSION_KEY)
-    return
-  }
-
-  window.localStorage.setItem(AUTH_SESSION_KEY, JSON.stringify(session))
-}
-
-export function getStoredAuthToken() {
-  return readAuthSession()?.accessToken
-}
-
-function withAuthHeaders(headers?: HeadersInit) {
-  const mergedHeaders = new Headers(headers)
-  const token = getStoredAuthToken()
-
-  if (token && !mergedHeaders.has('Authorization')) {
-    mergedHeaders.set('Authorization', `Bearer ${token}`)
-  }
-
-  return mergedHeaders
-}
-
-function isAuthError(status: number) {
-  return status === 401 || status === 403
 }
 
 function isFormDataBody(body: unknown): body is FormData {
@@ -156,14 +101,15 @@ function isFormDataBody(body: unknown): body is FormData {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const isFormData = isFormDataBody(init?.body)
   const headers = isFormData
-    ? withAuthHeaders(init?.headers)
-    : withAuthHeaders({
+    ? init?.headers
+    : {
         'Content-Type': 'application/json',
         ...(init?.headers ?? {}),
-      })
+      }
 
   const response = await fetchFromApi(path, {
     ...init,
+    credentials: 'include',
     cache: 'no-store',
     headers,
   })
@@ -248,6 +194,12 @@ export async function login(payload: LoginPayload) {
 
 export async function fetchCurrentUser() {
   return request<AuthUser & { sub?: string }>('/auth/me')
+}
+
+export async function logout() {
+  return request<void>('/auth/logout', {
+    method: 'POST',
+  })
 }
 
 export function resolveMediaUrl(value?: string | null) {
