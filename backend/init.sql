@@ -1,0 +1,2 @@
+INSERT INTO "users" (id,email,"passwordHash",role,"createdAt","updatedAt")VALUES (gen_random_uuid(),'admin@portfolio.local',
+'f15283b8ea5c91a5d4f01ea6bc1b870c:85154ff62c5dd0b1acb4478ec1467985998bd51ac5452cb5556fb140a17a5783e642f96a1611b10d0cfb2664897223dc08a20f5bb88f44ddab1cc6ace5ea4d30','administrador',NOW(),NOW());

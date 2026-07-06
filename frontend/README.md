@@ -26,5 +26,6 @@ npm run lint
 
 ## Observações
 
-- O frontend consome a API via `NEXT_PUBLIC_API_URL`.
+- Em Docker, o browser consome a API via `/api` e o `nginx` faz o proxy interno para `api:3001`.
+- Em desenvolvimento local, o Next rewrites `/api` para `http://localhost:3001`.
 - A maior parte da experiência pública deve continuar acessível sem autenticação.

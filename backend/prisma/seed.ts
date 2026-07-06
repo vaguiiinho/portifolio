@@ -1,9 +1,66 @@
 import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { randomUUID } from 'crypto';
-import { hashPassword } from '../src/modules/auth/infrastructure/services/password-hasher.service';
-import { UserRole } from '../src/modules/auth/domain/entities/user';
+import {
+  randomBytes,
+  randomUUID,
+  scrypt as scryptCallback,
+} from 'crypto';
+import { promisify } from 'util';
+import path from 'path';
+
+const scrypt = promisify(scryptCallback);
+const ADMIN_ROLE = 'administrador' as const;
+
+type PrismaClientCtor = new (options: { adapter: PrismaPg }) => {
+  project: {
+    deleteMany: () => Promise<unknown>;
+    createMany: (args: {
+      data: Array<Record<string, unknown>>;
+    }) => Promise<unknown>;
+  };
+  stats: {
+    upsert: (args: Record<string, unknown>) => Promise<unknown>;
+  };
+  config: {
+    upsert: (args: Record<string, unknown>) => Promise<unknown>;
+  };
+  $executeRaw: (strings: TemplateStringsArray, ...args: unknown[]) => Promise<unknown>;
+  $disconnect: () => Promise<void>;
+};
+
+function loadPrismaClient(): PrismaClientCtor {
+  // Build stage uses src/generated, runtime image uses dist/generated.
+  const candidates = [
+    '../src/generated/prisma/client.ts',
+    '../dist/generated/prisma/client.js',
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      const modulePath = path.resolve(__dirname, candidate);
+      const prismaModule = require(modulePath) as { PrismaClient?: PrismaClientCtor };
+
+      if (prismaModule?.PrismaClient) {
+        return prismaModule.PrismaClient;
+      }
+    } catch {
+      // Try the next generated client location.
+    }
+  }
+
+  throw new Error(
+    'Unable to load PrismaClient from src/generated/prisma/client or dist/generated/prisma/client.',
+  );
+}
+
+async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString('hex');
+  const derivedKey = (await scrypt(password, salt, 64)) as Buffer;
+
+  return `${salt}:${derivedKey.toString('hex')}`;
+}
+
+const PrismaClient = loadPrismaClient();
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({
@@ -100,7 +157,7 @@ async function main() {
       ${randomUUID()},
       ${adminEmail},
       ${passwordHash},
-      ${UserRole.administrador},
+      ${ADMIN_ROLE},
       ${now},
       ${now}
     )

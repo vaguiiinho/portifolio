@@ -8,16 +8,22 @@ function normalizeBaseUrl(value?: string | null) {
   return trimmed.replace(/\/$/, '')
 }
 
+function isAbsoluteBaseUrl(value?: string | null) {
+  return Boolean(value?.match(/^https?:\/\//))
+}
+
 function isServerSide() {
   return typeof window === 'undefined'
 }
 
 export function getApiBaseUrlCandidates() {
+  const publicBaseUrl = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_URL)
+
   const primary = isServerSide()
     ? normalizeBaseUrl(process.env.API_INTERNAL_URL) ??
-      normalizeBaseUrl(process.env.NEXT_PUBLIC_API_URL) ??
-      'http://localhost:3001'
-    : normalizeBaseUrl(process.env.NEXT_PUBLIC_API_URL) ?? 'http://localhost:3001'
+      (isAbsoluteBaseUrl(publicBaseUrl) ? publicBaseUrl : undefined) ??
+      'http://api:3001'
+    : publicBaseUrl ?? '/api'
 
   if (!isServerSide()) {
     return [primary]
@@ -27,7 +33,7 @@ export function getApiBaseUrlCandidates() {
     return [primary]
   }
 
-  return [primary, 'http://backend:3001']
+  return [primary, 'http://backend:3001', 'http://localhost:3001']
 }
 
 export function getApiBaseUrl() {
