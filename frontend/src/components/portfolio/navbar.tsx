@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
-import { Menu, X, Moon, Sun, LogIn, LogOut } from "lucide-react"
+import { Menu, X, Moon, Sun, LogIn, LogOut, ChevronDown, UserRound } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { AppLink } from "@/components/ui/app-link"
 import { Container } from "./container"
@@ -28,6 +28,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
   const isDark = resolvedTheme === "dark"
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const { user, isAuthenticated, logout, isLoading } = useAuth()
   const router = useRouter()
   const { scrollY } = useScroll()
@@ -42,6 +43,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
   }
 
   function handleLogout() {
+    setIsUserMenuOpen(false)
     void logout()
     router.push(portfolioRoutes.home)
   }
@@ -70,35 +72,6 @@ export function Navbar({ siteName, locale }: NavbarProps) {
           {/* Actions */}
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
             <LocaleToggle locale={locale} />
-            {!isLoading &&
-              (isAuthenticated ? (
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="hidden lg:flex flex-col text-right leading-tight">
-                    <span className="text-xs text-muted-foreground">Admin</span>
-                    <span className="text-xs font-medium">{user?.email}</span>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleLogout}
-                    className="rounded-full"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span className="hidden sm:inline">Sair</span>
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  as="a"
-                  href={portfolioRoutes.admin}
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full"
-                >
-                  <LogIn className="h-4 w-4" />
-                  Admin
-                </Button>
-              ))}
             <Button
               variant="ghost"
               size="icon"
@@ -127,6 +100,60 @@ export function Navbar({ siteName, locale }: NavbarProps) {
             >
               {shellCtaContent.navbar.secondaryLabel}
             </Button>
+
+            {!isLoading &&
+              (isAuthenticated ? (
+                <div className="relative">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsUserMenuOpen((isOpen) => !isOpen)}
+                    className="max-w-48 rounded-full"
+                    aria-expanded={isUserMenuOpen}
+                    aria-haspopup="menu"
+                    aria-controls="user-menu"
+                  >
+                    <UserRound className="h-4 w-4 shrink-0" />
+                    <span className="hidden max-w-28 truncate sm:inline">
+                      {user?.email}
+                    </span>
+                    <ChevronDown className="h-4 w-4 shrink-0" />
+                  </Button>
+                  {isUserMenuOpen && (
+                    <div
+                      id="user-menu"
+                      role="menu"
+                      className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-border bg-popover p-1 shadow-lg"
+                    >
+                      <div className="px-3 py-2">
+                        <p className="text-xs text-muted-foreground">Administrador</p>
+                        <p className="truncate text-sm font-medium">{user?.email}</p>
+                      </div>
+                      <div className="my-1 h-px bg-border" />
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={handleLogout}
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-destructive transition-colors hover:bg-destructive/10"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sair
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Button
+                  as="a"
+                  href={portfolioRoutes.admin}
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full"
+                >
+                  <LogIn className="h-4 w-4" />
+                  Entrar
+                </Button>
+              ))}
 
             {/* Mobile Menu Toggle */}
             <Button

@@ -10,10 +10,14 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { Login } from '../application/login';
-import { LoginDto } from './dtos';
+import { CreateUserDto, LoginDto } from './dtos';
+import { CreateUser } from '../application/create-user';
 import { AuthGuard } from './guards/auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
+import { Roles } from './decorators/roles.decorator';
 import type { LoginResult } from '../application/login';
+import { UserRole } from '../domain/entities/user';
 
 const AUTH_COOKIE_NAME = 'portfolio-auth-token';
 
@@ -30,7 +34,10 @@ function toMaxAgeMs(): number {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly login: Login) {}
+  constructor(
+    private readonly login: Login,
+    private readonly createUser: CreateUser,
+  ) {}
 
   @Post('login')
   async signIn(
@@ -42,6 +49,15 @@ export class AuthController {
     this.setAuthCookie(response, result);
 
     return { user: result.user };
+  }
+
+  @Post('users')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.administrador)
+  async create(@Body() dto: CreateUserDto) {
+    const user = await this.createUser.execute(dto);
+
+    return user.toJSON();
   }
 
   @Get('me')

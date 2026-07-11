@@ -1,11 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { Login } from '../application/login';
+import { CreateUser } from '../application/create-user';
 import { AuthGuard } from './guards/auth.guard';
 
 describe('AuthController', () => {
   let controller: AuthController;
   let mockLogin: {
+    execute: jest.Mock;
+  };
+  let mockCreateUser: {
     execute: jest.Mock;
   };
   let response: {
@@ -15,6 +19,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     mockLogin = { execute: jest.fn() };
+    mockCreateUser = { execute: jest.fn() };
     const mockTokenService = { sign: jest.fn(), verify: jest.fn() };
     response = {
       cookie: jest.fn(),
@@ -25,6 +30,7 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         { provide: Login, useValue: mockLogin },
+        { provide: CreateUser, useValue: mockCreateUser },
         { provide: 'ITokenService', useValue: mockTokenService },
         AuthGuard,
       ],

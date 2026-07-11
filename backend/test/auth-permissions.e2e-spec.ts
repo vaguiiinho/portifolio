@@ -12,6 +12,7 @@ import { ProjectsController } from '../src/modules/projects/presentation/project
 import { ConfigController } from '../src/modules/config/presentation/config.controller';
 import { StatsController } from '../src/modules/stats/presentation/stats.controller';
 import { Login } from '../src/modules/auth/application/login';
+import { CreateUser } from '../src/modules/auth/application/create-user';
 import { CreateProject } from '../src/modules/projects/application/create-project';
 import { ListProjects } from '../src/modules/projects/application/list-projects';
 import { UpdateProject } from '../src/modules/projects/application/update-project';
@@ -239,6 +240,7 @@ describe('Auth and permissions e2e', () => {
       ],
       providers: [
         Login,
+        CreateUser,
         CreateProject,
         ListProjects,
         UpdateProject,
@@ -348,6 +350,32 @@ describe('Auth and permissions e2e', () => {
           description: 'This project was created by the admin e2e test.',
         });
       });
+  });
+
+  it('allows only an administrator to create users', async () => {
+    const adminAgent = request.agent(app.getHttpServer());
+    await adminAgent
+      .post('/auth/login')
+      .send({ email: adminUser.email, password: 'secret123' })
+      .expect(201);
+
+    await adminAgent
+      .post('/auth/users')
+      .send({ email: 'new-admin@portfolio.local', password: 'secret123' })
+      .expect(201)
+      .expect(({ body }) => {
+        expect(body).toMatchObject({
+          email: 'new-admin@portfolio.local',
+          role: UserRole.administrador,
+        });
+        expect(body.passwordHash).toBeUndefined();
+      });
+
+    await request(app.getHttpServer())
+      .post('/auth/users')
+      .set('Cookie', [`portfolio-auth-token=${tokenService.getVisitorToken()}`])
+      .send({ email: 'blocked@portfolio.local', password: 'secret123' })
+      .expect(403);
   });
 
   it('forbids non-admin tokens on administrative routes', async () => {

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './presentation/auth.controller';
 import { Login } from './application/login';
+import { CreateUser } from './application/create-user';
 import { UserPrismaRepository } from './infrastructure/repositories/user-prisma-repository';
 import { PasswordHasherService } from './infrastructure/services/password-hasher.service';
 import { JwtTokenService } from './infrastructure/services/jwt-token.service';
@@ -12,6 +13,7 @@ import { PrismaService } from '../../shared/infrastructure/prisma.service';
   controllers: [AuthController],
   providers: [
     Login,
+    CreateUser,
     AuthGuard,
     RolesGuard,
     {
