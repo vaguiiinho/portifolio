@@ -18,25 +18,16 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { Roles } from './decorators/roles.decorator';
 import type { LoginResult } from '../application/login';
 import { UserRole } from '../domain/entities/user';
+import { EnvironmentService } from '../../../shared/config';
 
 const AUTH_COOKIE_NAME = 'portfolio-auth-token';
-
-function toMaxAgeMs(): number {
-  const raw = process.env.AUTH_JWT_EXPIRES_IN_SECONDS ?? '86400';
-  const seconds = Number(raw);
-
-  if (Number.isNaN(seconds) || seconds <= 0) {
-    return 24 * 60 * 60 * 1000;
-  }
-
-  return seconds * 1000;
-}
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly login: Login,
     private readonly createUser: CreateUser,
+    private readonly environment: EnvironmentService,
   ) {}
 
   @Post('login')
@@ -72,7 +63,7 @@ export class AuthController {
     response.clearCookie(AUTH_COOKIE_NAME, {
       path: '/',
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      secure: this.environment.authCookieSecure,
     });
   }
 
@@ -80,9 +71,9 @@ export class AuthController {
     response.cookie(AUTH_COOKIE_NAME, result.accessToken, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      secure: this.environment.authCookieSecure,
       path: '/',
-      maxAge: toMaxAgeMs(),
+      maxAge: this.environment.authJwtExpiresInSeconds * 1000,
     });
   }
 }

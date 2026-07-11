@@ -5,6 +5,7 @@ import {
 import { execSync } from 'child_process';
 import { StatsPrismaRepository } from './stats-prisma-repository';
 import { PrismaService } from '../../../../shared/infrastructure/prisma.service';
+import { EnvironmentService } from '../../../../shared/config';
 import { Stats } from '../../domain/entities/stats';
 
 describe('StatsPrismaRepository (Integration)', () => {
@@ -32,7 +33,7 @@ describe('StatsPrismaRepository (Integration)', () => {
     });
 
     // Create PrismaService
-    prismaService = new PrismaService();
+    prismaService = new PrismaService(new EnvironmentService());
 
     // Create repository
     repository = new StatsPrismaRepository(prismaService);

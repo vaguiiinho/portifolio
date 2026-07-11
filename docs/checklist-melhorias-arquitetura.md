@@ -12,12 +12,12 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ## Prioridade alta — Segurança e infraestrutura
 
-- [ ] Criar um `DatabaseModule` global que exporte uma única instância de `PrismaService`.
-- [ ] Remover os providers duplicados de `PrismaService` dos módulos de domínio.
-- [ ] Criar configuração tipada e validada durante o bootstrap da aplicação.
-- [ ] Exigir `DATABASE_URL` e `AUTH_JWT_SECRET` em produção; não usar segredo JWT padrão fora de desenvolvimento.
-- [ ] Centralizar configuração de CORS, cookie, JWT e porta em um serviço de ambiente.
-- [ ] Ocultar mensagens internas de Prisma/Node em respostas `500` e registrar o detalhe apenas nos logs do servidor.
+- [x] Criar um `DatabaseModule` global que exporte uma única instância de `PrismaService`.
+- [x] Remover os providers duplicados de `PrismaService` dos módulos de domínio.
+- [x] Criar configuração tipada e validada durante o bootstrap da aplicação.
+- [x] Exigir `DATABASE_URL` e `AUTH_JWT_SECRET` em produção; não usar segredo JWT padrão fora de desenvolvimento.
+- [x] Centralizar configuração de CORS, cookie, JWT e porta em um serviço de ambiente.
+- [x] Ocultar mensagens internas de Prisma/Node em respostas `500` e registrar o detalhe apenas nos logs do servidor.
 - [ ] Tratar `P2002` do Prisma como `409 Conflict` para campos únicos, como e-mail de usuário.
 - [ ] Tratar `P2025` do Prisma como `404 Not Found` quando aplicável.
 - [ ] Definir estratégia CSRF/origin-check para operações autenticadas que usam cookie.

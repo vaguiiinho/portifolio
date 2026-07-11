@@ -37,6 +37,7 @@ import { Config } from '../src/modules/config/domain/entities/config';
 import { Stats } from '../src/modules/stats/domain/entities/stats';
 import { AuthGuard } from '../src/modules/auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../src/modules/auth/presentation/guards/roles.guard';
+import { EnvironmentService } from '../src/shared/config';
 
 class InMemoryUserRepository implements IUserRepository {
   private readonly users = new Map<string, User>();
@@ -256,6 +257,13 @@ describe('Auth and permissions e2e', () => {
         },
         { provide: 'IPasswordHasher', useValue: new InMemoryPasswordHasher() },
         { provide: 'ITokenService', useValue: tokenService },
+        {
+          provide: EnvironmentService,
+          useValue: {
+            authCookieSecure: false,
+            authJwtExpiresInSeconds: 86400,
+          },
+        },
         {
           provide: 'IProjectRepository',
           useValue: new InMemoryProjectRepository([initialProject]),

@@ -5,7 +5,6 @@ import { ListProjects } from './application/list-projects';
 import { UpdateProject } from './application/update-project';
 import { DeleteProject } from './application/delete-project';
 import { ProjectPrismaRepository } from './infrastructure/repositories/project-prisma-repository';
-import { PrismaService } from '../../shared/infrastructure/prisma.service';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
@@ -20,7 +19,6 @@ import { AuthModule } from '../auth/auth.module';
       provide: 'IProjectRepository',
       useClass: ProjectPrismaRepository,
     },
-    PrismaService,
   ],
 })
 export class ProjectsModule {}

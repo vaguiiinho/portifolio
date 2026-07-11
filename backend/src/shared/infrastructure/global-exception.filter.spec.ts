@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { GlobalExceptionFilter } from './global-exception.filter';
@@ -6,10 +6,10 @@ import { GlobalExceptionFilter } from './global-exception.filter';
 describe('GlobalExceptionFilter', () => {
   let filter: GlobalExceptionFilter;
   let mockResponse: Partial<Response>;
-  let mockRequest: Partial<Request>;
   let mockHost: Partial<ArgumentsHost>;
 
   beforeEach(async () => {
+    jest.spyOn(Logger.prototype, 'error').mockImplementation();
     const module: TestingModule = await Test.createTestingModule({
       providers: [GlobalExceptionFilter],
     }).compile();
@@ -21,14 +21,15 @@ describe('GlobalExceptionFilter', () => {
       json: jest.fn(),
     };
 
-    mockRequest = {};
-
     mockHost = {
       switchToHttp: jest.fn().mockReturnValue({
         getResponse: jest.fn().mockReturnValue(mockResponse),
-        getRequest: jest.fn().mockReturnValue(mockRequest),
       }),
     };
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should handle HttpException correctly', () => {
@@ -71,7 +72,7 @@ describe('GlobalExceptionFilter', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({
       statusCode: 500,
-      message: 'Generic error message',
+      message: 'Internal server error',
       error: 'Internal Server Error',
     });
   });

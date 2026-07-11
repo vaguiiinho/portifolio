@@ -3,6 +3,7 @@ import { AuthController } from './auth.controller';
 import { Login } from '../application/login';
 import { CreateUser } from '../application/create-user';
 import { AuthGuard } from './guards/auth.guard';
+import { EnvironmentService } from '../../../shared/config';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -32,6 +33,13 @@ describe('AuthController', () => {
         { provide: Login, useValue: mockLogin },
         { provide: CreateUser, useValue: mockCreateUser },
         { provide: 'ITokenService', useValue: mockTokenService },
+        {
+          provide: EnvironmentService,
+          useValue: {
+            authCookieSecure: false,
+            authJwtExpiresInSeconds: 86400,
+          },
+        },
         AuthGuard,
       ],
     }).compile();

@@ -5,6 +5,7 @@ import type {
   ITokenService,
 } from '../../domain/services/i-token-service';
 import { UserRole } from '../../domain/entities/user';
+import { EnvironmentService } from '../../../../shared/config';
 
 function base64UrlEncode(value: Buffer | string | object): string {
   const buffer =
@@ -36,11 +37,13 @@ function toSeconds(expiresIn: string | number): number {
 
 @Injectable()
 export class JwtTokenService implements ITokenService {
-  private readonly secret =
-    process.env.AUTH_JWT_SECRET ?? 'portfolio-auth-secret';
-  private readonly expiresInSeconds = toSeconds(
-    process.env.AUTH_JWT_EXPIRES_IN_SECONDS ?? '86400',
-  );
+  private readonly secret: string;
+  private readonly expiresInSeconds: number;
+
+  constructor(environment: EnvironmentService) {
+    this.secret = environment.authJwtSecret;
+    this.expiresInSeconds = toSeconds(environment.authJwtExpiresInSeconds);
+  }
 
   sign(payload: Omit<AuthTokenPayload, 'iat' | 'exp'>): string {
     const header = { alg: 'HS256', typ: 'JWT' };

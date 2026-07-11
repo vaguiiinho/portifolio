@@ -7,7 +7,6 @@ import { PasswordHasherService } from './infrastructure/services/password-hasher
 import { JwtTokenService } from './infrastructure/services/jwt-token.service';
 import { AuthGuard } from './presentation/guards/auth.guard';
 import { RolesGuard } from './presentation/guards/roles.guard';
-import { PrismaService } from '../../shared/infrastructure/prisma.service';
 
 @Module({
   controllers: [AuthController],
@@ -28,7 +27,6 @@ import { PrismaService } from '../../shared/infrastructure/prisma.service';
       provide: 'ITokenService',
       useClass: JwtTokenService,
     },
-    PrismaService,
   ],
   exports: [AuthGuard, RolesGuard, 'ITokenService'],
 })
