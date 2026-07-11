@@ -59,3 +59,8 @@ export type Stats = Prisma.StatsModel
  * 
  */
 export type Config = Prisma.ConfigModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
