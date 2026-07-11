@@ -74,4 +74,31 @@ describe('Project', () => {
     project.updateFeatured(true);
     expect(project.featured).toBe(true);
   });
+
+  it('should reject invalid project invariants', () => {
+    expect(
+      () =>
+        new Project(
+          '',
+          mockTitle,
+          mockDescription,
+          mockTechStack,
+          '',
+          '',
+          mockCreatedAt,
+        ),
+    ).toThrow('Project id must not be empty');
+    expect(
+      () =>
+        new Project(
+          mockId,
+          mockTitle,
+          mockDescription,
+          [],
+          '',
+          '',
+          mockCreatedAt,
+        ),
+    ).toThrow('Project tech stack must contain at least one technology');
+  });
 });

@@ -12,10 +12,10 @@ export class Contact {
     message: string,
     createdAt: Date,
   ) {
-    this._id = id;
-    this._name = name;
-    this._email = email;
-    this._message = message;
+    this._id = this.required(id, 'Contact id');
+    this._name = this.required(name, 'Contact name');
+    this._email = this.normalizeEmail(email);
+    this._message = this.required(message, 'Contact message');
     this._createdAt = createdAt;
   }
 
@@ -40,15 +40,15 @@ export class Contact {
   }
 
   updateName(name: string): void {
-    this._name = name;
+    this._name = this.required(name, 'Contact name');
   }
 
   updateEmail(email: string): void {
-    this._email = email;
+    this._email = this.normalizeEmail(email);
   }
 
   updateMessage(message: string): void {
-    this._message = message;
+    this._message = this.required(message, 'Contact message');
   }
 
   toJSON() {
@@ -59,5 +59,21 @@ export class Contact {
       message: this.message,
       createdAt: this.createdAt,
     };
+  }
+
+  private required(value: string, field: string): string {
+    const normalized = value.trim();
+    if (!normalized) {
+      throw new Error(`${field} must not be empty`);
+    }
+    return normalized;
+  }
+
+  private normalizeEmail(email: string): string {
+    const normalized = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+      throw new Error('Contact email must be valid');
+    }
+    return normalized;
   }
 }

@@ -70,4 +70,13 @@ describe('Stats', () => {
     stats.trackEvent('   ');
     expect(stats.events).toEqual({ 'page:home': 3 });
   });
+
+  it('should reject negative counters and invalid event increments', () => {
+    expect(() => new Stats('3', -1, 0, new Date())).toThrow(
+      'Projects count must be a non-negative integer',
+    );
+    expect(() => stats.trackEvent('page:home', 0)).toThrow(
+      'Event increment must be a positive integer',
+    );
+  });
 });

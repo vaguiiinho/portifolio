@@ -32,10 +32,10 @@ export class Project {
     resultTitle?: string,
     resultDescription?: string,
   ) {
-    this._id = id;
-    this._title = title;
-    this._description = description;
-    this._techStack = techStack;
+    this._id = this.required(id, 'Project id');
+    this._title = this.required(title, 'Project title');
+    this._description = this.required(description, 'Project description');
+    this._techStack = this.normalizeTechStack(techStack);
     this._githubUrl = githubUrl;
     this._liveUrl = liveUrl;
     this._createdAt = createdAt;
@@ -110,15 +110,15 @@ export class Project {
   }
 
   updateTitle(title: string): void {
-    this._title = title;
+    this._title = this.required(title, 'Project title');
   }
 
   updateDescription(description: string): void {
-    this._description = description;
+    this._description = this.required(description, 'Project description');
   }
 
   updateTechStack(techStack: string[]): void {
-    this._techStack = [...techStack];
+    this._techStack = this.normalizeTechStack(techStack);
   }
 
   updateGithubUrl(githubUrl: string): void {
@@ -179,5 +179,25 @@ export class Project {
       featured: this.featured,
       createdAt: this.createdAt,
     };
+  }
+
+  private required(value: string, field: string): string {
+    const normalized = value.trim();
+    if (!normalized) {
+      throw new Error(`${field} must not be empty`);
+    }
+    return normalized;
+  }
+
+  private normalizeTechStack(techStack: string[]): string[] {
+    const normalized = [
+      ...new Set(techStack.map((item) => item.trim()).filter(Boolean)),
+    ];
+    if (normalized.length === 0) {
+      throw new Error(
+        'Project tech stack must contain at least one technology',
+      );
+    }
+    return normalized;
   }
 }

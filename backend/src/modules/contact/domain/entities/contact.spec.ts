@@ -44,4 +44,12 @@ describe('Contact', () => {
     contact.updateMessage(newMessage);
     expect(contact.message).toBe(newMessage);
   });
+
+  it('should normalize email and reject invalid contact data', () => {
+    contact.updateEmail(' JANE@EXAMPLE.COM ');
+    expect(contact.email).toBe('jane@example.com');
+    expect(
+      () => new Contact(mockId, '', mockEmail, mockMessage, mockCreatedAt),
+    ).toThrow('Contact name must not be empty');
+  });
 });

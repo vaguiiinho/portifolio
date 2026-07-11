@@ -12,10 +12,10 @@ export class Stats {
     updatedAt: Date,
     events: Record<string, number> = {},
   ) {
-    this._id = id;
-    this._projectsCount = projectsCount;
-    this._visitors = visitors;
-    this._events = { ...events };
+    this._id = this.requiredId(id);
+    this._projectsCount = this.validCount(projectsCount, 'Projects count');
+    this._visitors = this.validCount(visitors, 'Visitors count');
+    this._events = this.normalizeEvents(events);
     this._updatedAt = updatedAt;
   }
 
@@ -57,18 +57,22 @@ export class Stats {
   }
 
   updateProjectsCount(count: number): void {
-    this._projectsCount = count;
+    this._projectsCount = this.validCount(count, 'Projects count');
     this._updatedAt = new Date();
   }
 
   updateVisitors(count: number): void {
-    this._visitors = count;
+    this._visitors = this.validCount(count, 'Visitors count');
     this._updatedAt = new Date();
   }
 
   trackEvent(key: string, increment = 1): void {
     if (!key.trim()) {
       return;
+    }
+
+    if (!Number.isInteger(increment) || increment <= 0) {
+      throw new Error('Event increment must be a positive integer');
     }
 
     this._events[key] = (this._events[key] ?? 0) + increment;
@@ -83,5 +87,31 @@ export class Stats {
       events: this.events,
       updatedAt: this.updatedAt,
     };
+  }
+
+  private requiredId(id: string): string {
+    const normalized = id.trim();
+    if (!normalized) {
+      throw new Error('Stats id must not be empty');
+    }
+    return normalized;
+  }
+
+  private validCount(value: number, field: string): number {
+    if (!Number.isInteger(value) || value < 0) {
+      throw new Error(`${field} must be a non-negative integer`);
+    }
+    return value;
+  }
+
+  private normalizeEvents(
+    events: Record<string, number>,
+  ): Record<string, number> {
+    return Object.fromEntries(
+      Object.entries(events).map(([key, value]) => [
+        key,
+        this.validCount(value, `Event "${key}"`),
+      ]),
+    );
   }
 }
