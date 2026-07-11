@@ -30,12 +30,12 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 - [x] Migrar `UserPrismaRepository` de `$queryRaw` para `prisma.user.findUnique`, `create` e demais métodos do client.
 - [x] Migrar `ProjectPrismaRepository` para `prisma.project.findMany`, `findUnique`, `create`, `update` e `delete`.
-- [ ] Migrar `ContactPrismaRepository` para `prisma.contact.create` e consultas tipadas.
-- [ ] Migrar `ConfigPrismaRepository` para `prisma.config`.
+- [x] Migrar `ContactPrismaRepository` para `prisma.contact.create` e consultas tipadas.
+- [x] Migrar `ConfigPrismaRepository` para `prisma.config`.
 - [x] Usar `upsert` ou uma chave fixa para garantir que `Config` tenha somente um registro global.
-- [ ] Migrar `StatsPrismaRepository` para `prisma.stats` nas operações simples.
-- [ ] Manter `$queryRaw` somente em relatórios, agregações complexas ou atualizações atômicas que o Prisma não consiga expressar bem.
-- [ ] Documentar cada uso restante de SQL bruto com o motivo técnico.
+- [x] Migrar `StatsPrismaRepository` para `prisma.stats` nas operações simples.
+- [x] Manter `$queryRaw` somente em relatórios, agregações complexas ou atualizações atômicas que o Prisma não consiga expressar bem.
+- [x] Documentar cada uso restante de SQL bruto com o motivo técnico: não há uso remanescente em repositórios CRUD.
 - [ ] Criar mappers explícitos entre modelo Prisma e entidade de domínio.
 - [ ] Manter `prisma generate` no build e na CI para garantir que o client reflita o schema atual.
 
