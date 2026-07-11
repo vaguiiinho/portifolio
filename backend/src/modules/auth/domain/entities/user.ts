@@ -1,3 +1,5 @@
+import { Email, PasswordHash } from '../value-objects';
+
 export enum UserRole {
   visitante = 'visitante',
   administrador = 'administrador',
@@ -5,8 +7,8 @@ export enum UserRole {
 
 export class User {
   private _id: string;
-  private _email: string;
-  private _passwordHash: string;
+  private _email: Email;
+  private _passwordHash: PasswordHash;
   private _role: UserRole;
   private _createdAt: Date;
   private _updatedAt: Date;
@@ -19,9 +21,17 @@ export class User {
     createdAt: Date,
     updatedAt: Date,
   ) {
+    if (!id.trim()) {
+      throw new Error('User id must not be empty');
+    }
+
+    if (!Object.values(UserRole).includes(role)) {
+      throw new Error('User role must be valid');
+    }
+
     this._id = id;
-    this._email = email;
-    this._passwordHash = passwordHash;
+    this._email = Email.create(email);
+    this._passwordHash = PasswordHash.create(passwordHash);
     this._role = role;
     this._createdAt = createdAt;
     this._updatedAt = updatedAt;
@@ -32,11 +42,11 @@ export class User {
   }
 
   get email(): string {
-    return this._email;
+    return this._email.toString();
   }
 
   get passwordHash(): string {
-    return this._passwordHash;
+    return this._passwordHash.toString();
   }
 
   get role(): UserRole {

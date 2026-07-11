@@ -46,9 +46,7 @@ export class AuthController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.administrador)
   async create(@Body() dto: CreateUserDto) {
-    const user = await this.createUser.execute(dto);
-
-    return user.toJSON();
+    return this.createUser.execute(dto);
   }
 
   @Get('me')

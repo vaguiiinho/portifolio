@@ -38,7 +38,7 @@ describe('CreateUser', () => {
     expect(passwordHasher.hash).toHaveBeenCalledWith('secret123');
     expect(result.email).toBe('admin@portfolio.local');
     expect(result.role).toBe(UserRole.administrador);
-    expect(result.passwordHash).toBe('hashed-password');
+    expect(result).not.toHaveProperty('passwordHash');
   });
 
   it('rejects an email that is already registered', async () => {

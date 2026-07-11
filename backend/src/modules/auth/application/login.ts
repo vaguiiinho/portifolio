@@ -1,8 +1,9 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '../domain/entities/user';
+import { PlainPassword } from '../domain/value-objects';
 import type { IUserRepository } from '../domain/repositories/i-user-repository';
 import type { IPasswordHasher } from '../domain/services/i-password-hasher';
 import type { ITokenService } from '../domain/services/i-token-service';
+import { toUserResult, UserResult } from './user-result';
 
 export interface LoginInput {
   email: string;
@@ -11,7 +12,7 @@ export interface LoginInput {
 
 export interface LoginResult {
   accessToken: string;
-  user: ReturnType<User['toJSON']>;
+  user: UserResult;
 }
 
 @Injectable()
@@ -32,8 +33,9 @@ export class Login {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    const password = PlainPassword.create(input.password).toString();
     const passwordMatches = await this.passwordHasher.compare(
-      input.password,
+      password,
       user.passwordHash,
     );
 
@@ -49,7 +51,7 @@ export class Login {
 
     return {
       accessToken,
-      user: user.toJSON(),
+      user: toUserResult(user),
     };
   }
 }

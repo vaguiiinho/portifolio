@@ -51,7 +51,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 ### Entidades com comportamento e validação
 
 - [ ] Mover invariantes de negócio para entidades, não apenas para DTOs.
-- [ ] Garantir que `User` não possa existir com e-mail inválido, role inválida ou hash de senha vazio.
+- [x] Garantir que `User` não possa existir com e-mail inválido, role inválida ou hash de senha vazio.
 - [ ] Garantir que `Project` não possa existir sem título, descrição ou tecnologias válidas.
 - [ ] Garantir que `Contact` valide nome, e-mail e mensagem como regras de domínio.
 - [ ] Garantir que `Config` normalize e valide os conteúdos localizados antes de persistir.
@@ -61,9 +61,9 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ### Value Objects
 
-- [ ] Criar `Email` como Value Object: normalização, validação e comparação devem ficar em um único lugar.
-- [ ] Criar `PlainPassword` como Value Object para validar política mínima antes do hash.
-- [ ] Criar `PasswordHash` como Value Object para impedir persistência de hash vazio ou malformado.
+- [x] Criar `Email` como Value Object: normalização, validação e comparação devem ficar em um único lugar.
+- [x] Criar `PlainPassword` como Value Object para validar política mínima antes do hash.
+- [x] Criar `PasswordHash` como Value Object para impedir persistência de hash vazio ou malformado.
 - [ ] Criar `ProjectUrl`/`ExternalUrl` se a validação de GitHub, demo e vídeo se repetir.
 - [ ] Criar `TechStack` como Value Object se houver regras de tamanho, duplicidade ou normalização de tecnologias.
 - [ ] Criar `LocalizedContent` como Value Object se a estrutura multilíngue continuar crescendo.

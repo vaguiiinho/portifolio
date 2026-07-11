@@ -1,8 +1,10 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { User, UserRole } from '../domain/entities/user';
+import { PlainPassword } from '../domain/value-objects';
 import type { IUserRepository } from '../domain/repositories/i-user-repository';
 import type { IPasswordHasher } from '../domain/services/i-password-hasher';
+import { toUserResult, UserResult } from './user-result';
 
 export interface CreateUserInput {
   email: string;
@@ -19,7 +21,8 @@ export class CreateUser {
     private readonly passwordHasher: IPasswordHasher,
   ) {}
 
-  async execute(input: CreateUserInput): Promise<User> {
+  async execute(input: CreateUserInput): Promise<UserResult> {
+    const password = PlainPassword.create(input.password).toString();
     const email = input.email.trim().toLowerCase();
     const existingUser = await this.userRepository.findByEmail(email);
 
@@ -31,12 +34,12 @@ export class CreateUser {
     const user = new User(
       randomUUID(),
       email,
-      await this.passwordHasher.hash(input.password),
+      await this.passwordHasher.hash(password),
       input.role ?? UserRole.administrador,
       now,
       now,
     );
 
-    return this.userRepository.create(user);
+    return toUserResult(await this.userRepository.create(user));
   }
 }
