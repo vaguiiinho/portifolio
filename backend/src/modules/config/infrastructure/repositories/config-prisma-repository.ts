@@ -257,16 +257,14 @@ export class ConfigPrismaRepository implements IConfigRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async find(): Promise<Config> {
-    let prismaConfig = await this.prisma.config.findFirst();
-
-    if (!prismaConfig) {
-      prismaConfig = await this.prisma.config.create({
-        data: {
-          ...DEFAULT_CONFIG,
-          updatedAt: new Date(),
-        } as never,
-      });
-    }
+    const prismaConfig = await this.prisma.config.upsert({
+      where: { id: DEFAULT_CONFIG.id },
+      create: {
+        ...DEFAULT_CONFIG,
+        updatedAt: new Date(),
+      } as never,
+      update: {},
+    });
 
     return normalizeConfig(prismaConfig);
   }

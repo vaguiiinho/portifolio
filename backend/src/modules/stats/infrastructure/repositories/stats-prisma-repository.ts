@@ -9,19 +9,17 @@ export class StatsPrismaRepository implements IStatsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async find(): Promise<Stats> {
-    let prismaStats = await this.prisma.stats.findFirst();
-
-    if (!prismaStats) {
-      prismaStats = await this.prisma.stats.create({
-        data: {
-          id: '1',
-          projectsCount: 0,
-          visitors: 0,
-          events: {},
-          updatedAt: new Date(),
-        },
-      });
-    }
+    const prismaStats = await this.prisma.stats.upsert({
+      where: { id: '1' },
+      create: {
+        id: '1',
+        projectsCount: 0,
+        visitors: 0,
+        events: {},
+        updatedAt: new Date(),
+      },
+      update: {},
+    });
 
     return this.mapToDomain(prismaStats);
   }

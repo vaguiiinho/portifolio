@@ -32,7 +32,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Migrar `ProjectPrismaRepository` para `prisma.project.findMany`, `findUnique`, `create`, `update` e `delete`.
 - [ ] Migrar `ContactPrismaRepository` para `prisma.contact.create` e consultas tipadas.
 - [ ] Migrar `ConfigPrismaRepository` para `prisma.config`.
-- [ ] Usar `upsert` ou uma chave fixa para garantir que `Config` tenha somente um registro global.
+- [x] Usar `upsert` ou uma chave fixa para garantir que `Config` tenha somente um registro global.
 - [ ] Migrar `StatsPrismaRepository` para `prisma.stats` nas operações simples.
 - [ ] Manter `$queryRaw` somente em relatórios, agregações complexas ou atualizações atômicas que o Prisma não consiga expressar bem.
 - [ ] Documentar cada uso restante de SQL bruto com o motivo técnico.
@@ -41,7 +41,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ### Concorrência e consistência
 
-- [ ] Garantir criação segura de `Config` e `Stats` sob requisições simultâneas.
+- [x] Garantir criação segura de `Config` e `Stats` sob requisições simultâneas.
 - [ ] Usar transações para operações que alterem mais de uma tabela ou exigirem atomicidade.
 - [ ] Avaliar um `UnitOfWork` apenas quando existirem casos de uso multi-repositório reais.
 - [ ] Padronizar a estratégia de geração de IDs: Prisma `cuid`, UUID ou um `IdGenerator` injetável.
