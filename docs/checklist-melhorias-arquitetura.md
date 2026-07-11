@@ -18,7 +18,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Exigir `DATABASE_URL` e `AUTH_JWT_SECRET` em produção; não usar segredo JWT padrão fora de desenvolvimento.
 - [x] Centralizar configuração de CORS, cookie, JWT e porta em um serviço de ambiente.
 - [x] Ocultar mensagens internas de Prisma/Node em respostas `500` e registrar o detalhe apenas nos logs do servidor.
-- [ ] Tratar `P2002` do Prisma como `409 Conflict` para campos únicos, como e-mail de usuário.
+- [x] Tratar `P2002` do Prisma como `409 Conflict` para campos únicos, como e-mail de usuário.
 - [ ] Tratar `P2025` do Prisma como `404 Not Found` quando aplicável.
 - [ ] Definir estratégia CSRF/origin-check para operações autenticadas que usam cookie.
 - [ ] Revisar `secure`, `sameSite` e domínio do cookie para produção.
@@ -28,8 +28,8 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ### Migração de CRUD comum para Prisma tipado
 
-- [ ] Migrar `UserPrismaRepository` de `$queryRaw` para `prisma.user.findUnique`, `create` e demais métodos do client.
-- [ ] Migrar `ProjectPrismaRepository` para `prisma.project.findMany`, `findUnique`, `create`, `update` e `delete`.
+- [x] Migrar `UserPrismaRepository` de `$queryRaw` para `prisma.user.findUnique`, `create` e demais métodos do client.
+- [x] Migrar `ProjectPrismaRepository` para `prisma.project.findMany`, `findUnique`, `create`, `update` e `delete`.
 - [ ] Migrar `ContactPrismaRepository` para `prisma.contact.create` e consultas tipadas.
 - [ ] Migrar `ConfigPrismaRepository` para `prisma.config`.
 - [ ] Usar `upsert` ou uma chave fixa para garantir que `Config` tenha somente um registro global.
