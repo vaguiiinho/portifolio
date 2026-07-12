@@ -57,8 +57,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
 
       setAuthErrorStatus(status)
-      setUser(null)
-      void logoutRequest()
+
+      // A 403 can mean insufficient permissions (or an origin/CSRF rejection),
+      // not an expired session. Retrying logout after such a response emits the
+      // same auth-error event and creates a request loop.
+      if (status === 401) {
+        setUser(null)
+        void logoutRequest()
+      }
     }
 
     window.addEventListener("portfolio:auth-error", handleAuthError)
