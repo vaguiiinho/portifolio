@@ -96,7 +96,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 - [x] Corrigir o setup de Testcontainers para testes de integração em ambiente com Docker disponível.
 - [x] Evitar falhas secundárias no `afterAll` quando um container de teste não iniciar.
-- [ ] Cobrir `POST /auth/users`: sem token, visitante, administrador, payload inválido e e-mail duplicado.
+- [x] Cobrir `POST /auth/users`: sem token, visitante, administrador, payload inválido e e-mail duplicado.
 - [ ] Cobrir seed: criação inicial, idempotência e falha sem variáveis obrigatórias.
 - [ ] Criar testes de repositórios após migração para métodos tipados do Prisma.
 - [ ] Criar testes de entidades e Value Objects para cada invariante relevante.
