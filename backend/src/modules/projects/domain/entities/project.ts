@@ -238,14 +238,7 @@ export class Project {
   }
 
   private normalizeTechStack(techStack: string[]): string[] {
-    const normalized = [
-      ...new Set(techStack.map((item) => item.trim()).filter(Boolean)),
-    ];
-    if (normalized.length === 0) {
-      throw new Error(
-        'Project tech stack must contain at least one technology',
-      );
-    }
-    return normalized;
+    return TechStack.create(techStack).toArray();
   }
 }
+import { TechStack } from '../value-objects';
