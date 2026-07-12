@@ -54,8 +54,8 @@ describe('Config', () => {
     expect(config.siteName).toBe(mockSiteName);
     expect(config.description).toBe(mockDescription);
     expect(config.aboutBio).toEqual(mockAboutBio);
-    expect(config.servicesContent).toBe(mockServicesContent);
-    expect(config.testimonialsContent).toBe(mockTestimonialsContent);
+    expect(config.servicesContent).toEqual(mockServicesContent);
+    expect(config.testimonialsContent).toEqual(mockTestimonialsContent);
     expect(config.updatedAt).toBe(mockUpdatedAt);
   });
 
@@ -74,9 +74,53 @@ describe('Config', () => {
   });
 
   it('should update about bio', () => {
-    const newBio: SiteContent['aboutBio'] = { pt: ['Atualizado'], en: ['Updated'] };
+    const newBio: SiteContent['aboutBio'] = {
+      pt: ['Atualizado'],
+      en: ['Updated'],
+    };
     config.updateAboutBio(newBio);
     expect(config.aboutBio).toEqual(newBio);
     expect(config.updatedAt.getTime()).toBeGreaterThan(mockUpdatedAt.getTime());
+  });
+
+  it('should normalize localized content and protect it from external mutation', () => {
+    const aboutBio: SiteContent['aboutBio'] = { pt: [' Texto normalizado '] };
+    const normalizedConfig = new Config(
+      mockId,
+      ' Meu portfólio ',
+      ' Uma descrição válida ',
+      aboutBio,
+      { pt: mockServicesContent.pt! },
+      { pt: mockTestimonialsContent.pt! },
+      mockUpdatedAt,
+    );
+
+    aboutBio.pt![0] = 'Alterado externamente';
+    const returnedBio = normalizedConfig.aboutBio;
+    returnedBio.pt![0] = 'Alterado pela leitura';
+
+    expect(normalizedConfig.siteName).toBe('Meu portfólio');
+    expect(normalizedConfig.aboutBio.pt).toEqual(['Texto normalizado']);
+  });
+
+  it('should reject invalid localized content before it is persisted', () => {
+    expect(
+      () =>
+        new Config(
+          mockId,
+          mockSiteName,
+          mockDescription,
+          {},
+          mockServicesContent,
+          mockTestimonialsContent,
+          mockUpdatedAt,
+        ),
+    ).toThrow('Config about bio must contain at least one locale');
+
+    expect(() =>
+      config.updateServicesContent({
+        pt: { ...mockServicesContent.pt!, ctaLabel: ' ' },
+      }),
+    ).toThrow('Config service CTA label must not be empty');
   });
 });

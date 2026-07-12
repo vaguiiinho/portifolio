@@ -54,7 +54,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Garantir que `User` não possa existir com e-mail inválido, role inválida ou hash de senha vazio.
 - [x] Garantir que `Project` não possa existir sem título, descrição ou tecnologias válidas.
 - [x] Garantir que `Contact` valide nome, e-mail e mensagem como regras de domínio.
-- [ ] Garantir que `Config` normalize e valide os conteúdos localizados antes de persistir.
+- [x] Garantir que `Config` normalize e valide os conteúdos localizados antes de persistir.
 - [x] Garantir que `Stats` não aceite contadores negativos nem incrementos inválidos.
 - [ ] Preferir métodos de intenção nas entidades, como `project.updateDetails()` e `stats.trackEvent()`, em vez de alterar estado de forma genérica.
 - [ ] Manter construtores protegidos por factories ou métodos `create`/`restore` quando a complexidade das entidades aumentar.
