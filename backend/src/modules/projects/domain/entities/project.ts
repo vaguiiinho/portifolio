@@ -1,3 +1,19 @@
+export interface ProjectDetails {
+  title?: string;
+  description?: string;
+  techStack?: string[];
+  githubUrl?: string;
+  liveUrl?: string;
+  videoUrl?: string;
+  problemTitle?: string;
+  problemDescription?: string;
+  solutionTitle?: string;
+  solutionDescription?: string;
+  resultTitle?: string;
+  resultDescription?: string;
+  featured?: boolean;
+}
+
 export class Project {
   private _id: string;
   private _title: string;
@@ -159,6 +175,38 @@ export class Project {
 
   updateFeatured(featured: boolean): void {
     this._featured = featured;
+  }
+
+  updateDetails(details: ProjectDetails): void {
+    if (details.title !== undefined) this.updateTitle(details.title);
+    if (details.description !== undefined) {
+      this.updateDescription(details.description);
+    }
+    if (details.techStack !== undefined)
+      this.updateTechStack(details.techStack);
+    if (details.githubUrl !== undefined)
+      this.updateGithubUrl(details.githubUrl);
+    if (details.liveUrl !== undefined) this.updateLiveUrl(details.liveUrl);
+    if (details.videoUrl !== undefined) this.updateVideoUrl(details.videoUrl);
+    if (details.problemTitle !== undefined) {
+      this.updateProblemTitle(details.problemTitle);
+    }
+    if (details.problemDescription !== undefined) {
+      this.updateProblemDescription(details.problemDescription);
+    }
+    if (details.solutionTitle !== undefined) {
+      this.updateSolutionTitle(details.solutionTitle);
+    }
+    if (details.solutionDescription !== undefined) {
+      this.updateSolutionDescription(details.solutionDescription);
+    }
+    if (details.resultTitle !== undefined) {
+      this.updateResultTitle(details.resultTitle);
+    }
+    if (details.resultDescription !== undefined) {
+      this.updateResultDescription(details.resultDescription);
+    }
+    if (details.featured !== undefined) this.updateFeatured(details.featured);
   }
 
   toJSON() {

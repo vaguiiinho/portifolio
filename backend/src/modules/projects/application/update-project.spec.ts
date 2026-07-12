@@ -70,7 +70,7 @@ describe('UpdateProject', () => {
     const result = await service.execute(input);
 
     expect(mockRepository.findById).toHaveBeenCalledWith('1');
-    expect(mockRepository.update).toHaveBeenCalled();
+    expect(mockRepository.update).toHaveBeenCalledWith(existingProject);
     expect(result.title).toBe('New Title');
   });
 

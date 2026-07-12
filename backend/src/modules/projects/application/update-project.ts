@@ -32,24 +32,7 @@ export class UpdateProject {
       throw new Error('Project not found');
     }
 
-    const updatedProject = new Project(
-      existingProject.id,
-      input.title ?? existingProject.title,
-      input.description ?? existingProject.description,
-      input.techStack ?? existingProject.techStack,
-      input.githubUrl ?? existingProject.githubUrl,
-      input.liveUrl ?? existingProject.liveUrl,
-      existingProject.createdAt,
-      input.featured ?? existingProject.featured,
-      input.videoUrl ?? existingProject.videoUrl,
-      input.problemTitle ?? existingProject.problemTitle,
-      input.problemDescription ?? existingProject.problemDescription,
-      input.solutionTitle ?? existingProject.solutionTitle,
-      input.solutionDescription ?? existingProject.solutionDescription,
-      input.resultTitle ?? existingProject.resultTitle,
-      input.resultDescription ?? existingProject.resultDescription,
-    );
-
-    return this.projectRepository.update(updatedProject);
+    existingProject.updateDetails(input);
+    return this.projectRepository.update(existingProject);
   }
 }
