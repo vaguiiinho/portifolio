@@ -37,7 +37,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Manter `$queryRaw` somente em relatórios, agregações complexas ou atualizações atômicas que o Prisma não consiga expressar bem.
 - [x] Documentar cada uso restante de SQL bruto com o motivo técnico: não há uso remanescente em repositórios CRUD.
 - [x] Criar mappers explícitos entre modelo Prisma e entidade de domínio.
-- [ ] Manter `prisma generate` no build e na CI para garantir que o client reflita o schema atual.
+- [x] Manter `prisma generate` no build e na CI para garantir que o client reflita o schema atual.
 
 ### Concorrência e consistência
 
@@ -101,7 +101,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [ ] Criar testes de repositórios após migração para métodos tipados do Prisma.
 - [ ] Criar testes de entidades e Value Objects para cada invariante relevante.
 - [ ] Criar testes de contrato HTTP para payloads e códigos de status principais.
-- [ ] Corrigir o lint do `frontend/healthcheck.js` para que o pipeline possa falhar apenas por problemas reais.
+- [x] Corrigir o lint do `frontend/healthcheck.js` para que o pipeline possa falhar apenas por problemas reais.
 
 ## Prioridade futura — Operação e observabilidade
 
