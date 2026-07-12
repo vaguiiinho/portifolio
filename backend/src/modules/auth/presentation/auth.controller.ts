@@ -19,6 +19,7 @@ import { Roles } from './decorators/roles.decorator';
 import type { LoginResult } from '../application/login';
 import { UserRole } from '../domain/entities/user';
 import { EnvironmentService } from '../../../shared/config';
+import { toUserResponse } from './mappers/user-response.mapper';
 
 const AUTH_COOKIE_NAME = 'portfolio-auth-token';
 
@@ -39,14 +40,14 @@ export class AuthController {
 
     this.setAuthCookie(response, result);
 
-    return { user: result.user };
+    return { user: toUserResponse(result.user) };
   }
 
   @Post('users')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.administrador)
   async create(@Body() dto: CreateUserDto) {
-    return this.createUser.execute(dto);
+    return toUserResponse(await this.createUser.execute(dto));
   }
 
   @Get('me')

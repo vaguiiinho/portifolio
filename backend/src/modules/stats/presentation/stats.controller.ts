@@ -7,6 +7,7 @@ import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Roles } from '../../auth/presentation/decorators/roles.decorator';
 import { UserRole } from '../../auth/domain/entities/user';
+import { toStatsResponse } from './mappers/stats-response.mapper';
 
 @Controller('stats')
 export class StatsController {
@@ -18,18 +19,18 @@ export class StatsController {
 
   @Get()
   async get() {
-    return this.getStats.execute();
+    return toStatsResponse(await this.getStats.execute());
   }
 
   @Put()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.administrador)
   async update(@Body() dto: UpdateStatsDto) {
-    return this.updateStats.execute(dto);
+    return toStatsResponse(await this.updateStats.execute(dto));
   }
 
   @Post('events')
   async trackEvent(@Body() dto: TrackStatsEventDto) {
-    return this.trackStatsEvent.execute(dto);
+    return toStatsResponse(await this.trackStatsEvent.execute(dto));
   }
 }

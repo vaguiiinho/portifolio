@@ -6,6 +6,7 @@ import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Roles } from '../../auth/presentation/decorators/roles.decorator';
 import { UserRole } from '../../auth/domain/entities/user';
+import { toConfigResponse } from './mappers/config-response.mapper';
 
 @Controller('config')
 export class ConfigController {
@@ -16,13 +17,13 @@ export class ConfigController {
 
   @Get()
   async get() {
-    return this.getConfig.execute();
+    return toConfigResponse(await this.getConfig.execute());
   }
 
   @Put()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(UserRole.administrador)
   async update(@Body() dto: UpdateConfigDto) {
-    return this.updateConfig.execute(dto);
+    return toConfigResponse(await this.updateConfig.execute(dto));
   }
 }

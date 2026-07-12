@@ -33,12 +33,12 @@ describe('ContactController', () => {
         'Hello',
         new Date(),
       );
-      mockSendContact.execute.mockResolvedValue(mockContact);
+      mockSendContact.execute.mockResolvedValue(mockContact.toJSON());
 
       const result = await controller.send(dto);
 
       expect(mockSendContact.execute).toHaveBeenCalledWith(dto);
-      expect(result).toBe(mockContact);
+      expect(result).toEqual(mockContact.toJSON());
     });
   });
 });

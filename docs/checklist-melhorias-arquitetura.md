@@ -77,9 +77,9 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Manter DTOs somente na apresentação; use cases devem receber inputs próprios da aplicação.
 - [x] Definir tipos de saída próprios para cada use case, como `CreateUserResult` e `ListProjectsResult`.
 - [x] Evitar que a camada de aplicação retorne entidades de domínio diretamente para controllers.
-- [ ] Criar mappers na apresentação para converter `UseCaseResult` em `ResponseDto` HTTP.
-- [ ] Garantir que respostas HTTP exponham somente campos permitidos e nunca detalhes internos da entidade, como `passwordHash`.
-- [ ] Criar DTOs de resposta/mappers para não devolver entidades diretamente pelos controllers.
+- [x] Criar mappers na apresentação para converter `UseCaseResult` em `ResponseDto` HTTP.
+- [x] Garantir que respostas HTTP exponham somente campos permitidos e nunca detalhes internos da entidade, como `passwordHash`.
+- [x] Criar DTOs de resposta/mappers para não devolver entidades diretamente pelos controllers.
 
 ## Prioridade média — API e frontend
 

@@ -53,12 +53,12 @@ describe('StatsController', () => {
   describe('get', () => {
     it('should return stats', async () => {
       const mockStats = new Stats('1', 5, 100, new Date());
-      mockGetStats.execute.mockResolvedValue(mockStats);
+      mockGetStats.execute.mockResolvedValue(mockStats.toJSON());
 
       const result = await controller.get();
 
       expect(mockGetStats.execute).toHaveBeenCalled();
-      expect(result).toBe(mockStats);
+      expect(result).toEqual(mockStats.toJSON());
     });
   });
 
@@ -66,12 +66,12 @@ describe('StatsController', () => {
     it('should update stats', async () => {
       const dto = { projectsCount: 10, visitors: 200 };
       const mockStats = new Stats('1', 10, 200, new Date());
-      mockUpdateStats.execute.mockResolvedValue(mockStats);
+      mockUpdateStats.execute.mockResolvedValue(mockStats.toJSON());
 
       const result = await controller.update(dto);
 
       expect(mockUpdateStats.execute).toHaveBeenCalledWith(dto);
-      expect(result).toBe(mockStats);
+      expect(result).toEqual(mockStats.toJSON());
     });
   });
 
@@ -81,12 +81,12 @@ describe('StatsController', () => {
       const mockStats = new Stats('1', 5, 100, new Date(), {
         'cta:contact': 2,
       });
-      mockTrackStatsEvent.execute.mockResolvedValue(mockStats);
+      mockTrackStatsEvent.execute.mockResolvedValue(mockStats.toJSON());
 
       const result = await controller.trackEvent(dto);
 
       expect(mockTrackStatsEvent.execute).toHaveBeenCalledWith(dto);
-      expect(result).toBe(mockStats);
+      expect(result).toEqual(mockStats.toJSON());
     });
   });
 });

@@ -69,7 +69,7 @@ describe('ProjectsController', () => {
       const result = await controller.list();
 
       expect(mockListProjects.execute).toHaveBeenCalled();
-      expect(result).toBe(mockProjects);
+      expect(result).toEqual(mockProjects);
     });
   });
 
@@ -81,7 +81,7 @@ describe('ProjectsController', () => {
       const result = await controller.findById('1');
 
       expect(mockFindProject.execute).toHaveBeenCalledWith('1');
-      expect(result).toBe(mockProject);
+      expect(result).toEqual(mockProject);
     });
 
     it('should propagate a not found error', async () => {
@@ -100,7 +100,7 @@ describe('ProjectsController', () => {
       const result = await controller.create(dto);
 
       expect(mockCreateProject.execute).toHaveBeenCalledWith(dto);
-      expect(result).toBe(mockProject);
+      expect(result).toEqual(mockProject);
     });
   });
 
@@ -116,7 +116,7 @@ describe('ProjectsController', () => {
         id: '1',
         ...dto,
       });
-      expect(result).toBe(mockProject);
+      expect(result).toEqual(mockProject);
     });
   });
 

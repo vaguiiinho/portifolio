@@ -55,9 +55,9 @@ describe('ConfigController', () => {
       { pt: { cards: [], trustPoints: [] }, en: { cards: [], trustPoints: [] } },
       new Date('2026-06-28T00:00:00.000Z'),
     );
-    mockGetConfig.execute.mockResolvedValue(mockConfig);
+    mockGetConfig.execute.mockResolvedValue(mockConfig.toJSON());
 
-    await expect(controller.get()).resolves.toBe(mockConfig);
+    await expect(controller.get()).resolves.toEqual(mockConfig.toJSON());
     expect(mockGetConfig.execute).toHaveBeenCalled();
   });
 
@@ -83,9 +83,9 @@ describe('ConfigController', () => {
       { pt: { cards: [], trustPoints: [] }, en: { cards: [], trustPoints: [] } },
       new Date('2026-06-28T00:00:00.000Z'),
     );
-    mockUpdateConfig.execute.mockResolvedValue(mockConfig);
+    mockUpdateConfig.execute.mockResolvedValue(mockConfig.toJSON());
 
-    await expect(controller.update(dto)).resolves.toBe(mockConfig);
+    await expect(controller.update(dto)).resolves.toEqual(mockConfig.toJSON());
     expect(mockUpdateConfig.execute).toHaveBeenCalledWith(dto);
   });
 });

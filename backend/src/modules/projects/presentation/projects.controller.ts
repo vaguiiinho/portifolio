@@ -25,6 +25,7 @@ import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Roles } from '../../auth/presentation/decorators/roles.decorator';
 import { UserRole } from '../../auth/domain/entities/user';
+import { toProjectResponse } from './mappers/project-response.mapper';
 
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 
@@ -40,12 +41,12 @@ export class ProjectsController {
 
   @Get()
   async list() {
-    return this.listProjects.execute();
+    return (await this.listProjects.execute()).map(toProjectResponse);
   }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return this.findProject.execute(id);
+    return toProjectResponse(await this.findProject.execute(id));
   }
 
   @Post()
@@ -63,10 +64,10 @@ export class ProjectsController {
     @Body() dto: CreateProjectDto,
     @UploadedFile() videoFile?: MulterFile,
   ) {
-    return this.createProject.execute({
+    return toProjectResponse(await this.createProject.execute({
       ...dto,
       videoUrl: this.resolveVideoUrl(dto.videoUrl, videoFile),
-    });
+    }));
   }
 
   @Put(':id')
@@ -84,11 +85,11 @@ export class ProjectsController {
     @Body() dto: UpdateProjectDto,
     @UploadedFile() videoFile?: MulterFile,
   ) {
-    return this.updateProject.execute({
+    return toProjectResponse(await this.updateProject.execute({
       id,
       ...dto,
       videoUrl: this.resolveVideoUrl(dto.videoUrl, videoFile),
-    });
+    }));
   }
 
   @Delete(':id')
