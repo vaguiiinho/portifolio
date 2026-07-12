@@ -16,11 +16,23 @@ API NestJS do portfólio, organizada por módulos e seguindo Clean Architecture 
 Os comandos do backend devem rodar dentro do container:
 
 ```bash
-docker compose exec backend npm run start:dev
-docker compose exec backend npm run build
-docker compose exec backend npm run test
-docker compose exec backend npm run test:e2e
+docker compose exec api npm run start:dev
+docker compose exec api npm run build
+docker compose exec api npm run test
+docker compose exec api npm run test:e2e
 ```
+
+## Primeiro administrador
+
+Defina `DATABASE_URL`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente do backend
+(use `.env.example` como referência) e execute:
+
+```bash
+docker compose exec api npm run db:seed
+```
+
+O comando pode ser executado mais de uma vez: ele cria o administrador somente
+quando o e-mail ainda não existir e não altera uma conta já criada.
 
 ## Planejamento relacionado
 

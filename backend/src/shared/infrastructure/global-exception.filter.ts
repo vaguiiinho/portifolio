@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { Prisma } from '../../generated/prisma/client';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -32,6 +33,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = responseObj.message || message;
         error = responseObj.error || error;
       }
+    } else if (this.isPrismaRecordNotFoundError(exception)) {
+      status = 404;
+      message = 'Resource not found';
+      error = 'Not Found';
     } else {
       this.logger.error(exception);
     }
@@ -41,5 +46,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message,
       error,
     });
+  }
+
+  private isPrismaRecordNotFoundError(exception: unknown): boolean {
+    return (
+      exception instanceof Prisma.PrismaClientKnownRequestError &&
+      exception.code === 'P2025'
+    );
   }
 }

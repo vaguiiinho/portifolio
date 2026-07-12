@@ -19,10 +19,10 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Centralizar configuração de CORS, cookie, JWT e porta em um serviço de ambiente.
 - [x] Ocultar mensagens internas de Prisma/Node em respostas `500` e registrar o detalhe apenas nos logs do servidor.
 - [x] Tratar `P2002` do Prisma como `409 Conflict` para campos únicos, como e-mail de usuário.
-- [ ] Tratar `P2025` do Prisma como `404 Not Found` quando aplicável.
-- [ ] Definir estratégia CSRF/origin-check para operações autenticadas que usam cookie.
-- [ ] Revisar `secure`, `sameSite` e domínio do cookie para produção.
-- [ ] Manter seed idempotente para o primeiro administrador e documentar o procedimento de execução.
+- [x] Tratar `P2025` do Prisma como `404 Not Found` quando aplicável.
+- [x] Definir estratégia CSRF/origin-check para operações autenticadas que usam cookie.
+- [x] Revisar `secure`, `sameSite` e domínio do cookie para produção.
+- [x] Manter seed idempotente para o primeiro administrador e documentar o procedimento de execução.
 
 ## Prioridade alta — Prisma e persistência
 

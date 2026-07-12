@@ -60,16 +60,18 @@ export class AuthController {
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie(AUTH_COOKIE_NAME, {
       path: '/',
-      sameSite: 'lax',
+      sameSite: this.environment.authCookieSameSite,
       secure: this.environment.authCookieSecure,
+      domain: this.environment.authCookieDomain,
     });
   }
 
   private setAuthCookie(response: Response, result: LoginResult) {
     response.cookie(AUTH_COOKIE_NAME, result.accessToken, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: this.environment.authCookieSameSite,
       secure: this.environment.authCookieSecure,
+      domain: this.environment.authCookieDomain,
       path: '/',
       maxAge: this.environment.authJwtExpiresInSeconds * 1000,
     });

@@ -1,6 +1,7 @@
-import { HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { ArgumentsHost, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
+import { Prisma } from '../../generated/prisma/client';
 import { GlobalExceptionFilter } from './global-exception.filter';
 
 describe('GlobalExceptionFilter', () => {
@@ -74,6 +75,22 @@ describe('GlobalExceptionFilter', () => {
       statusCode: 500,
       message: 'Internal server error',
       error: 'Internal Server Error',
+    });
+  });
+
+  it('should map Prisma P2025 errors to Not Found', () => {
+    const exception = new Prisma.PrismaClientKnownRequestError(
+      'Record not found',
+      { code: 'P2025', clientVersion: 'test' },
+    );
+
+    filter.catch(exception, mockHost as ArgumentsHost);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
+    expect(mockResponse.json).toHaveBeenCalledWith({
+      statusCode: HttpStatus.NOT_FOUND,
+      message: 'Resource not found',
+      error: 'Not Found',
     });
   });
 

@@ -29,24 +29,17 @@ const adminEmail = email;
 const adminPassword = password;
 
 async function main() {
-  const existingUser = await prisma.user.findUnique({
+  await prisma.user.upsert({
     where: { email: adminEmail },
-  });
-
-  if (existingUser) {
-    console.log(`Administrator ${adminEmail} already exists; nothing to do.`);
-    return;
-  }
-
-  await prisma.user.create({
-    data: {
+    update: {},
+    create: {
       email: adminEmail,
       passwordHash: await hashPassword(adminPassword),
       role: 'administrador',
     },
   });
 
-  console.log(`Administrator ${adminEmail} created.`);
+  console.log(`Administrator ${adminEmail} is ready.`);
 }
 
 main()

@@ -37,6 +37,8 @@ describe('AuthController', () => {
           provide: EnvironmentService,
           useValue: {
             authCookieSecure: false,
+            authCookieSameSite: 'lax',
+            authCookieDomain: undefined,
             authJwtExpiresInSeconds: 86400,
           },
         },

@@ -4,7 +4,10 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AppModule } from './app.module';
-import { GlobalExceptionFilter } from './shared/infrastructure';
+import {
+  createCsrfOriginMiddleware,
+  GlobalExceptionFilter,
+} from './shared/infrastructure';
 import { EnvironmentService } from './shared/config';
 
 async function bootstrap() {
@@ -23,6 +26,8 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
+
+  app.use(createCsrfOriginMiddleware(environment.corsOrigin));
 
   app.useGlobalPipes(
     new ValidationPipe({

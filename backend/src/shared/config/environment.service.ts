@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { CookieOptions } from 'express';
 
 @Injectable()
 export class EnvironmentService {
@@ -30,7 +31,34 @@ export class EnvironmentService {
   }
 
   get authCookieSecure(): boolean {
-    return process.env.NODE_ENV === 'production';
+    const configured = process.env.AUTH_COOKIE_SECURE;
+    const secure =
+      configured === undefined
+        ? process.env.NODE_ENV === 'production'
+        : this.boolean('AUTH_COOKIE_SECURE');
+
+    if (process.env.NODE_ENV === 'production' && !secure) {
+      throw new Error('AUTH_COOKIE_SECURE must be true in production');
+    }
+
+    return secure;
+  }
+
+  get authCookieSameSite(): CookieOptions['sameSite'] {
+    const value = process.env.AUTH_COOKIE_SAME_SITE?.trim().toLowerCase();
+    if (!value) return 'lax';
+
+    if (value === 'lax' || value === 'strict' || value === 'none') {
+      return value;
+    }
+
+    throw new Error(
+      'AUTH_COOKIE_SAME_SITE must be one of: lax, strict, none',
+    );
+  }
+
+  get authCookieDomain(): string | undefined {
+    return process.env.AUTH_COOKIE_DOMAIN?.trim() || undefined;
   }
 
   validate(): void {
@@ -39,6 +67,15 @@ export class EnvironmentService {
     void this.corsOrigin;
     void this.authJwtSecret;
     void this.authJwtExpiresInSeconds;
+    void this.authCookieSecure;
+    void this.authCookieSameSite;
+    void this.authCookieDomain;
+
+    if (this.authCookieSameSite === 'none' && !this.authCookieSecure) {
+      throw new Error(
+        'AUTH_COOKIE_SECURE must be true when AUTH_COOKIE_SAME_SITE is none',
+      );
+    }
   }
 
   private required(name: string): string {
@@ -57,5 +94,12 @@ export class EnvironmentService {
     }
 
     return value;
+  }
+
+  private boolean(name: string): boolean {
+    const value = process.env[name]?.trim().toLowerCase();
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    throw new Error(`${name} must be true or false`);
   }
 }
