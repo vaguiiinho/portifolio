@@ -6,6 +6,7 @@ import { IProjectRepository } from '../domain/repositories/i-project-repository'
 describe('CreateProject', () => {
   let service: CreateProject;
   let mockRepository: jest.Mocked<IProjectRepository>;
+  const idGenerator = { generate: jest.fn(() => 'project-id') };
 
   beforeEach(async () => {
     const mockRepo = {
@@ -22,6 +23,10 @@ describe('CreateProject', () => {
         {
           provide: 'IProjectRepository',
           useValue: mockRepo,
+        },
+        {
+          provide: 'IIdGenerator',
+          useValue: idGenerator,
         },
       ],
     }).compile();
@@ -60,6 +65,7 @@ describe('CreateProject', () => {
     const result = await service.execute(input);
 
     expect(mockRepository.create).toHaveBeenCalled();
+    expect(idGenerator.generate).toHaveBeenCalled();
     expect(result).toBe(mockProject);
     expect(result.title).toBe(input.title);
     expect(result.featured).toBe(true);

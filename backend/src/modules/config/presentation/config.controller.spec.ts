@@ -46,7 +46,7 @@ describe('ConfigController', () => {
       '1',
       'Site',
       'Description',
-      { pt: [], en: [] },
+      { pt: ['Descrição em português'], en: ['Description in English'] },
       {
         pt: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },
         en: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },

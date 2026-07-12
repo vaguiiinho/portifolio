@@ -6,6 +6,7 @@ import { IContactRepository } from '../domain/repositories/i-contact-repository'
 describe('SendContact', () => {
   let service: SendContact;
   let mockRepository: jest.Mocked<IContactRepository>;
+  const idGenerator = { generate: jest.fn(() => 'contact-id') };
 
   beforeEach(async () => {
     const mockRepo = {
@@ -22,6 +23,10 @@ describe('SendContact', () => {
         {
           provide: 'IContactRepository',
           useValue: mockRepo,
+        },
+        {
+          provide: 'IIdGenerator',
+          useValue: idGenerator,
         },
       ],
     }).compile();
@@ -54,6 +59,7 @@ describe('SendContact', () => {
     const result = await service.execute(input);
 
     expect(mockRepository.create).toHaveBeenCalled();
+    expect(idGenerator.generate).toHaveBeenCalled();
     expect(result).toBe(mockContact);
     expect(result.name).toBe(input.name);
   });

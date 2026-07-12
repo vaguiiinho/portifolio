@@ -44,7 +44,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Garantir criação segura de `Config` e `Stats` sob requisições simultâneas.
 - [ ] Usar transações para operações que alterem mais de uma tabela ou exigirem atomicidade.
 - [ ] Avaliar um `UnitOfWork` apenas quando existirem casos de uso multi-repositório reais.
-- [ ] Padronizar a estratégia de geração de IDs: Prisma `cuid`, UUID ou um `IdGenerator` injetável.
+- [x] Padronizar a estratégia de geração de IDs: Prisma `cuid`, UUID ou um `IdGenerator` injetável.
 
 ## Prioridade média — DDD e regras de domínio
 

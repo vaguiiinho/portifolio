@@ -7,8 +7,10 @@ import { PasswordHasherService } from './infrastructure/services/password-hasher
 import { JwtTokenService } from './infrastructure/services/jwt-token.service';
 import { AuthGuard } from './presentation/guards/auth.guard';
 import { RolesGuard } from './presentation/guards/roles.guard';
+import { IdentifiersModule } from '../../shared/infrastructure';
 
 @Module({
+  imports: [IdentifiersModule],
   controllers: [AuthController],
   providers: [
     Login,

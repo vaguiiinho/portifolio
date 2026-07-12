@@ -3,11 +3,13 @@ import { CreateUser } from './create-user';
 import { User, UserRole } from '../domain/entities/user';
 import type { IUserRepository } from '../domain/repositories/i-user-repository';
 import type { IPasswordHasher } from '../domain/services/i-password-hasher';
+import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
 
 describe('CreateUser', () => {
   let service: CreateUser;
   let userRepository: jest.Mocked<IUserRepository>;
   let passwordHasher: jest.Mocked<IPasswordHasher>;
+  let idGenerator: jest.Mocked<IIdGenerator>;
 
   beforeEach(() => {
     userRepository = {
@@ -19,7 +21,8 @@ describe('CreateUser', () => {
       hash: jest.fn(),
       compare: jest.fn(),
     };
-    service = new CreateUser(userRepository, passwordHasher);
+    idGenerator = { generate: jest.fn(() => 'user-id') };
+    service = new CreateUser(userRepository, passwordHasher, idGenerator);
   });
 
   it('creates an administrator with a hashed password', async () => {
@@ -36,6 +39,7 @@ describe('CreateUser', () => {
       'admin@portfolio.local',
     );
     expect(passwordHasher.hash).toHaveBeenCalledWith('secret123');
+    expect(idGenerator.generate).toHaveBeenCalled();
     expect(result.email).toBe('admin@portfolio.local');
     expect(result.role).toBe(UserRole.administrador);
     expect(result).not.toHaveProperty('passwordHash');

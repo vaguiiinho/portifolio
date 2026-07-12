@@ -6,9 +6,10 @@ import { UpdateProject } from './application/update-project';
 import { DeleteProject } from './application/delete-project';
 import { ProjectPrismaRepository } from './infrastructure/repositories/project-prisma-repository';
 import { AuthModule } from '../auth/auth.module';
+import { IdentifiersModule } from '../../shared/infrastructure';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, IdentifiersModule],
   controllers: [ProjectsController],
   providers: [
     CreateProject,
