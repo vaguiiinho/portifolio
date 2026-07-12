@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Project as PrismaProject } from '../../../../generated/prisma/client';
 import { mkdir, writeFile } from 'fs/promises';
 import { extname, join } from 'path';
 import { randomUUID } from 'crypto';
 import { PrismaService } from '../../../../shared/infrastructure/prisma.service';
 import { Project } from '../../domain/entities/project';
 import { IProjectRepository } from '../../domain/repositories/i-project-repository';
+import { ProjectPrismaMapper } from '../mappers/project-prisma-mapper';
 
 @Injectable()
 export class ProjectPrismaRepository implements IProjectRepository {
@@ -15,87 +15,43 @@ export class ProjectPrismaRepository implements IProjectRepository {
     const projects = await this.prisma.project.findMany({
       orderBy: [{ featured: 'desc' }, { createdAt: 'desc' }],
     });
-    return projects.map((project) => this.mapToDomain(project));
+    return projects.map(ProjectPrismaMapper.toDomain);
   }
 
   async findById(id: string): Promise<Project | null> {
     const project = await this.prisma.project.findUnique({ where: { id } });
-    return project ? this.mapToDomain(project) : null;
+    return project ? ProjectPrismaMapper.toDomain(project) : null;
   }
 
   async create(project: Project): Promise<Project> {
     const videoUrl = await this.persistVideoReference(project.videoUrl);
     const created = await this.prisma.project.create({
       data: {
-        id: project.id,
-        title: project.title,
-        description: project.description,
-        techStack: project.techStack,
-        githubUrl: this.toNullable(project.githubUrl),
-        liveUrl: this.toNullable(project.liveUrl),
-        videoUrl: this.toNullable(videoUrl),
-        problemTitle: this.toNullable(project.problemTitle),
-        problemDescription: this.toNullable(project.problemDescription),
-        solutionTitle: this.toNullable(project.solutionTitle),
-        solutionDescription: this.toNullable(project.solutionDescription),
-        resultTitle: this.toNullable(project.resultTitle),
-        resultDescription: this.toNullable(project.resultDescription),
-        featured: project.featured,
-        createdAt: project.createdAt,
+        ...ProjectPrismaMapper.toPersistence(project),
+        videoUrl: videoUrl || null,
       },
     });
-    return this.mapToDomain(created);
+    return ProjectPrismaMapper.toDomain(created);
   }
 
   async update(project: Project): Promise<Project> {
     const videoUrl = await this.persistVideoReference(project.videoUrl);
     const updated = await this.prisma.project.update({
       where: { id: project.id },
-      data: {
-        title: project.title,
-        description: project.description,
-        techStack: project.techStack,
-        githubUrl: this.toNullable(project.githubUrl),
-        liveUrl: this.toNullable(project.liveUrl),
-        videoUrl: this.toNullable(videoUrl),
-        problemTitle: this.toNullable(project.problemTitle),
-        problemDescription: this.toNullable(project.problemDescription),
-        solutionTitle: this.toNullable(project.solutionTitle),
-        solutionDescription: this.toNullable(project.solutionDescription),
-        resultTitle: this.toNullable(project.resultTitle),
-        resultDescription: this.toNullable(project.resultDescription),
-        featured: project.featured,
-      },
+      data: (() => {
+        const {
+          id: _id,
+          createdAt: _createdAt,
+          ...data
+        } = ProjectPrismaMapper.toPersistence(project);
+        return { ...data, videoUrl: videoUrl || null };
+      })(),
     });
-    return this.mapToDomain(updated);
+    return ProjectPrismaMapper.toDomain(updated);
   }
 
   async delete(id: string): Promise<void> {
     await this.prisma.project.delete({ where: { id } });
-  }
-
-  private mapToDomain(project: PrismaProject): Project {
-    return new Project(
-      project.id,
-      project.title,
-      project.description,
-      project.techStack,
-      project.githubUrl ?? '',
-      project.liveUrl ?? '',
-      project.createdAt,
-      project.featured,
-      project.videoUrl ?? undefined,
-      project.problemTitle ?? undefined,
-      project.problemDescription ?? undefined,
-      project.solutionTitle ?? undefined,
-      project.solutionDescription ?? undefined,
-      project.resultTitle ?? undefined,
-      project.resultDescription ?? undefined,
-    );
-  }
-
-  private toNullable(value?: string): string | null {
-    return value || null;
   }
 
   private async persistVideoReference(

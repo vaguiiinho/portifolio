@@ -36,7 +36,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Migrar `StatsPrismaRepository` para `prisma.stats` nas operações simples.
 - [x] Manter `$queryRaw` somente em relatórios, agregações complexas ou atualizações atômicas que o Prisma não consiga expressar bem.
 - [x] Documentar cada uso restante de SQL bruto com o motivo técnico: não há uso remanescente em repositórios CRUD.
-- [ ] Criar mappers explícitos entre modelo Prisma e entidade de domínio.
+- [x] Criar mappers explícitos entre modelo Prisma e entidade de domínio.
 - [ ] Manter `prisma generate` no build e na CI para garantir que o client reflita o schema atual.
 
 ### Concorrência e consistência
