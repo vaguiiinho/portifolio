@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Config } from '../domain/entities/config';
 import type { SiteContent } from '../domain/entities/site-content';
 import type { IConfigRepository } from '../domain/repositories/i-config-repository';
 import { CONFIG_REPOSITORY } from '../../../shared/domain/tokens';
+import { ConfigResult, toConfigResult } from './config-result';
+import { Config } from '../domain/entities/config';
 
 export interface UpdateConfigInput {
   siteName?: string;
@@ -19,7 +20,7 @@ export class UpdateConfig {
     private readonly configRepository: IConfigRepository,
   ) {}
 
-  async execute(input: UpdateConfigInput): Promise<Config> {
+  async execute(input: UpdateConfigInput): Promise<ConfigResult> {
     const existingConfig = await this.configRepository.find();
 
     const updatedConfig = new Config(
@@ -32,6 +33,6 @@ export class UpdateConfig {
       new Date(),
     );
 
-    return this.configRepository.update(updatedConfig);
+    return toConfigResult(await this.configRepository.update(updatedConfig));
   }
 }

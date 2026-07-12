@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Config } from '../domain/entities/config';
 import type { IConfigRepository } from '../domain/repositories/i-config-repository';
 import { CONFIG_REPOSITORY } from '../../../shared/domain/tokens';
+import { ConfigResult, toConfigResult } from './config-result';
 
 @Injectable()
 export class GetConfig {
@@ -10,7 +10,7 @@ export class GetConfig {
     private readonly configRepository: IConfigRepository,
   ) {}
 
-  async execute(): Promise<Config> {
-    return this.configRepository.find();
+  async execute(): Promise<ConfigResult> {
+    return toConfigResult(await this.configRepository.find());
   }
 }

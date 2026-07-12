@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Stats } from '../domain/entities/stats';
 import type { IStatsRepository } from '../domain/repositories/i-stats-repository';
 import { STATS_REPOSITORY } from '../../../shared/domain/tokens';
+import { StatsResult, toStatsResult } from './stats-result';
 
 export interface UpdateStatsInput {
   projectsCount?: number;
@@ -15,7 +16,7 @@ export class UpdateStats {
     private readonly statsRepository: IStatsRepository,
   ) {}
 
-  async execute(input: UpdateStatsInput): Promise<Stats> {
+  async execute(input: UpdateStatsInput): Promise<StatsResult> {
     const existingStats = await this.statsRepository.find();
 
     const updatedStats = new Stats(
@@ -26,6 +27,6 @@ export class UpdateStats {
       existingStats.events,
     );
 
-    return this.statsRepository.update(updatedStats);
+    return toStatsResult(await this.statsRepository.update(updatedStats));
   }
 }

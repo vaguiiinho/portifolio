@@ -62,6 +62,6 @@ describe('ListProjects', () => {
     const result = await service.execute();
 
     expect(mockRepository.findAll).toHaveBeenCalled();
-    expect(result).toBe(mockProjects);
+    expect(result).toEqual(mockProjects.map((project) => project.toJSON()));
   });
 });

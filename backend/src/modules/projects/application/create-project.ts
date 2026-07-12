@@ -3,6 +3,7 @@ import { Project } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
 import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
 import { ID_GENERATOR, PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
+import { ProjectResult, toProjectResult } from './project-result';
 
 export interface CreateProjectInput {
   title: string;
@@ -28,7 +29,7 @@ export class CreateProject {
     @Inject(ID_GENERATOR) private readonly idGenerator: IIdGenerator,
   ) {}
 
-  async execute(input: CreateProjectInput): Promise<Project> {
+  async execute(input: CreateProjectInput): Promise<ProjectResult> {
     const id = this.idGenerator.generate();
     const createdAt = new Date();
 
@@ -50,6 +51,6 @@ export class CreateProject {
       input.resultDescription,
     );
 
-    return this.projectRepository.create(project);
+    return toProjectResult(await this.projectRepository.create(project));
   }
 }

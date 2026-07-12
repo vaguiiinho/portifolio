@@ -8,8 +8,6 @@ import {
   Param,
   HttpCode,
   HttpStatus,
-  NotFoundException,
-  Inject,
   UploadedFile,
   UseInterceptors,
   BadRequestException,
@@ -19,15 +17,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import type { File as MulterFile } from 'multer';
 import { CreateProject } from '../application/create-project';
 import { ListProjects } from '../application/list-projects';
+import { FindProject } from '../application/find-project';
 import { UpdateProject } from '../application/update-project';
 import { DeleteProject } from '../application/delete-project';
-import { IProjectRepository } from '../domain/repositories/i-project-repository';
 import { CreateProjectDto, UpdateProjectDto } from './dtos';
 import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Roles } from '../../auth/presentation/decorators/roles.decorator';
 import { UserRole } from '../../auth/domain/entities/user';
-import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 
@@ -36,10 +33,9 @@ export class ProjectsController {
   constructor(
     private readonly createProject: CreateProject,
     private readonly listProjects: ListProjects,
+    private readonly findProject: FindProject,
     private readonly updateProject: UpdateProject,
     private readonly deleteProject: DeleteProject,
-    @Inject(PROJECT_REPOSITORY)
-    private readonly projectRepository: IProjectRepository,
   ) {}
 
   @Get()
@@ -49,11 +45,7 @@ export class ProjectsController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    const project = await this.projectRepository.findById(id);
-    if (!project) {
-      throw new NotFoundException(`Project with ID ${id} not found`);
-    }
-    return project;
+    return this.findProject.execute(id);
   }
 
   @Post()

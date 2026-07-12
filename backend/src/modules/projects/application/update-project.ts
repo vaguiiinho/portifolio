@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Project } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
 import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
+import { ProjectResult, toProjectResult } from './project-result';
 
 export interface UpdateProjectInput {
   id: string;
@@ -27,13 +27,13 @@ export class UpdateProject {
     private readonly projectRepository: IProjectRepository,
   ) {}
 
-  async execute(input: UpdateProjectInput): Promise<Project> {
+  async execute(input: UpdateProjectInput): Promise<ProjectResult> {
     const existingProject = await this.projectRepository.findById(input.id);
     if (!existingProject) {
       throw new Error('Project not found');
     }
 
     existingProject.updateDetails(input);
-    return this.projectRepository.update(existingProject);
+    return toProjectResult(await this.projectRepository.update(existingProject));
   }
 }

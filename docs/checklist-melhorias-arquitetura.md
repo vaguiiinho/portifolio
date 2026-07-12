@@ -73,10 +73,10 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 - [x] Centralizar tokens de injeção em constantes `Symbol`, substituindo strings como `'IUserRepository'`.
 - [x] Impedir imports de `infrastructure` dentro de `domain` com regra de lint ou teste arquitetural.
-- [ ] Manter interfaces de repositório no domínio e implementações Prisma na infraestrutura.
-- [ ] Manter DTOs somente na apresentação; use cases devem receber inputs próprios da aplicação.
-- [ ] Definir tipos de saída próprios para cada use case, como `CreateUserResult` e `ListProjectsResult`.
-- [ ] Evitar que a camada de aplicação retorne entidades de domínio diretamente para controllers.
+- [x] Manter interfaces de repositório no domínio e implementações Prisma na infraestrutura.
+- [x] Manter DTOs somente na apresentação; use cases devem receber inputs próprios da aplicação.
+- [x] Definir tipos de saída próprios para cada use case, como `CreateUserResult` e `ListProjectsResult`.
+- [x] Evitar que a camada de aplicação retorne entidades de domínio diretamente para controllers.
 - [ ] Criar mappers na apresentação para converter `UseCaseResult` em `ResponseDto` HTTP.
 - [ ] Garantir que respostas HTTP exponham somente campos permitidos e nunca detalhes internos da entidade, como `passwordHash`.
 - [ ] Criar DTOs de resposta/mappers para não devolver entidades diretamente pelos controllers.

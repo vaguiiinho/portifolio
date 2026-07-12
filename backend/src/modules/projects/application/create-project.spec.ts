@@ -67,7 +67,7 @@ describe('CreateProject', () => {
 
     expect(mockRepository.create).toHaveBeenCalled();
     expect(idGenerator.generate).toHaveBeenCalled();
-    expect(result).toBe(mockProject);
+    expect(result).toEqual(expect.objectContaining(mockProject.toJSON()));
     expect(result.title).toBe(input.title);
     expect(result.featured).toBe(true);
   });

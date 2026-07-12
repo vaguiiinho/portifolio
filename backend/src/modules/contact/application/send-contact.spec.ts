@@ -61,7 +61,7 @@ describe('SendContact', () => {
 
     expect(mockRepository.create).toHaveBeenCalled();
     expect(idGenerator.generate).toHaveBeenCalled();
-    expect(result).toBe(mockContact);
+    expect(result).toEqual(mockContact.toJSON());
     expect(result.name).toBe(input.name);
   });
 });

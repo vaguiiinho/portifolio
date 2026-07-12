@@ -40,6 +40,6 @@ describe('GetStats', () => {
     const result = await service.execute();
 
     expect(mockRepository.find).toHaveBeenCalled();
-    expect(result).toBe(mockStats);
+    expect(result).toEqual(mockStats.toJSON());
   });
 });

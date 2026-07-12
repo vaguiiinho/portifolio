@@ -3,6 +3,7 @@ import { Contact } from '../domain/entities/contact';
 import type { IContactRepository } from '../domain/repositories/i-contact-repository';
 import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
 import { CONTACT_REPOSITORY, ID_GENERATOR } from '../../../shared/domain/tokens';
+import { ContactResult, toContactResult } from './contact-result';
 
 export interface SendContactInput {
   name: string;
@@ -18,7 +19,7 @@ export class SendContact {
     @Inject(ID_GENERATOR) private readonly idGenerator: IIdGenerator,
   ) {}
 
-  async execute(input: SendContactInput): Promise<Contact> {
+  async execute(input: SendContactInput): Promise<ContactResult> {
     const id = this.idGenerator.generate();
     const createdAt = new Date();
 
@@ -30,6 +31,6 @@ export class SendContact {
       createdAt,
     );
 
-    return this.contactRepository.create(contact);
+    return toContactResult(await this.contactRepository.create(contact));
   }
 }
