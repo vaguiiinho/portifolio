@@ -7,7 +7,7 @@ import { PasswordHasherService } from './infrastructure/services/password-hasher
 import { JwtTokenService } from './infrastructure/services/jwt-token.service';
 import { AuthGuard } from './presentation/guards/auth.guard';
 import { RolesGuard } from './presentation/guards/roles.guard';
-import { IdentifiersModule } from '../../shared/infrastructure';
+import { IdentifiersModule, RateLimitGuard } from '../../shared/infrastructure';
 import { PASSWORD_HASHER, TOKEN_SERVICE, USER_REPOSITORY } from '../../shared/domain/tokens';
 
 @Module({
@@ -18,6 +18,7 @@ import { PASSWORD_HASHER, TOKEN_SERVICE, USER_REPOSITORY } from '../../shared/do
     CreateUser,
     AuthGuard,
     RolesGuard,
+    RateLimitGuard,
     {
       provide: USER_REPOSITORY,
       useClass: UserPrismaRepository,

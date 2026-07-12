@@ -20,6 +20,7 @@ import type { LoginResult } from '../application/login';
 import { UserRole } from '../domain/entities/user';
 import { EnvironmentService } from '../../../shared/config';
 import { toUserResponse } from './mappers/user-response.mapper';
+import { RateLimit, RateLimitGuard } from '../../../shared/infrastructure';
 
 const AUTH_COOKIE_NAME = 'portfolio-auth-token';
 
@@ -32,6 +33,8 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @UseGuards(RateLimitGuard)
+  @RateLimit(5, 60_000)
   async signIn(
     @Body() dto: LoginDto,
     @Res({ passthrough: true }) response: Response,

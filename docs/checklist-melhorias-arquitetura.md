@@ -42,8 +42,8 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 ### Concorrência e consistência
 
 - [x] Garantir criação segura de `Config` e `Stats` sob requisições simultâneas.
-- [ ] Usar transações para operações que alterem mais de uma tabela ou exigirem atomicidade.
-- [ ] Avaliar um `UnitOfWork` apenas quando existirem casos de uso multi-repositório reais.
+- [x] Usar transações para operações que alterem mais de uma tabela ou exigirem atomicidade. *(Não há caso de uso multi-tabela atualmente; `Config` e `Stats` já usam operações atômicas por repositório.)*
+- [x] Avaliar um `UnitOfWork` apenas quando existirem casos de uso multi-repositório reais. *(Adiado: todos os use cases atuais dependem de um único repositório.)*
 - [x] Padronizar a estratégia de geração de IDs: Prisma `cuid`, UUID ou um `IdGenerator` injetável.
 
 ## Prioridade média — DDD e regras de domínio
@@ -67,7 +67,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Criar `ProjectUrl`/`ExternalUrl` se a validação de GitHub, demo e vídeo se repetir.
 - [x] Criar `TechStack` como Value Object se houver regras de tamanho, duplicidade ou normalização de tecnologias.
 - [ ] Criar `LocalizedContent` como Value Object se a estrutura multilíngue continuar crescendo.
-- [ ] Evitar criar Value Objects para campos simples sem regra própria; o objetivo é encapsular comportamento, não aumentar quantidade de arquivos.
+- [x] Evitar criar Value Objects para campos simples sem regra própria; o objetivo é encapsular comportamento, não aumentar quantidade de arquivos. *(Foram adicionados apenas objetos para e-mail, senhas, URLs e tecnologias, que têm invariantes próprios.)*
 
 ### Contratos e dependências
 
@@ -88,7 +88,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [ ] Adicionar feedback visual padronizado para loading, sucesso e erro nas mutações administrativas.
 - [x] Proteger a rota `/admin` antecipadamente com middleware baseado na presença da sessão.
 - [ ] Manter o backend como fonte final de autorização, mesmo com proteção no frontend.
-- [ ] Avaliar React Query ou SWR quando o painel tiver mais mutações, cache e invalidação de dados.
+- [x] Avaliar React Query ou SWR quando o painel tiver mais mutações, cache e invalidação de dados. *(Não adotado: o painel atual tem poucas mutações e o estado local mantém o fluxo mais simples.)*
 - [x] Melhorar acessibilidade do dropdown de usuário: fechar ao clicar fora, tecla `Escape` e foco por teclado.
 - [ ] Gerar contratos compartilhados via OpenAPI quando a API e o frontend crescerem, reduzindo duplicação de tipos.
 
@@ -105,10 +105,10 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ## Prioridade futura — Operação e observabilidade
 
-- [ ] Adicionar logs estruturados com contexto de request e erro.
-- [ ] Adicionar identificador de correlação por requisição.
+- [x] Adicionar logs estruturados com contexto de request e erro.
+- [x] Adicionar identificador de correlação por requisição.
 - [ ] Revisar health checks para incluir conectividade do banco quando necessário.
-- [ ] Adicionar rate limit para login e formulário de contato.
+- [x] Adicionar rate limit para login e formulário de contato.
 - [ ] Definir paginação para projetos, contatos e futuras listas administrativas.
 - [ ] Adicionar documentação de API com OpenAPI/Swagger.
 

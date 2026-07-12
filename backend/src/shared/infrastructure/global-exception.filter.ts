@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { Prisma } from '../../generated/prisma/client';
+import type { RequestWithId } from './request-id.middleware';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -15,6 +16,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<RequestWithId>();
     let status = 500;
     let message = 'Internal server error';
     let error = 'Internal Server Error';
@@ -38,13 +40,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message = 'Resource not found';
       error = 'Not Found';
     } else {
-      this.logger.error(exception);
+      this.logger.error(JSON.stringify({
+        requestId: request.requestId,
+        error: exception instanceof Error ? exception.message : String(exception),
+      }));
     }
 
     response.status(status).json({
       statusCode: status,
       message,
       error,
+      requestId: request.requestId,
     });
   }
 
