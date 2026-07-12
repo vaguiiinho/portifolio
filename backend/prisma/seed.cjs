@@ -1,8 +1,11 @@
-import 'dotenv/config';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { hashPassword } from '../src/modules/auth/infrastructure/services/password-hasher.service';
+require('dotenv/config');
 
+const { randomBytes, scrypt: scryptCallback } = require('crypto');
+const { promisify } = require('util');
+const { PrismaPg } = require('@prisma/adapter-pg');
+const { PrismaClient } = require('../dist/src/generated/prisma/client');
+
+const scrypt = promisify(scryptCallback);
 const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
 const password = process.env.ADMIN_PASSWORD;
 const databaseUrl = process.env.DATABASE_URL;
@@ -25,25 +28,29 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: databaseUrl }),
 });
 
-const adminEmail = email;
-const adminPassword = password;
+async function hashPassword(value) {
+  const salt = randomBytes(16).toString('hex');
+  const derivedKey = await scrypt(value, salt, 64);
+
+  return `${salt}:${derivedKey.toString('hex')}`;
+}
 
 async function main() {
   await prisma.user.upsert({
-    where: { email: adminEmail },
+    where: { email },
     update: {},
     create: {
-      email: adminEmail,
-      passwordHash: await hashPassword(adminPassword),
+      email,
+      passwordHash: await hashPassword(password),
       role: 'administrador',
     },
   });
 
-  console.log(`Administrator ${adminEmail} is ready.`);
+  console.log(`Administrator ${email} is ready.`);
 }
 
 main()
-  .catch((error: unknown) => {
+  .catch((error) => {
     console.error(error);
     process.exitCode = 1;
   })

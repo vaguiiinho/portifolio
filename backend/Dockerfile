@@ -17,4 +17,4 @@ COPY --from=build /app/prisma /app/./prisma
 COPY --from=build /app/prisma.config.ts /app/./prisma.config.ts
 COPY --from=build /app/healthcheck.js /app/./healthcheck.js
 EXPOSE 3001
-CMD ["sh", "-c", "npx prisma migrate deploy && (node dist/main.js || node dist/src/main.js)"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && (node dist/main.js || node dist/src/main.js)"]

@@ -27,6 +27,8 @@ docker compose exec api npm run test:e2e
 Defina `DATABASE_URL`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente do backend
 (use `.env.example` como referência) e execute:
 
+O container de produção executa o seed automaticamente após aplicar as migrations. Para executá-lo manualmente em desenvolvimento, use:
+
 ```bash
 docker compose exec api npm run db:seed
 ```
