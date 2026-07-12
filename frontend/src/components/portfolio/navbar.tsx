@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { Menu, X, Moon, Sun, LogIn, LogOut, ChevronDown, UserRound } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -29,10 +29,35 @@ export function Navbar({ siteName, locale }: NavbarProps) {
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
   const [isScrolled, setIsScrolled] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
   const { user, isAuthenticated, logout, isLoading } = useAuth()
   const router = useRouter()
   const { scrollY } = useScroll()
   const shellCtaContent = getShellCtaContent(locale)
+
+  useEffect(() => {
+    if (!isUserMenuOpen) return
+
+    function closeOnOutsideClick(event: PointerEvent) {
+      if (!userMenuRef.current?.contains(event.target as Node)) {
+        setIsUserMenuOpen(false)
+      }
+    }
+
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsUserMenuOpen(false)
+        document.getElementById("user-menu-trigger")?.focus()
+      }
+    }
+
+    document.addEventListener("pointerdown", closeOnOutsideClick)
+    document.addEventListener("keydown", closeOnEscape)
+    return () => {
+      document.removeEventListener("pointerdown", closeOnOutsideClick)
+      document.removeEventListener("keydown", closeOnEscape)
+    }
+  }, [isUserMenuOpen])
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 0)
@@ -103,8 +128,9 @@ export function Navbar({ siteName, locale }: NavbarProps) {
 
             {!isLoading &&
               (isAuthenticated ? (
-                <div className="relative">
+                <div ref={userMenuRef} className="relative">
                   <Button
+                    id="user-menu-trigger"
                     variant="outline"
                     size="sm"
                     onClick={() => setIsUserMenuOpen((isOpen) => !isOpen)}
@@ -134,6 +160,13 @@ export function Navbar({ siteName, locale }: NavbarProps) {
                         type="button"
                         role="menuitem"
                         onClick={handleLogout}
+                        onKeyDown={(event) => {
+                          if (event.key === "Escape") {
+                            event.preventDefault()
+                            setIsUserMenuOpen(false)
+                            document.getElementById("user-menu-trigger")?.focus()
+                          }
+                        }}
                         className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-destructive transition-colors hover:bg-destructive/10"
                       >
                         <LogOut className="h-4 w-4" />

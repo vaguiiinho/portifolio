@@ -86,10 +86,10 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [ ] Separar `frontend/src/lib/api.ts` por domínio: `auth`, `projects`, `config`, `stats` e `contact`.
 - [ ] Centralizar cliente HTTP e tratamento de `401`, `403`, `409` e `500`.
 - [ ] Adicionar feedback visual padronizado para loading, sucesso e erro nas mutações administrativas.
-- [ ] Proteger a rota `/admin` antecipadamente com middleware baseado na presença da sessão.
+- [x] Proteger a rota `/admin` antecipadamente com middleware baseado na presença da sessão.
 - [ ] Manter o backend como fonte final de autorização, mesmo com proteção no frontend.
 - [ ] Avaliar React Query ou SWR quando o painel tiver mais mutações, cache e invalidação de dados.
-- [ ] Melhorar acessibilidade do dropdown de usuário: fechar ao clicar fora, tecla `Escape` e foco por teclado.
+- [x] Melhorar acessibilidade do dropdown de usuário: fechar ao clicar fora, tecla `Escape` e foco por teclado.
 - [ ] Gerar contratos compartilhados via OpenAPI quando a API e o frontend crescerem, reduzindo duplicação de tipos.
 
 ## Prioridade média — Testes e qualidade
