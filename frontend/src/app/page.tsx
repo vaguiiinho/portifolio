@@ -5,6 +5,7 @@ import { fetchSiteConfig } from "@/lib/site-config"
 import { getLocale } from "@/lib/locale-server"
 import { createRouteMetadata } from "@/lib/metadata"
 import { getHeroContent } from "@/lib/content/localized"
+import { hasServicesContent } from "@/lib/site-content"
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale()
@@ -24,13 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function HomePage() {
   const config = await fetchSiteConfig()
   const locale = await getLocale()
+  const showServices = hasServicesContent(config.servicesContent, locale)
 
   return (
     <main className="relative">
       <MetricBeacon eventKey="page:home" />
-      <Navbar siteName={config.siteName} locale={locale} />
-      <Hero siteName={config.siteName} locale={locale} />
-      <HomeHub locale={locale} />
+      <Navbar siteName={config.siteName} locale={locale} showServices={showServices} />
+      <Hero siteName={config.siteName} locale={locale} showServices={showServices} />
+      <HomeHub locale={locale} showServices={showServices} />
       <Testimonials locale={locale} content={config.testimonialsContent} />
       <ConversionMetrics locale={locale} />
       <Footer siteName={config.siteName} locale={locale} />

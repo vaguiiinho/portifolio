@@ -21,9 +21,10 @@ import { useRouter } from "next/navigation"
 interface NavbarProps {
   siteName: string
   locale: Locale
+  showServices?: boolean
 }
 
-export function Navbar({ siteName, locale }: NavbarProps) {
+export function Navbar({ siteName, locale, showServices = true }: NavbarProps) {
   const { resolvedTheme, setTheme } = useTheme()
   const isDark = resolvedTheme === "dark"
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useMobileMenu()
@@ -92,7 +93,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
             {siteName}
           </AppLink>
 
-          <DesktopNav locale={locale} />
+          <DesktopNav locale={locale} showServices={showServices} />
 
           {/* Actions */}
           <div className="flex min-w-0 items-center gap-2 sm:gap-3">
@@ -203,7 +204,7 @@ export function Navbar({ siteName, locale }: NavbarProps) {
           </div>
         </nav>
 
-        <MobileNav isOpen={isMobileMenuOpen} onClose={closeMobileMenu} locale={locale} />
+        <MobileNav isOpen={isMobileMenuOpen} onClose={closeMobileMenu} locale={locale} showServices={showServices} />
       </Container>
     </motion.header>
   )

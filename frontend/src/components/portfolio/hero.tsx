@@ -8,9 +8,10 @@ import type { Locale } from "@/lib/locale"
 interface HeroProps {
   siteName: string
   locale: Locale
+  showServices?: boolean
 }
 
-export async function Hero({ siteName, locale }: HeroProps) {
+export async function Hero({ siteName, locale, showServices = true }: HeroProps) {
   const stats = await fetchHeroStats()
 
   return (
@@ -19,7 +20,7 @@ export async function Hero({ siteName, locale }: HeroProps) {
 
       <Container className="py-20 lg:py-32">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <HeroContent stats={stats} locale={locale} />
+          <HeroContent stats={stats} locale={locale} showServices={showServices} />
           <div className="relative hidden lg:block">
             <Avatar siteName={siteName} />
           </div>

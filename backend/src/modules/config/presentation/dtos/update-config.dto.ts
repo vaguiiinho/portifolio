@@ -23,4 +23,8 @@ export class UpdateConfigDto {
   @IsOptional()
   @IsObject({ message: 'testimonialsContent must be an object' })
   testimonialsContent?: SiteContent['testimonialsContent'];
+
+  @IsOptional()
+  @IsObject({ message: 'contactContent must be an object' })
+  contactContent?: SiteContent['contactContent'];
 }

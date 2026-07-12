@@ -63,6 +63,7 @@ model Config {
   aboutBio          Json     @default("[]")
   servicesContent    Json     @default("{}")
   testimonialsContent Json     @default("{}")
+  contactContent      Json     @default("{}")
   updatedAt         DateTime @updatedAt
 
   @@map("config")

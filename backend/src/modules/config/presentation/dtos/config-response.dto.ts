@@ -7,5 +7,6 @@ export interface ConfigResponseDto {
   aboutBio: SiteContent['aboutBio'];
   servicesContent: SiteContent['servicesContent'];
   testimonialsContent: SiteContent['testimonialsContent'];
+  contactContent: SiteContent['contactContent'];
   updatedAt: Date;
 }

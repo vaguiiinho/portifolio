@@ -8,6 +8,7 @@ import { useAuth } from "./auth-provider"
 import { portfolioRoutes } from "@/lib/routes"
 import { SiteConfigModal } from "./site-config-modal"
 import { SiteContentModal } from "./site-content-modal"
+import { ContactContentModal } from "./contact-content-modal"
 import { ProjectsAdminTable } from "./projects-admin-table"
 import type { Locale } from "@/lib/locale"
 import type { ApiStats } from "@/lib/api"
@@ -43,6 +44,7 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
   const { user, isAuthenticated, isLoading, logout } = useAuth()
   const [isConfigEditorOpen, setIsConfigEditorOpen] = useState(false)
   const [isContentEditorOpen, setIsContentEditorOpen] = useState(false)
+  const [isContactEditorOpen, setIsContactEditorOpen] = useState(false)
   const isClient = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -232,6 +234,9 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
                   >
                     {locale === "en" ? "Edit content" : "Editar conteúdo"}
                   </Button>
+                  <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => setIsContactEditorOpen(true)}>
+                    {locale === "en" ? "Edit contact" : "Editar contato"}
+                  </Button>
                 </div>
               </div>
               <div className="mt-2 font-medium">{siteConfig.siteName}</div>
@@ -256,6 +261,7 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
           onClose={() => setIsContentEditorOpen(false)}
           onSaved={() => router.refresh()}
         />
+        <ContactContentModal key={isContactEditorOpen ? `contact-${siteConfig.updatedAt}` : "contact-closed"} open={isContactEditorOpen} config={siteConfig} locale={locale} onClose={() => setIsContactEditorOpen(false)} onSaved={() => router.refresh()} />
       </div>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">

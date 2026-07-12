@@ -9,13 +9,14 @@ interface PortfolioRouteShellProps {
   locale: Locale
   children: ReactNode
   pageMetricKey?: string
+  showServices?: boolean
 }
 
-export function PortfolioRouteShell({ siteName, locale, children, pageMetricKey }: PortfolioRouteShellProps) {
+export function PortfolioRouteShell({ siteName, locale, children, pageMetricKey, showServices = true }: PortfolioRouteShellProps) {
   return (
     <main className="relative">
       {pageMetricKey && <MetricBeacon eventKey={pageMetricKey} />}
-      <Navbar siteName={siteName} locale={locale} />
+      <Navbar siteName={siteName} locale={locale} showServices={showServices} />
       {children}
       <Footer siteName={siteName} locale={locale} />
     </main>

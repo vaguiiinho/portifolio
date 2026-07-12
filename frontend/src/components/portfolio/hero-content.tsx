@@ -8,9 +8,10 @@ import type { HeroStat } from "@/lib/stats"
 interface HeroContentProps {
   stats: HeroStat[]
   locale: Locale
+  showServices?: boolean
 }
 
-export function HeroContent({ stats, locale }: HeroContentProps) {
+export function HeroContent({ stats, locale, showServices = true }: HeroContentProps) {
   const heroContent = getHeroContent(locale)
   const titleSuffix = locale === "en" ? "and modern products" : "e produtos modernos"
 
@@ -39,16 +40,18 @@ export function HeroContent({ stats, locale }: HeroContentProps) {
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <Button
-          as="a"
-          href={portfolioRoutes.services}
-          size="lg"
-          className="rounded-full group"
-          metricKey="cta:hero-services"
-        >
-          {heroContent.viewProjectsText}
-          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </Button>
+        {showServices && (
+          <Button
+            as="a"
+            href={portfolioRoutes.services}
+            size="lg"
+            className="rounded-full group"
+            metricKey="cta:hero-services"
+          >
+            {heroContent.viewProjectsText}
+            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Button>
+        )}
         <Button
           as="a"
           href={portfolioRoutes.contact}

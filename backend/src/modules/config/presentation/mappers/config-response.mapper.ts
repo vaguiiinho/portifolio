@@ -10,5 +10,6 @@ export function toConfigResponse(result: ConfigResult): ConfigResponseDto {
     },
     servicesContent: structuredClone(result.servicesContent),
     testimonialsContent: structuredClone(result.testimonialsContent),
+    contactContent: structuredClone(result.contactContent),
   };
 }

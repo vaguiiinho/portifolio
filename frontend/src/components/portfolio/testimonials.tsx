@@ -6,7 +6,7 @@ import { MetricBeacon } from "./metric-beacon"
 import { SectionHeader } from "./section-header"
 import { getTestimonialsContent } from "@/lib/content/localized"
 import type { Locale } from "@/lib/locale"
-import { resolveLocalizedField, type SiteContentField, type TestimonialsContent } from "@/lib/site-content"
+import { hasTestimonialsContent, resolveLocalizedField, type SiteContentField, type TestimonialsContent } from "@/lib/site-content"
 
 interface TestimonialsProps {
   locale: Locale
@@ -16,6 +16,8 @@ interface TestimonialsProps {
 export function Testimonials({ locale, content }: TestimonialsProps) {
   const testimonialsContent = getTestimonialsContent(locale)
   const resolvedContent = resolveLocalizedField(content, locale, testimonialsContent)
+
+  if (!hasTestimonialsContent(content, locale)) return null
 
   return (
     <section id="testimonials" className="py-24 sm:py-32 bg-secondary/20">

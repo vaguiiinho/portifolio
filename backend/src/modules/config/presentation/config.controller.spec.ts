@@ -62,7 +62,7 @@ describe('ConfigController', () => {
   });
 
   it('should update config', async () => {
-    const dto: SiteContent & { siteName?: string; description?: string } = {
+    const dto: Omit<SiteContent, 'contactContent'> & { siteName?: string; description?: string } = {
       aboutBio: { pt: ['Novo bio'], en: ['New bio'] },
       servicesContent: {
         pt: { ctaTitle: 'Need scope?', ctaDescription: 'Need scope?', ctaLabel: 'Quote', cards: [] },

@@ -4,6 +4,7 @@ import type {
   ServicesContent,
   SiteContent,
   TestimonialsContent,
+  ContactContent,
 } from './site-content';
 
 export class Config {
@@ -13,6 +14,7 @@ export class Config {
   private _aboutBio: SiteContent['aboutBio'];
   private _servicesContent: SiteContent['servicesContent'];
   private _testimonialsContent: SiteContent['testimonialsContent'];
+  private _contactContent: SiteContent['contactContent'];
   private _updatedAt: Date;
 
   constructor(
@@ -23,6 +25,7 @@ export class Config {
     servicesContent: SiteContent['servicesContent'],
     testimonialsContent: SiteContent['testimonialsContent'],
     updatedAt: Date,
+    contactContent?: SiteContent['contactContent'],
   ) {
     this._id = this.required(id, 'Config id');
     this._siteName = this.required(siteName, 'Config site name');
@@ -31,6 +34,7 @@ export class Config {
     this._servicesContent = this.normalizeServicesContent(servicesContent);
     this._testimonialsContent =
       this.normalizeTestimonialsContent(testimonialsContent);
+    this._contactContent = this.normalizeContactContent(contactContent ?? this.defaultContactContent());
     this._updatedAt = updatedAt;
   }
 
@@ -73,6 +77,15 @@ export class Config {
     }));
   }
 
+  get contactContent(): SiteContent['contactContent'] {
+    return this.cloneLocalized(this._contactContent, (content) => ({
+      ...content,
+      paths: content.paths.map((path) => ({ ...path })),
+      formLabels: { ...content.formLabels },
+      formPlaceholders: { ...content.formPlaceholders },
+    }));
+  }
+
   get updatedAt(): Date {
     return this._updatedAt;
   }
@@ -105,6 +118,11 @@ export class Config {
     this._updatedAt = new Date();
   }
 
+  updateContactContent(contactContent: SiteContent['contactContent']): void {
+    this._contactContent = this.normalizeContactContent(contactContent);
+    this._updatedAt = new Date();
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -113,6 +131,7 @@ export class Config {
       aboutBio: this.aboutBio,
       servicesContent: this.servicesContent,
       testimonialsContent: this.testimonialsContent,
+      contactContent: this.contactContent,
       updatedAt: this.updatedAt,
     };
   }
@@ -205,6 +224,52 @@ export class Config {
         };
       },
     );
+  }
+
+  private normalizeContactContent(
+    content: SiteContent['contactContent'],
+  ): SiteContent['contactContent'] {
+    return this.normalizeLocalized(content, 'Config contact content', (value) => {
+      if (!value || typeof value !== 'object' || Array.isArray(value) || !Array.isArray(value.paths)) {
+        throw new Error('Config contact content must contain paths');
+      }
+      return {
+        title: this.required(value.title, 'Config contact title'),
+        subtitle: this.required(value.subtitle, 'Config contact subtitle'),
+        contactTitle: this.required(value.contactTitle, 'Config contact title'),
+        contactDescription: this.required(value.contactDescription, 'Config contact description'),
+        contactNote: this.required(value.contactNote, 'Config contact note'),
+        paths: value.paths.map((path) => ({
+          title: this.required(path.title, 'Config contact path title'),
+          description: this.required(path.description, 'Config contact path description'),
+          ctaLabel: this.required(path.ctaLabel, 'Config contact path CTA label'),
+          ctaHref: this.required(path.ctaHref, 'Config contact path CTA URL'),
+          secondaryLabel: this.required(path.secondaryLabel, 'Config contact path secondary label'),
+          secondaryHref: this.required(path.secondaryHref, 'Config contact path secondary URL'),
+        })),
+        formLabels: this.normalizeContactFields(value.formLabels, 'labels'),
+        formPlaceholders: this.normalizeContactFields(value.formPlaceholders, 'placeholders'),
+        submitButton: this.required(value.submitButton, 'Config contact submit button'),
+        submittingText: this.required(value.submittingText, 'Config contact submitting text'),
+      };
+    });
+  }
+
+  private normalizeContactFields(
+    value: ContactContent['formLabels'],
+    field: string,
+  ): ContactContent['formLabels'] {
+    return {
+      name: this.required(value?.name, `Config contact ${field} name`),
+      email: this.required(value?.email, `Config contact ${field} email`),
+      subject: this.required(value?.subject, `Config contact ${field} subject`),
+      message: this.required(value?.message, `Config contact ${field} message`),
+    };
+  }
+
+  private defaultContactContent(): SiteContent['contactContent'] {
+    const fields = { name: 'Name', email: 'Email', subject: 'Subject', message: 'Message' };
+    return { pt: { title: 'Contato', subtitle: 'Entre em contato.', contactTitle: 'Canais', contactDescription: 'Escolha um canal.', contactNote: 'Envie sua mensagem.', paths: [], formLabels: fields, formPlaceholders: fields, submitButton: 'Enviar', submittingText: 'Enviando' } };
   }
 
   private normalizeLocalized<T>(

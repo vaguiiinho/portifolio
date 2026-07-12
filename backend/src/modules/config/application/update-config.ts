@@ -11,6 +11,7 @@ export interface UpdateConfigInput {
   aboutBio?: SiteContent['aboutBio'];
   servicesContent?: SiteContent['servicesContent'];
   testimonialsContent?: SiteContent['testimonialsContent'];
+  contactContent?: SiteContent['contactContent'];
 }
 
 @Injectable()
@@ -31,6 +32,7 @@ export class UpdateConfig {
       input.servicesContent ?? existingConfig.servicesContent,
       input.testimonialsContent ?? existingConfig.testimonialsContent,
       new Date(),
+      input.contactContent ?? existingConfig.contactContent,
     );
 
     return toConfigResult(await this.configRepository.update(updatedConfig));

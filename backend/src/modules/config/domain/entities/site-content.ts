@@ -28,8 +28,31 @@ export interface TestimonialsContent {
   trustPoints: string[];
 }
 
+export interface ContactPathContent {
+  title: string;
+  description: string;
+  ctaLabel: string;
+  ctaHref: string;
+  secondaryLabel: string;
+  secondaryHref: string;
+}
+
+export interface ContactContent {
+  title: string;
+  subtitle: string;
+  contactTitle: string;
+  contactDescription: string;
+  contactNote: string;
+  paths: ContactPathContent[];
+  formLabels: { name: string; email: string; subject: string; message: string };
+  formPlaceholders: { name: string; email: string; subject: string; message: string };
+  submitButton: string;
+  submittingText: string;
+}
+
 export interface SiteContent {
   aboutBio: LocalizedContent<string[]>;
   servicesContent: LocalizedContent<ServicesContent>;
   testimonialsContent: LocalizedContent<TestimonialsContent>;
+  contactContent: LocalizedContent<ContactContent>;
 }

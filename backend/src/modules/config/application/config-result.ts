@@ -8,6 +8,7 @@ export interface ConfigResult {
   aboutBio: SiteContent['aboutBio'];
   servicesContent: SiteContent['servicesContent'];
   testimonialsContent: SiteContent['testimonialsContent'];
+  contactContent: SiteContent['contactContent'];
   updatedAt: Date;
 }
 
@@ -19,6 +20,7 @@ export function toConfigResult(config: Config): ConfigResult {
     aboutBio: config.aboutBio,
     servicesContent: config.servicesContent,
     testimonialsContent: config.testimonialsContent,
+    contactContent: config.contactContent,
     updatedAt: config.updatedAt,
   };
 }

@@ -7,9 +7,10 @@ import type { Locale } from "@/lib/locale"
 
 interface HomeHubProps {
   locale: Locale
+  showServices?: boolean
 }
 
-export function HomeHub({ locale }: HomeHubProps) {
+export function HomeHub({ locale, showServices = true }: HomeHubProps) {
   const routes =
     locale === "en"
       ? [
@@ -57,6 +58,8 @@ export function HomeHub({ locale }: HomeHubProps) {
           },
         ]
 
+  const visibleRoutes = routes.filter((route) => showServices || route.href !== portfolioRoutes.services)
+
   return (
     <section className="py-20 sm:py-24">
       <Container>
@@ -70,7 +73,7 @@ export function HomeHub({ locale }: HomeHubProps) {
         />
 
         <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {routes.map((route) => (
+          {visibleRoutes.map((route) => (
             <AppLink
               key={route.href}
               href={route.href}

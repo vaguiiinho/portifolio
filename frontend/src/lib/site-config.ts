@@ -1,5 +1,5 @@
 import { fetchFromApi } from './api-base-url'
-import type { SiteContentField } from './site-content'
+import type { ContactContent, SiteContentField } from './site-content'
 
 export interface SiteConfig {
   id: string
@@ -16,6 +16,7 @@ export interface SiteConfig {
     cards: { quote: string; name: string; role: string; company: string; result: string }[]
     trustPoints: string[]
   }>
+  contactContent?: SiteContentField<ContactContent>
   updatedAt: string
 }
 
@@ -46,6 +47,7 @@ export async function fetchSiteConfig(): Promise<SiteConfig> {
         aboutBio: undefined,
         servicesContent: undefined,
         testimonialsContent: undefined,
+        contactContent: undefined,
         updatedAt: new Date().toISOString(),
       }
     }
@@ -59,6 +61,7 @@ export async function fetchSiteConfig(): Promise<SiteConfig> {
       aboutBio: undefined,
       servicesContent: undefined,
       testimonialsContent: undefined,
+      contactContent: undefined,
       updatedAt: new Date().toISOString(),
     }
   }

@@ -9,6 +9,7 @@ import { fetchSiteConfig } from "@/lib/site-config"
 import { routeCtaContent } from "@/lib/content"
 import { getLocale } from "@/lib/locale-server"
 import { getProjectsContent } from "@/lib/content/localized"
+import { hasServicesContent } from "@/lib/site-content"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
@@ -29,7 +30,7 @@ export default async function ProjectsPage() {
   const projectsPageContent = getProjectsContent(locale)
 
   return (
-    <PortfolioRouteShell siteName={config.siteName} locale={locale} pageMetricKey="page:projects">
+    <PortfolioRouteShell siteName={config.siteName} locale={locale} pageMetricKey="page:projects" showServices={hasServicesContent(config.servicesContent, locale)}>
       <RouteIntro
         title={projectsPageContent.title}
         subtitle={projectsPageContent.subtitle}

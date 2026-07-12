@@ -8,6 +8,7 @@ import type {
   ServicesContent,
   SiteContent,
   TestimonialsContent,
+  ContactContent,
 } from '../../domain/entities/site-content';
 import { IConfigRepository } from '../../domain/repositories/i-config-repository';
 
@@ -162,6 +163,24 @@ const DEFAULT_CONFIG = {
       ],
     },
   } satisfies SiteContent['testimonialsContent'],
+  contactContent: {
+    pt: {
+      title: 'Pronto para conversar?', subtitle: 'Entre em contato com o contexto do seu projeto.', contactTitle: 'Canais diretos', contactDescription: 'Escolha o canal mais rápido para você.', contactNote: 'Informe contexto, prazo e objetivo para acelerar a resposta.',
+      paths: [
+        { title: 'Sou recrutador', description: 'Quero conhecer seu histórico e currículo.', ctaLabel: 'Ver currículo', ctaHref: '/curriculo', secondaryLabel: 'LinkedIn', secondaryHref: 'https://linkedin.com/in/joaosilva' },
+        { title: 'Sou cliente', description: 'Quero conversar sobre um projeto.', ctaLabel: 'Pedir orçamento', ctaHref: '/contato#contact-form', secondaryLabel: 'WhatsApp', secondaryHref: 'https://wa.me/5500000000000' },
+      ],
+      formLabels: { name: 'Nome', email: 'E-mail', subject: 'Assunto', message: 'Mensagem' }, formPlaceholders: { name: 'Seu nome', email: 'voce@empresa.com', subject: 'Landing page, dashboard ou API?', message: 'Conte brevemente o que você precisa entregar...' }, submitButton: 'Enviar mensagem', submittingText: 'Enviando...',
+    },
+    en: {
+      title: 'Ready to talk?', subtitle: 'Get in touch with your project context.', contactTitle: 'Direct channels', contactDescription: 'Choose the fastest channel for you.', contactNote: 'Share the context, deadline and goal to speed up my reply.',
+      paths: [
+        { title: "I'm a recruiter", description: 'I want to see your background and resume.', ctaLabel: 'View resume', ctaHref: '/curriculo', secondaryLabel: 'LinkedIn', secondaryHref: 'https://linkedin.com/in/joaosilva' },
+        { title: "I'm a client", description: 'I want to discuss a project.', ctaLabel: 'Request quote', ctaHref: '/contato#contact-form', secondaryLabel: 'WhatsApp', secondaryHref: 'https://wa.me/5500000000000' },
+      ],
+      formLabels: { name: 'Name', email: 'Email', subject: 'Subject', message: 'Message' }, formPlaceholders: { name: 'Your name', email: 'you@company.com', subject: 'Landing page, dashboard or API?', message: 'Briefly tell me what you need to deliver...' }, submitButton: 'Send message', submittingText: 'Sending...',
+    },
+  } satisfies SiteContent['contactContent'],
 };
 
 function isLocale(value: unknown): value is Locale {
@@ -196,6 +215,10 @@ function cloneTestimonialsContent(value: TestimonialsContent): TestimonialsConte
     })),
     trustPoints: [...value.trustPoints],
   };
+}
+
+function cloneContactContent(value: ContactContent): ContactContent {
+  return { ...value, paths: value.paths.map((path) => ({ ...path })), formLabels: { ...value.formLabels }, formPlaceholders: { ...value.formPlaceholders } };
 }
 
 function normalizeLocalizedValue<T>(
@@ -235,6 +258,7 @@ function normalizeConfig(raw: PrismaConfig): Config {
     aboutBio?: unknown;
     servicesContent?: unknown;
     testimonialsContent?: unknown;
+    contactContent?: unknown;
   };
 
   return new Config(
@@ -249,6 +273,15 @@ function normalizeConfig(raw: PrismaConfig): Config {
       cloneTestimonialsContent,
     ),
     prismaConfig.updatedAt,
+    normalizeLocalizedValue(
+      prismaConfig.contactContent &&
+        typeof prismaConfig.contactContent === 'object' &&
+        Object.keys(prismaConfig.contactContent).length > 0
+        ? prismaConfig.contactContent
+        : undefined,
+      DEFAULT_CONFIG.contactContent,
+      cloneContactContent,
+    ),
   );
 }
 
@@ -278,6 +311,7 @@ export class ConfigPrismaRepository implements IConfigRepository {
         aboutBio: config.aboutBio,
         servicesContent: config.servicesContent,
         testimonialsContent: config.testimonialsContent,
+        contactContent: config.contactContent,
         updatedAt: config.updatedAt,
       } as never,
     });

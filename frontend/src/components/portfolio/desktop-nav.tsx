@@ -4,10 +4,11 @@ import type { Locale } from "@/lib/locale"
 
 interface DesktopNavProps {
   locale: Locale
+  showServices?: boolean
 }
 
-export function DesktopNav({ locale }: DesktopNavProps) {
-  const navLinks = getNavLinks(locale)
+export function DesktopNav({ locale, showServices = true }: DesktopNavProps) {
+  const navLinks = getNavLinks(locale).filter((link) => showServices || link.href !== "/servicos")
 
   return (
     <div className="hidden md:flex items-center gap-8">

@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { Loader2, PencilLine, Languages, X } from "lucide-react"
+import { Loader2, PencilLine, Languages, Plus, Trash2, X } from "lucide-react"
 import { RemoveScroll } from "react-remove-scroll"
 import { Button } from "@/components/ui/button"
 import { FormField } from "@/components/ui/form-field"
@@ -120,6 +120,17 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
     }))
   }
 
+  function addAboutBio() {
+    updateCurrentDraft((draft) => ({ ...draft, aboutBio: [...draft.aboutBio, ""] }))
+  }
+
+  function removeAboutBio(index: number) {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      aboutBio: draft.aboutBio.filter((_, currentIndex) => currentIndex !== index),
+    }))
+  }
+
   function updateServiceCard(index: number, field: keyof ServicesContent["cards"][number], value: string) {
     updateCurrentDraft((draft) => ({
       ...draft,
@@ -156,6 +167,26 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
     }))
   }
 
+  function addServiceCard() {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      servicesContent: {
+        ...draft.servicesContent,
+        cards: [...draft.servicesContent.cards, { title: "", description: "", deliverables: [] }],
+      },
+    }))
+  }
+
+  function removeServiceCard(index: number) {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      servicesContent: {
+        ...draft.servicesContent,
+        cards: draft.servicesContent.cards.filter((_, currentIndex) => currentIndex !== index),
+      },
+    }))
+  }
+
   function updateTestimonialCard(index: number, field: keyof TestimonialsContent["cards"][number], value: string) {
     updateCurrentDraft((draft) => ({
       ...draft,
@@ -176,6 +207,46 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
         trustPoints: draft.testimonialsContent.trustPoints.map((item, currentIndex) =>
           currentIndex === index ? value : item,
         ),
+      },
+    }))
+  }
+
+  function addTestimonialCard() {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      testimonialsContent: {
+        ...draft.testimonialsContent,
+        cards: [...draft.testimonialsContent.cards, { quote: "", name: "", role: "", company: "", result: "" }],
+      },
+    }))
+  }
+
+  function removeTestimonialCard(index: number) {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      testimonialsContent: {
+        ...draft.testimonialsContent,
+        cards: draft.testimonialsContent.cards.filter((_, currentIndex) => currentIndex !== index),
+      },
+    }))
+  }
+
+  function addTrustPoint() {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      testimonialsContent: {
+        ...draft.testimonialsContent,
+        trustPoints: [...draft.testimonialsContent.trustPoints, ""],
+      },
+    }))
+  }
+
+  function removeTrustPoint(index: number) {
+    updateCurrentDraft((draft) => ({
+      ...draft,
+      testimonialsContent: {
+        ...draft.testimonialsContent,
+        trustPoints: draft.testimonialsContent.trustPoints.filter((_, currentIndex) => currentIndex !== index),
       },
     }))
   }
@@ -340,20 +411,26 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
                   </div>
                   <div className="grid gap-4">
                     {currentDraft.aboutBio.map((paragraph, index) => (
-                      <FormField
-                        key={index}
-                        id={`about-bio-${activeLocale}-${index}`}
-                        name={`aboutBio-${activeLocale}-${index}`}
-                        label={
-                          locale === "en"
-                            ? `Bio paragraph ${index + 1}`
-                            : `Parágrafo da bio ${index + 1}`
-                        }
-                        rows={3}
-                        value={paragraph}
-                        onChange={(event) => updateAboutBio(index, event.target.value)}
-                      />
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="min-w-0 flex-1">
+                          <FormField
+                            id={`about-bio-${activeLocale}-${index}`}
+                            name={`aboutBio-${activeLocale}-${index}`}
+                            label={locale === "en" ? `Bio paragraph ${index + 1}` : `Parágrafo da bio ${index + 1}`}
+                            rows={3}
+                            value={paragraph}
+                            onChange={(event) => updateAboutBio(index, event.target.value)}
+                          />
+                        </div>
+                        <Button type="button" variant="outline" size="icon" className="mt-7 shrink-0" onClick={() => removeAboutBio(index)} disabled={currentDraft.aboutBio.length === 1} aria-label={locale === "en" ? "Remove paragraph" : "Remover parágrafo"}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     ))}
+                    <Button type="button" variant="outline" className="w-fit rounded-full" onClick={addAboutBio}>
+                      <Plus className="h-4 w-4" />
+                      {locale === "en" ? "Add paragraph" : "Adicionar parágrafo"}
+                    </Button>
                   </div>
                 </section>
 
@@ -397,8 +474,11 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
                   <div className="grid gap-4">
                     {currentDraft.servicesContent.cards.map((card, index) => (
                       <div key={index} className="rounded-2xl border border-border bg-background/70 p-4">
-                        <div className="mb-3 text-sm font-semibold">
-                          {locale === "en" ? `Service card ${index + 1}` : `Card de serviço ${index + 1}`}
+                        <div className="mb-3 flex items-center justify-between gap-3 text-sm font-semibold">
+                          <span>{locale === "en" ? `Service card ${index + 1}` : `Card de serviço ${index + 1}`}</span>
+                          <Button type="button" variant="ghost" size="icon" onClick={() => removeServiceCard(index)} aria-label={locale === "en" ? "Remove service" : "Remover serviço"}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                         <div className="grid gap-4">
                           <FormField
@@ -427,6 +507,10 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
                         </div>
                       </div>
                     ))}
+                    <Button type="button" variant="outline" className="w-fit rounded-full" onClick={addServiceCard}>
+                      <Plus className="h-4 w-4" />
+                      {locale === "en" ? "Add service" : "Adicionar serviço"}
+                    </Button>
                   </div>
                 </section>
 
@@ -445,8 +529,11 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
                   <div className="grid gap-4">
                     {currentDraft.testimonialsContent.cards.map((card, index) => (
                       <div key={index} className="rounded-2xl border border-border bg-background/70 p-4">
-                        <div className="mb-3 text-sm font-semibold">
-                          {locale === "en" ? `Testimonial ${index + 1}` : `Depoimento ${index + 1}`}
+                        <div className="mb-3 flex items-center justify-between gap-3 text-sm font-semibold">
+                          <span>{locale === "en" ? `Testimonial ${index + 1}` : `Depoimento ${index + 1}`}</span>
+                          <Button type="button" variant="ghost" size="icon" onClick={() => removeTestimonialCard(index)} aria-label={locale === "en" ? "Remove testimonial" : "Remover depoimento"}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                         <div className="grid gap-4 md:grid-cols-2">
                           <FormField
@@ -490,19 +577,23 @@ export function SiteContentModal({ open, config, onClose, onSaved, locale }: Sit
                         </div>
                       </div>
                     ))}
+                    <Button type="button" variant="outline" className="w-fit rounded-full" onClick={addTestimonialCard}>
+                      <Plus className="h-4 w-4" />
+                      {locale === "en" ? "Add testimonial" : "Adicionar depoimento"}
+                    </Button>
                   </div>
 
                   <div className="grid gap-4">
                     {currentDraft.testimonialsContent.trustPoints.map((point, index) => (
-                      <FormField
-                        key={index}
-                        id={`trust-point-${activeLocale}-${index}`}
-                        name={`trustPoint-${activeLocale}-${index}`}
-                        label={locale === "en" ? `Trust point ${index + 1}` : `Ponto de confiança ${index + 1}`}
-                        value={point}
-                        onChange={(event) => updateTrustPoint(index, event.target.value)}
-                      />
+                      <div key={index} className="flex items-end gap-3">
+                        <div className="min-w-0 flex-1"><FormField id={`trust-point-${activeLocale}-${index}`} name={`trustPoint-${activeLocale}-${index}`} label={locale === "en" ? `Trust point ${index + 1}` : `Ponto de confiança ${index + 1}`} value={point} onChange={(event) => updateTrustPoint(index, event.target.value)} /></div>
+                        <Button type="button" variant="outline" size="icon" className="shrink-0" onClick={() => removeTrustPoint(index)} aria-label={locale === "en" ? "Remove trust point" : "Remover ponto de confiança"}><Trash2 className="h-4 w-4" /></Button>
+                      </div>
                     ))}
+                    <Button type="button" variant="outline" className="w-fit rounded-full" onClick={addTrustPoint}>
+                      <Plus className="h-4 w-4" />
+                      {locale === "en" ? "Add trust point" : "Adicionar ponto de confiança"}
+                    </Button>
                   </div>
                 </section>
 

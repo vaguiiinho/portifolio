@@ -5,17 +5,17 @@ import { AlertCircle, CheckCircle2, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FadeIn } from "@/components/ui/fade-in"
 import { FormField } from "@/components/ui/form-field"
-import { getContactContent } from "@/lib/content/localized"
 import type { Locale } from "@/lib/locale"
+import type { ContactContent } from "@/lib/site-content"
 import { useContact } from "@/hooks/use-contact"
 import { trackStatsEvent } from "@/lib/analytics"
 
 interface ContactFormProps {
   locale: Locale
+  content: ContactContent
 }
 
-export function ContactForm({ locale }: ContactFormProps) {
-  const contactContent = getContactContent(locale)
+export function ContactForm({ locale, content: contactContent }: ContactFormProps) {
   const [statusMessage, setStatusMessage] = useState<string | null>(null)
   const { submitContact, isSubmitting, error, success } = useContact()
 

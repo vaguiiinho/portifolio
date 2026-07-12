@@ -11,6 +11,7 @@ import { siteDefaults } from "@/lib/site-config"
 import { MetricBeacon } from "@/components/portfolio/metric-beacon"
 import { getLocale } from "@/lib/locale-server"
 import { getResumeContent, getResumePageContent } from "@/lib/content/localized"
+import { hasServicesContent } from "@/lib/site-content"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
@@ -34,11 +35,12 @@ export default async function ResumePage() {
   const locale = await getLocale()
   const resumePageContent = getResumePageContent(locale)
   const resumeContent = getResumeContent(locale)
+  const showServices = hasServicesContent(config.servicesContent, locale)
 
   return (
     <main className="relative">
       <MetricBeacon eventKey="page:resume" />
-      <Navbar siteName={config.siteName} locale={locale} />
+      <Navbar siteName={config.siteName} locale={locale} showServices={showServices} />
 
       <section className="relative overflow-hidden pt-28 pb-20 sm:pt-32 sm:pb-24">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(84,130,255,0.16),_transparent_45%),radial-gradient(circle_at_bottom_right,_rgba(255,255,255,0.06),_transparent_30%)]" />

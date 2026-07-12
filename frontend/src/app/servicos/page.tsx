@@ -10,6 +10,8 @@ import { fetchSiteConfig } from "@/lib/site-config"
 import { routeCtaContent } from "@/lib/content"
 import { getLocale } from "@/lib/locale-server"
 import { getServicesContent } from "@/lib/content/localized"
+import { notFound } from "next/navigation"
+import { hasServicesContent } from "@/lib/site-content"
 
 export async function generateMetadata(): Promise<Metadata> {
   const config = await fetchSiteConfig()
@@ -28,6 +30,8 @@ export default async function ServicesPage() {
   const config = await fetchSiteConfig()
   const locale = await getLocale()
   const servicesPageContent = getServicesContent(locale)
+
+  if (!hasServicesContent(config.servicesContent, locale)) notFound()
 
   return (
     <PortfolioRouteShell siteName={config.siteName} locale={locale} pageMetricKey="page:services">

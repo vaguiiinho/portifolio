@@ -7,11 +7,12 @@ interface MobileNavProps {
   isOpen: boolean
   onClose: () => void
   locale: Locale
+  showServices?: boolean
 }
 
-export function MobileNav({ isOpen, onClose, locale }: MobileNavProps) {
+export function MobileNav({ isOpen, onClose, locale, showServices = true }: MobileNavProps) {
   if (!isOpen) return null
-  const navLinks = getNavLinks(locale)
+  const navLinks = getNavLinks(locale).filter((link) => showServices || link.href !== "/servicos")
 
   return (
     <motion.div
