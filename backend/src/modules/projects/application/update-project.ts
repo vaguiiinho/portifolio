@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Project } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
+import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 
 export interface UpdateProjectInput {
   id: string;
@@ -22,7 +23,7 @@ export interface UpdateProjectInput {
 @Injectable()
 export class UpdateProject {
   constructor(
-    @Inject('IProjectRepository')
+    @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: IProjectRepository,
   ) {}
 

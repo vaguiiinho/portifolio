@@ -4,6 +4,7 @@ import type { IUserRepository } from '../domain/repositories/i-user-repository';
 import type { IPasswordHasher } from '../domain/services/i-password-hasher';
 import type { ITokenService } from '../domain/services/i-token-service';
 import { toUserResult, UserResult } from './user-result';
+import { PASSWORD_HASHER, TOKEN_SERVICE, USER_REPOSITORY } from '../../../shared/domain/tokens';
 
 export interface LoginInput {
   email: string;
@@ -18,11 +19,11 @@ export interface LoginResult {
 @Injectable()
 export class Login {
   constructor(
-    @Inject('IUserRepository')
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
-    @Inject('IPasswordHasher')
+    @Inject(PASSWORD_HASHER)
     private readonly passwordHasher: IPasswordHasher,
-    @Inject('ITokenService')
+    @Inject(TOKEN_SERVICE)
     private readonly tokenService: ITokenService,
   ) {}
 

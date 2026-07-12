@@ -1,10 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
+import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 
 @Injectable()
 export class DeleteProject {
   constructor(
-    @Inject('IProjectRepository')
+    @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: IProjectRepository,
   ) {}
 

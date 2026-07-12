@@ -7,6 +7,7 @@ import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Config } from '../domain/entities/config';
 import type { SiteContent } from '../domain/entities/site-content';
+import { TOKEN_SERVICE } from '../../../shared/domain/tokens';
 
 describe('ConfigController', () => {
   let controller: ConfigController;
@@ -29,7 +30,7 @@ describe('ConfigController', () => {
       providers: [
         { provide: GetConfig, useValue: mockGet },
         { provide: UpdateConfig, useValue: mockUpdate },
-        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: TOKEN_SERVICE, useValue: mockTokenService },
         { provide: Reflector, useValue: mockReflector },
         AuthGuard,
         RolesGuard,

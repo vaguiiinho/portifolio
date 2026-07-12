@@ -1,6 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Stats } from '../domain/entities/stats';
 import type { IStatsRepository } from '../domain/repositories/i-stats-repository';
+import { STATS_REPOSITORY } from '../../../shared/domain/tokens';
 
 export interface UpdateStatsInput {
   projectsCount?: number;
@@ -10,7 +11,7 @@ export interface UpdateStatsInput {
 @Injectable()
 export class UpdateStats {
   constructor(
-    @Inject('IStatsRepository')
+    @Inject(STATS_REPOSITORY)
     private readonly statsRepository: IStatsRepository,
   ) {}
 

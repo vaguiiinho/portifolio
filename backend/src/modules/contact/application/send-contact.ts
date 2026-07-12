@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Contact } from '../domain/entities/contact';
 import type { IContactRepository } from '../domain/repositories/i-contact-repository';
 import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
+import { CONTACT_REPOSITORY, ID_GENERATOR } from '../../../shared/domain/tokens';
 
 export interface SendContactInput {
   name: string;
@@ -12,9 +13,9 @@ export interface SendContactInput {
 @Injectable()
 export class SendContact {
   constructor(
-    @Inject('IContactRepository')
+    @Inject(CONTACT_REPOSITORY)
     private readonly contactRepository: IContactRepository,
-    @Inject('IIdGenerator') private readonly idGenerator: IIdGenerator,
+    @Inject(ID_GENERATOR) private readonly idGenerator: IIdGenerator,
   ) {}
 
   async execute(input: SendContactInput): Promise<Contact> {

@@ -1,11 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Project } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
+import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 
 @Injectable()
 export class ListProjects {
   constructor(
-    @Inject('IProjectRepository')
+    @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: IProjectRepository,
   ) {}
 

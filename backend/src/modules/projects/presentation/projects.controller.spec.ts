@@ -10,6 +10,7 @@ import { Project } from '../domain/entities/project';
 import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Reflector } from '@nestjs/core';
+import { PROJECT_REPOSITORY, TOKEN_SERVICE } from '../../../shared/domain/tokens';
 
 describe('ProjectsController', () => {
   let controller: ProjectsController;
@@ -46,8 +47,8 @@ describe('ProjectsController', () => {
         { provide: ListProjects, useValue: mockList },
         { provide: UpdateProject, useValue: mockUpdate },
         { provide: DeleteProject, useValue: mockDelete },
-        { provide: 'IProjectRepository', useValue: mockRepo },
-        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: PROJECT_REPOSITORY, useValue: mockRepo },
+        { provide: TOKEN_SERVICE, useValue: mockTokenService },
         { provide: Reflector, useValue: mockReflector },
         AuthGuard,
         RolesGuard,
@@ -59,7 +60,7 @@ describe('ProjectsController', () => {
     mockListProjects = module.get(ListProjects);
     mockUpdateProject = module.get(UpdateProject);
     mockDeleteProject = module.get(DeleteProject);
-    mockRepository = module.get('IProjectRepository');
+    mockRepository = module.get(PROJECT_REPOSITORY);
   });
 
   it('should be defined', () => {

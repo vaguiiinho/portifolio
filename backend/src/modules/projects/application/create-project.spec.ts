@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateProject } from './create-project';
+import { ID_GENERATOR, PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 import { Project } from '../domain/entities/project';
 import { IProjectRepository } from '../domain/repositories/i-project-repository';
 
@@ -21,18 +22,18 @@ describe('CreateProject', () => {
       providers: [
         CreateProject,
         {
-          provide: 'IProjectRepository',
+          provide: PROJECT_REPOSITORY,
           useValue: mockRepo,
         },
         {
-          provide: 'IIdGenerator',
+          provide: ID_GENERATOR,
           useValue: idGenerator,
         },
       ],
     }).compile();
 
     service = module.get<CreateProject>(CreateProject);
-    mockRepository = module.get('IProjectRepository');
+    mockRepository = module.get(PROJECT_REPOSITORY);
   });
 
   it('should be defined', () => {

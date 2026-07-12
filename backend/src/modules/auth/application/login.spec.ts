@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UnauthorizedException } from '@nestjs/common';
 import { Login } from './login';
+import { PASSWORD_HASHER, TOKEN_SERVICE, USER_REPOSITORY } from '../../../shared/domain/tokens';
 import { User, UserRole } from '../domain/entities/user';
 import type { IUserRepository } from '../domain/repositories/i-user-repository';
 import type { IPasswordHasher } from '../domain/services/i-password-hasher';
@@ -30,16 +31,16 @@ describe('Login', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         Login,
-        { provide: 'IUserRepository', useValue: mockUserRepository },
-        { provide: 'IPasswordHasher', useValue: mockPasswordHasher },
-        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: USER_REPOSITORY, useValue: mockUserRepository },
+        { provide: PASSWORD_HASHER, useValue: mockPasswordHasher },
+        { provide: TOKEN_SERVICE, useValue: mockTokenService },
       ],
     }).compile();
 
     service = module.get(Login);
-    userRepository = module.get('IUserRepository');
-    passwordHasher = module.get('IPasswordHasher');
-    tokenService = module.get('ITokenService');
+    userRepository = module.get(USER_REPOSITORY);
+    passwordHasher = module.get(PASSWORD_HASHER);
+    tokenService = module.get(TOKEN_SERVICE);
   });
 
   it('should authenticate a valid administrator', async () => {

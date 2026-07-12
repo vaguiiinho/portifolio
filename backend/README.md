@@ -22,6 +22,15 @@ docker compose exec api npm run test
 docker compose exec api npm run test:e2e
 ```
 
+Os testes de integração usam Testcontainers e precisam de acesso ao daemon Docker. Execute-os no estágio `build` da imagem:
+
+```bash
+docker build --target build -t portifolio-api-test ./backend
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --entrypoint npm portifolio-api-test run test
+```
+
+No Docker Desktop com WSL, adicione `-e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal` se o PostgreSQL de teste não puder ser acessado.
+
 ## Primeiro administrador
 
 Defina `DATABASE_URL`, `ADMIN_EMAIL` e `ADMIN_PASSWORD` no ambiente do backend

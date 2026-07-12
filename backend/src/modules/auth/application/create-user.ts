@@ -4,6 +4,7 @@ import { PlainPassword } from '../domain/value-objects';
 import type { IUserRepository } from '../domain/repositories/i-user-repository';
 import type { IPasswordHasher } from '../domain/services/i-password-hasher';
 import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
+import { ID_GENERATOR, PASSWORD_HASHER, USER_REPOSITORY } from '../../../shared/domain/tokens';
 import { toUserResult, UserResult } from './user-result';
 
 export interface CreateUserInput {
@@ -15,11 +16,11 @@ export interface CreateUserInput {
 @Injectable()
 export class CreateUser {
   constructor(
-    @Inject('IUserRepository')
+    @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
-    @Inject('IPasswordHasher')
+    @Inject(PASSWORD_HASHER)
     private readonly passwordHasher: IPasswordHasher,
-    @Inject('IIdGenerator') private readonly idGenerator: IIdGenerator,
+    @Inject(ID_GENERATOR) private readonly idGenerator: IIdGenerator,
   ) {}
 
   async execute(input: CreateUserInput): Promise<UserResult> {

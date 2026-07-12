@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Config } from '../domain/entities/config';
 import type { SiteContent } from '../domain/entities/site-content';
 import type { IConfigRepository } from '../domain/repositories/i-config-repository';
+import { CONFIG_REPOSITORY } from '../../../shared/domain/tokens';
 
 export interface UpdateConfigInput {
   siteName?: string;
@@ -14,7 +15,7 @@ export interface UpdateConfigInput {
 @Injectable()
 export class UpdateConfig {
   constructor(
-    @Inject('IConfigRepository')
+    @Inject(CONFIG_REPOSITORY)
     private readonly configRepository: IConfigRepository,
   ) {}
 

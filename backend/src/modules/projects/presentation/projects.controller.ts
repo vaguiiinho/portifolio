@@ -27,6 +27,7 @@ import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Roles } from '../../auth/presentation/decorators/roles.decorator';
 import { UserRole } from '../../auth/domain/entities/user';
+import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 
 const MAX_VIDEO_SIZE = 50 * 1024 * 1024;
 
@@ -37,7 +38,7 @@ export class ProjectsController {
     private readonly listProjects: ListProjects,
     private readonly updateProject: UpdateProject,
     private readonly deleteProject: DeleteProject,
-    @Inject('IProjectRepository')
+    @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: IProjectRepository,
   ) {}
 

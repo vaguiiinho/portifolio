@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SendContact } from './send-contact';
+import { CONTACT_REPOSITORY, ID_GENERATOR } from '../../../shared/domain/tokens';
 import { Contact } from '../domain/entities/contact';
 import { IContactRepository } from '../domain/repositories/i-contact-repository';
 
@@ -21,18 +22,18 @@ describe('SendContact', () => {
       providers: [
         SendContact,
         {
-          provide: 'IContactRepository',
+          provide: CONTACT_REPOSITORY,
           useValue: mockRepo,
         },
         {
-          provide: 'IIdGenerator',
+          provide: ID_GENERATOR,
           useValue: idGenerator,
         },
       ],
     }).compile();
 
     service = module.get<SendContact>(SendContact);
-    mockRepository = module.get('IContactRepository');
+    mockRepository = module.get(CONTACT_REPOSITORY);
   });
 
   it('should be defined', () => {

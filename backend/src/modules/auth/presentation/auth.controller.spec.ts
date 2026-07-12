@@ -4,6 +4,7 @@ import { Login } from '../application/login';
 import { CreateUser } from '../application/create-user';
 import { AuthGuard } from './guards/auth.guard';
 import { EnvironmentService } from '../../../shared/config';
+import { TOKEN_SERVICE } from '../../../shared/domain/tokens';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -32,7 +33,7 @@ describe('AuthController', () => {
       providers: [
         { provide: Login, useValue: mockLogin },
         { provide: CreateUser, useValue: mockCreateUser },
-        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: TOKEN_SERVICE, useValue: mockTokenService },
         {
           provide: EnvironmentService,
           useValue: {

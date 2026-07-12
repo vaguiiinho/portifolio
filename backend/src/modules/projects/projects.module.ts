@@ -7,6 +7,7 @@ import { DeleteProject } from './application/delete-project';
 import { ProjectPrismaRepository } from './infrastructure/repositories/project-prisma-repository';
 import { AuthModule } from '../auth/auth.module';
 import { IdentifiersModule } from '../../shared/infrastructure';
+import { PROJECT_REPOSITORY } from '../../shared/domain/tokens';
 
 @Module({
   imports: [AuthModule, IdentifiersModule],
@@ -17,7 +18,7 @@ import { IdentifiersModule } from '../../shared/infrastructure';
     UpdateProject,
     DeleteProject,
     {
-      provide: 'IProjectRepository',
+      provide: PROJECT_REPOSITORY,
       useClass: ProjectPrismaRepository,
     },
   ],

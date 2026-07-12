@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UpdateProject } from './update-project';
+import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 import { Project } from '../domain/entities/project';
 import { IProjectRepository } from '../domain/repositories/i-project-repository';
 
@@ -20,14 +21,14 @@ describe('UpdateProject', () => {
       providers: [
         UpdateProject,
         {
-          provide: 'IProjectRepository',
+          provide: PROJECT_REPOSITORY,
           useValue: mockRepo,
         },
       ],
     }).compile();
 
     service = module.get<UpdateProject>(UpdateProject);
-    mockRepository = module.get('IProjectRepository');
+    mockRepository = module.get(PROJECT_REPOSITORY);
   });
 
   it('should be defined', () => {

@@ -71,8 +71,8 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ### Contratos e dependências
 
-- [ ] Centralizar tokens de injeção em constantes `Symbol`, substituindo strings como `'IUserRepository'`.
-- [ ] Impedir imports de `infrastructure` dentro de `domain` com regra de lint ou teste arquitetural.
+- [x] Centralizar tokens de injeção em constantes `Symbol`, substituindo strings como `'IUserRepository'`.
+- [x] Impedir imports de `infrastructure` dentro de `domain` com regra de lint ou teste arquitetural.
 - [ ] Manter interfaces de repositório no domínio e implementações Prisma na infraestrutura.
 - [ ] Manter DTOs somente na apresentação; use cases devem receber inputs próprios da aplicação.
 - [ ] Definir tipos de saída próprios para cada use case, como `CreateUserResult` e `ListProjectsResult`.
@@ -94,8 +94,8 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ## Prioridade média — Testes e qualidade
 
-- [ ] Corrigir o setup de Testcontainers para testes de integração em ambiente com Docker disponível.
-- [ ] Evitar falhas secundárias no `afterAll` quando um container de teste não iniciar.
+- [x] Corrigir o setup de Testcontainers para testes de integração em ambiente com Docker disponível.
+- [x] Evitar falhas secundárias no `afterAll` quando um container de teste não iniciar.
 - [ ] Cobrir `POST /auth/users`: sem token, visitante, administrador, payload inválido e e-mail duplicado.
 - [ ] Cobrir seed: criação inicial, idempotência e falha sem variáveis obrigatórias.
 - [ ] Criar testes de repositórios após migração para métodos tipados do Prisma.

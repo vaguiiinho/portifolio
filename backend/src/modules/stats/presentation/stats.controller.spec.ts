@@ -7,6 +7,7 @@ import { Stats } from '../domain/entities/stats';
 import { AuthGuard } from '../../auth/presentation/guards/auth.guard';
 import { RolesGuard } from '../../auth/presentation/guards/roles.guard';
 import { Reflector } from '@nestjs/core';
+import { TOKEN_SERVICE } from '../../../shared/domain/tokens';
 
 describe('StatsController', () => {
   let controller: StatsController;
@@ -32,7 +33,7 @@ describe('StatsController', () => {
         { provide: GetStats, useValue: mockGet },
         { provide: UpdateStats, useValue: mockUpdate },
         { provide: TrackStatsEvent, useValue: mockTrack },
-        { provide: 'ITokenService', useValue: mockTokenService },
+        { provide: TOKEN_SERVICE, useValue: mockTokenService },
         { provide: Reflector, useValue: mockReflector },
         AuthGuard,
         RolesGuard,

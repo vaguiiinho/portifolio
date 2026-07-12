@@ -41,8 +41,13 @@ describe('ProjectPrismaRepository (Integration)', () => {
   }, 60000); // Increase timeout for container startup
 
   afterAll(async () => {
-    await prismaService.$disconnect();
-    await container.stop();
+    if (prismaService) {
+      await prismaService.$disconnect();
+    }
+
+    if (container) {
+      await container.stop();
+    }
   });
 
   beforeEach(async () => {

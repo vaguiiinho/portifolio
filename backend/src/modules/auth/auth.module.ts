@@ -8,6 +8,7 @@ import { JwtTokenService } from './infrastructure/services/jwt-token.service';
 import { AuthGuard } from './presentation/guards/auth.guard';
 import { RolesGuard } from './presentation/guards/roles.guard';
 import { IdentifiersModule } from '../../shared/infrastructure';
+import { PASSWORD_HASHER, TOKEN_SERVICE, USER_REPOSITORY } from '../../shared/domain/tokens';
 
 @Module({
   imports: [IdentifiersModule],
@@ -18,18 +19,18 @@ import { IdentifiersModule } from '../../shared/infrastructure';
     AuthGuard,
     RolesGuard,
     {
-      provide: 'IUserRepository',
+      provide: USER_REPOSITORY,
       useClass: UserPrismaRepository,
     },
     {
-      provide: 'IPasswordHasher',
+      provide: PASSWORD_HASHER,
       useClass: PasswordHasherService,
     },
     {
-      provide: 'ITokenService',
+      provide: TOKEN_SERVICE,
       useClass: JwtTokenService,
     },
   ],
-  exports: [AuthGuard, RolesGuard, 'ITokenService'],
+  exports: [AuthGuard, RolesGuard, TOKEN_SERVICE],
 })
 export class AuthModule {}

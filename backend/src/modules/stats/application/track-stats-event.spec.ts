@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TrackStatsEvent } from './track-stats-event';
+import { STATS_REPOSITORY } from '../../../shared/domain/tokens';
 import { Stats } from '../domain/entities/stats';
 import { IStatsRepository } from '../domain/repositories/i-stats-repository';
 
@@ -18,14 +19,14 @@ describe('TrackStatsEvent', () => {
       providers: [
         TrackStatsEvent,
         {
-          provide: 'IStatsRepository',
+          provide: STATS_REPOSITORY,
           useValue: mockRepo,
         },
       ],
     }).compile();
 
     service = module.get<TrackStatsEvent>(TrackStatsEvent);
-    mockRepository = module.get('IStatsRepository');
+    mockRepository = module.get(STATS_REPOSITORY);
   });
 
   it('should track event', async () => {

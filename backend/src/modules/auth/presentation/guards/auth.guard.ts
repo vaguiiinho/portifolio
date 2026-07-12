@@ -7,11 +7,12 @@ import {
 } from '@nestjs/common';
 import type { Request } from 'express';
 import type { ITokenService } from '../../domain/services/i-token-service';
+import { TOKEN_SERVICE } from '../../../../shared/domain/tokens';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    @Inject('ITokenService')
+    @Inject(TOKEN_SERVICE)
     private readonly tokenService: ITokenService,
   ) {}
 

@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Project } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
 import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
+import { ID_GENERATOR, PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 
 export interface CreateProjectInput {
   title: string;
@@ -22,9 +23,9 @@ export interface CreateProjectInput {
 @Injectable()
 export class CreateProject {
   constructor(
-    @Inject('IProjectRepository')
+    @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: IProjectRepository,
-    @Inject('IIdGenerator') private readonly idGenerator: IIdGenerator,
+    @Inject(ID_GENERATOR) private readonly idGenerator: IIdGenerator,
   ) {}
 
   async execute(input: CreateProjectInput): Promise<Project> {
