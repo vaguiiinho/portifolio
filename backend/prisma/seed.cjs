@@ -6,28 +6,6 @@ const { PrismaPg } = require('@prisma/adapter-pg');
 const { PrismaClient } = require('../dist/src/generated/prisma/client');
 
 const scrypt = promisify(scryptCallback);
-const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-const password = process.env.ADMIN_PASSWORD;
-const databaseUrl = process.env.DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error('DATABASE_URL must be defined to seed the administrator');
-}
-
-if (!email || !password) {
-  throw new Error(
-    'Set ADMIN_EMAIL and ADMIN_PASSWORD before creating the initial administrator',
-  );
-}
-
-if (password.length < 6) {
-  throw new Error('ADMIN_PASSWORD must contain at least 6 characters');
-}
-
-const prisma = new PrismaClient({
-  adapter: new PrismaPg({ connectionString: databaseUrl }),
-});
-
 async function hashPassword(value) {
   const salt = randomBytes(16).toString('hex');
   const derivedKey = await scrypt(value, salt, 64);
@@ -35,7 +13,28 @@ async function hashPassword(value) {
   return `${salt}:${derivedKey.toString('hex')}`;
 }
 
-async function main() {
+function administratorEnvironment(env) {
+  const email = env.ADMIN_EMAIL?.trim().toLowerCase();
+  const password = env.ADMIN_PASSWORD;
+  const databaseUrl = env.DATABASE_URL;
+
+  if (!databaseUrl) {
+    throw new Error('DATABASE_URL must be defined to seed the administrator');
+  }
+  if (!email || !password) {
+    throw new Error(
+      'Set ADMIN_EMAIL and ADMIN_PASSWORD before creating the initial administrator',
+    );
+  }
+  if (password.length < 6) {
+    throw new Error('ADMIN_PASSWORD must contain at least 6 characters');
+  }
+
+  return { email, password, databaseUrl };
+}
+
+async function seedAdministrator(prisma, env = process.env, log = console.log) {
+  const { email, password } = administratorEnvironment(env);
   await prisma.user.upsert({
     where: { email },
     update: {},
@@ -46,14 +45,27 @@ async function main() {
     },
   });
 
-  console.log(`Administrator ${email} is ready.`);
+  log(`Administrator ${email} is ready.`);
 }
 
-main()
-  .catch((error) => {
+async function main() {
+  const { databaseUrl } = administratorEnvironment(process.env);
+  const prisma = new PrismaClient({
+    adapter: new PrismaPg({ connectionString: databaseUrl }),
+  });
+
+  try {
+    await seedAdministrator(prisma);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+if (require.main === module) {
+  main().catch((error) => {
     console.error(error);
     process.exitCode = 1;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });
+}
+
+module.exports = { administratorEnvironment, seedAdministrator };
