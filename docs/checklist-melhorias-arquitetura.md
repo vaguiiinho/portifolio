@@ -83,8 +83,8 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 
 ## Prioridade média — API e frontend
 
-- [ ] Separar `frontend/src/lib/api.ts` por domínio: `auth`, `projects`, `config`, `stats` e `contact`.
-- [ ] Centralizar cliente HTTP e tratamento de `401`, `403`, `409` e `500`.
+- [x] Separar `frontend/src/lib/api.ts` por domínio: `auth`, `projects`, `config`, `stats` e `contact`.
+- [x] Centralizar cliente HTTP e tratamento de `401`, `403`, `409` e `500`.
 - [ ] Adicionar feedback visual padronizado para loading, sucesso e erro nas mutações administrativas.
 - [x] Proteger a rota `/admin` antecipadamente com middleware baseado na presença da sessão.
 - [ ] Manter o backend como fonte final de autorização, mesmo com proteção no frontend.
