@@ -64,7 +64,7 @@ Este documento organiza melhorias para evoluir o projeto sem perder a simplicida
 - [x] Criar `Email` como Value Object: normalização, validação e comparação devem ficar em um único lugar.
 - [x] Criar `PlainPassword` como Value Object para validar política mínima antes do hash.
 - [x] Criar `PasswordHash` como Value Object para impedir persistência de hash vazio ou malformado.
-- [ ] Criar `ProjectUrl`/`ExternalUrl` se a validação de GitHub, demo e vídeo se repetir.
+- [x] Criar `ProjectUrl`/`ExternalUrl` se a validação de GitHub, demo e vídeo se repetir.
 - [x] Criar `TechStack` como Value Object se houver regras de tamanho, duplicidade ou normalização de tecnologias.
 - [ ] Criar `LocalizedContent` como Value Object se a estrutura multilíngue continuar crescendo.
 - [ ] Evitar criar Value Objects para campos simples sem regra própria; o objetivo é encapsular comportamento, não aumentar quantidade de arquivos.

@@ -70,6 +70,17 @@ describe('Project', () => {
     expect(project.liveUrl).toBe(newLiveUrl);
   });
 
+  it('should normalize and validate project URLs', () => {
+    project.updateGithubUrl(' https://github.com/updated ');
+    project.updateVideoUrl('https://example.com/demo.mp4');
+
+    expect(project.githubUrl).toBe('https://github.com/updated');
+    expect(project.videoUrl).toBe('https://example.com/demo.mp4');
+    expect(() => project.updateLiveUrl('ftp://example.com')).toThrow(
+      'Project external URL must be a valid HTTP(S) URL',
+    );
+  });
+
   it('should update featured', () => {
     project.updateFeatured(true);
     expect(project.featured).toBe(true);

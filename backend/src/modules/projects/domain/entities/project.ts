@@ -52,11 +52,11 @@ export class Project {
     this._title = this.required(title, 'Project title');
     this._description = this.required(description, 'Project description');
     this._techStack = this.normalizeTechStack(techStack);
-    this._githubUrl = githubUrl;
-    this._liveUrl = liveUrl;
+    this._githubUrl = ProjectUrl.external(githubUrl);
+    this._liveUrl = ProjectUrl.external(liveUrl);
     this._createdAt = createdAt;
     this._featured = featured;
-    this._videoUrl = videoUrl;
+    this._videoUrl = ProjectUrl.video(videoUrl);
     this._problemTitle = problemTitle;
     this._problemDescription = problemDescription;
     this._solutionTitle = solutionTitle;
@@ -138,15 +138,15 @@ export class Project {
   }
 
   updateGithubUrl(githubUrl: string): void {
-    this._githubUrl = githubUrl;
+    this._githubUrl = ProjectUrl.external(githubUrl);
   }
 
   updateLiveUrl(liveUrl: string): void {
-    this._liveUrl = liveUrl;
+    this._liveUrl = ProjectUrl.external(liveUrl);
   }
 
   updateVideoUrl(videoUrl?: string): void {
-    this._videoUrl = videoUrl;
+    this._videoUrl = ProjectUrl.video(videoUrl);
   }
 
   updateProblemTitle(problemTitle?: string): void {
@@ -241,4 +241,4 @@ export class Project {
     return TechStack.create(techStack).toArray();
   }
 }
-import { TechStack } from '../value-objects';
+import { ProjectUrl, TechStack } from '../value-objects';
