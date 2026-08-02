@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowRight, BarChart3, FolderGit2, LogOut, ShieldCheck, Sparkles, Users, CheckCircle2 } from "lucide-react"
+import { ArrowRight, BarChart3, FolderGit2, LogOut, ShieldCheck, Sparkles, Users, CheckCircle2, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "./auth-provider"
 import { portfolioRoutes } from "@/lib/routes"
@@ -15,6 +15,7 @@ import type { ApiStats } from "@/lib/api"
 import { Container } from "@/components/portfolio/container"
 import type { Project } from "@/components/portfolio/project-card"
 import type { SiteConfig } from "@/lib/site-config"
+import { getApiBaseUrl } from "@/lib/api-base-url"
 
 interface AdminDashboardProps {
   locale: Locale
@@ -45,6 +46,15 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
   const [isConfigEditorOpen, setIsConfigEditorOpen] = useState(false)
   const [isContentEditorOpen, setIsContentEditorOpen] = useState(false)
   const [isContactEditorOpen, setIsContactEditorOpen] = useState(false)
+  const [resumeError, setResumeError] = useState<string | null>(null)
+
+  async function uploadResume(file: File | undefined) {
+    if (!file) return
+    const formData = new FormData()
+    formData.append("file", file)
+    const response = await fetch(`${getApiBaseUrl()}/config/resume`, { method: "POST", credentials: "include", body: formData })
+    setResumeError(response.ok ? null : (locale === "en" ? "Unable to upload resume." : "Não foi possível enviar o currículo."))
+  }
   const isClient = useSyncExternalStore(
     () => () => {},
     () => true,
@@ -237,8 +247,14 @@ export function AdminDashboard({ locale, siteConfig, stats, projects }: AdminDas
                   <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => setIsContactEditorOpen(true)}>
                     {locale === "en" ? "Edit contact" : "Editar contato"}
                   </Button>
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-3 py-2 text-xs font-medium hover:bg-secondary">
+                    <Upload className="h-3.5 w-3.5" />
+                    {locale === "en" ? "Upload resume" : "Enviar currículo"}
+                    <input type="file" accept="application/pdf" className="sr-only" onChange={(event) => void uploadResume(event.target.files?.[0])} />
+                  </label>
                 </div>
               </div>
+              {resumeError && <p className="mt-3 text-xs text-destructive">{resumeError}</p>}
               <div className="mt-2 font-medium">{siteConfig.siteName}</div>
               <p className="mt-2 text-sm text-muted-foreground">{siteConfig.description}</p>
             </div>

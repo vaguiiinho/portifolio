@@ -1,4 +1,8 @@
-import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { mkdir, writeFile } from 'fs/promises';
+import { join } from 'path';
+import type { File as MulterFile } from 'multer';
 import { GetConfig } from '../application/get-config';
 import { UpdateConfig } from '../application/update-config';
 import { UpdateConfigDto } from './dtos';
@@ -25,5 +29,19 @@ export class ConfigController {
   @Roles(UserRole.administrador)
   async update(@Body() dto: UpdateConfigDto) {
     return toConfigResponse(await this.updateConfig.execute(dto));
+  }
+
+  @Post('resume')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(UserRole.administrador)
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }))
+  async uploadResume(@UploadedFile() file?: MulterFile) {
+    if (!file || file.mimetype !== 'application/pdf') {
+      throw new BadRequestException('Envie um arquivo PDF de até 10 MB');
+    }
+    const directory = join(process.cwd(), 'uploads', 'resume');
+    await mkdir(directory, { recursive: true });
+    await writeFile(join(directory, 'curriculo.pdf'), file.buffer);
+    return { resumeUrl: '/uploads/resume/curriculo.pdf' };
   }
 }
