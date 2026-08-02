@@ -24,6 +24,7 @@ export interface Project {
   solutionDescription?: string
   resultTitle?: string
   resultDescription?: string
+  captions?: { pt?: string; en?: string }
   featured?: boolean
 }
 

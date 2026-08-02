@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
 import { PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
 import { ProjectResult, toProjectResult } from './project-result';
+import type { ProjectCaptions, ProjectLocalizedContent } from '../domain/entities/project';
 
 export interface UpdateProjectInput {
   id: string;
@@ -17,6 +18,8 @@ export interface UpdateProjectInput {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  localizedContent?: ProjectLocalizedContent;
+  captions?: ProjectCaptions;
   featured?: boolean;
 }
 

@@ -1,5 +1,5 @@
-import { Project as PrismaProject } from '../../../../generated/prisma/client';
-import { Project } from '../../domain/entities/project';
+import { Prisma, Project as PrismaProject } from '../../../../generated/prisma/client';
+import { Project, type ProjectCaptions, type ProjectLocalizedContent } from '../../domain/entities/project';
 
 export class ProjectPrismaMapper {
   static toDomain(project: PrismaProject): Project {
@@ -19,6 +19,8 @@ export class ProjectPrismaMapper {
       project.solutionDescription ?? undefined,
       project.resultTitle ?? undefined,
       project.resultDescription ?? undefined,
+      (project as PrismaProject & { localizedContent?: ProjectLocalizedContent }).localizedContent,
+      (project as PrismaProject & { captions?: ProjectCaptions }).captions,
     );
   }
 
@@ -37,6 +39,8 @@ export class ProjectPrismaMapper {
       solutionDescription: project.solutionDescription || null,
       resultTitle: project.resultTitle || null,
       resultDescription: project.resultDescription || null,
+      localizedContent: project.localizedContent ? (project.localizedContent as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
+      captions: project.captions ? (project.captions as unknown as Prisma.InputJsonValue) : Prisma.JsonNull,
       featured: project.featured,
       createdAt: project.createdAt,
     };

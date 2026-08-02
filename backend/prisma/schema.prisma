@@ -29,6 +29,8 @@ model Project {
   solutionDescription String?
   resultTitle        String?  @db.VarChar(255)
   resultDescription  String?
+  localizedContent   Json?
+  captions           Json?
   featured           Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

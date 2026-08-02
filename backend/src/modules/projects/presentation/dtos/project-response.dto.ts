@@ -1,3 +1,5 @@
+import type { ProjectCaptions, ProjectLocalizedContent } from '../../domain/entities/project';
+
 export interface ProjectResponseDto {
   id: string;
   title: string;
@@ -12,6 +14,8 @@ export interface ProjectResponseDto {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  localizedContent?: ProjectLocalizedContent;
+  captions?: ProjectCaptions;
   featured: boolean;
   createdAt: Date;
 }

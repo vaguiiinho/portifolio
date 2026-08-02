@@ -15,7 +15,7 @@ export async function ProjectsGallery({ allowCreate = false, locale }: ProjectsG
 
   try {
     const response = await fetchProjects()
-    projects = response.map(mapApiProjectToPortfolioProject)
+    projects = response.map((project) => mapApiProjectToPortfolioProject(project, locale))
   } catch (error) {
     errorMessage =
       error instanceof Error

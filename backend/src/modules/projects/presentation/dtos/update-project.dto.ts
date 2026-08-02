@@ -6,6 +6,7 @@ import {
   MinLength,
   Matches,
   IsBoolean,
+  IsObject,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
@@ -63,6 +64,13 @@ function parseBoolean(value: unknown): boolean | undefined {
   }
 
   return undefined;
+}
+
+function parseObject(value: unknown): Record<string, unknown> | undefined {
+  if (typeof value === 'string') {
+    try { return JSON.parse(value) as Record<string, unknown>; } catch { return undefined; }
+  }
+  return value && typeof value === 'object' ? value as Record<string, unknown> : undefined;
 }
 
 export class UpdateProjectDto {
@@ -134,4 +142,14 @@ export class UpdateProjectDto {
   @Transform(({ value }) => parseBoolean(value))
   @IsBoolean({ message: 'Featured must be a boolean' })
   featured?: boolean;
+
+  @IsOptional()
+  @Transform(({ value }) => parseObject(value))
+  @IsObject({ message: 'Localized content must be an object' })
+  localizedContent?: Record<string, unknown>;
+
+  @IsOptional()
+  @Transform(({ value }) => parseObject(value))
+  @IsObject({ message: 'Captions must be an object' })
+  captions?: Record<string, unknown>;
 }

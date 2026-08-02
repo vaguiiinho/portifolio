@@ -226,7 +226,7 @@ export function getAboutContent(locale: Locale) {
         subtitle:
           "I combine clean architecture, objective interfaces and iterative delivery to turn ideas into reliable products.",
         bio: [
-          "I'm João Silva, a Full Stack Developer focused on products that need to communicate value quickly, support growth and stay easy to evolve.",
+          "I'm Vagner Silva, a Full Stack Developer focused on web products, clear interfaces, reliable APIs and applied AI.",
           "I work with Next.js, TypeScript, NestJS and PostgreSQL to build journeys that simplify user decisions and reduce conversion friction.",
           "I prefer well-defined scopes, predictable deliveries and interfaces that make the next step clear for recruiters, clients and technical teams.",
         ],
@@ -237,7 +237,7 @@ export function getAboutContent(locale: Locale) {
         subtitle:
           "Combino arquitetura limpa, interfaces objetivas e entrega iterativa para transformar ideias em produtos confiáveis.",
         bio: [
-          `Sou João Silva, desenvolvedor Full Stack com foco em produtos que precisam comunicar valor rápido, sustentar crescimento e ser fáceis de evoluir.`,
+          `Sou Vagner Silva, desenvolvedor Full Stack com foco em produtos web, interfaces claras, APIs confiáveis e IA aplicada.`,
           `Trabalho com Next.js, TypeScript, NestJS e PostgreSQL para construir jornadas que simplificam a decisão do usuário e reduzem atrito na conversão.`,
           `Prefiro escopos bem definidos, entregas previsíveis e interfaces que deixam claro o próximo passo para recrutadores, clientes e times técnicos.`,
         ],
@@ -264,16 +264,7 @@ export function getContactContent(locale: Locale) {
             ctaLabel: "View resume",
             ctaHref: portfolioRoutes.resume,
             secondaryLabel: "LinkedIn",
-            secondaryHref: "https://linkedin.com/in/joaosilva",
-          },
-          {
-            title: "I'm a client",
-            description:
-              "I have an idea, a page or a product to launch with a focus on conversion and a clear scope.",
-            ctaLabel: "Request quote",
-            ctaHref: `${portfolioRoutes.contact}#contact-form`,
-            secondaryLabel: "WhatsApp",
-            secondaryHref: "https://wa.me/5500000000000",
+            secondaryHref: "https://www.linkedin.com/in/vagner-silv4/",
           },
         ],
         formLabels: {
@@ -308,16 +299,7 @@ export function getContactContent(locale: Locale) {
             ctaLabel: "Ver currículo",
             ctaHref: portfolioRoutes.resume,
             secondaryLabel: "LinkedIn",
-            secondaryHref: "https://linkedin.com/in/joaosilva",
-          },
-          {
-            title: "Sou cliente",
-            description:
-              "Tenho uma ideia, uma página ou um produto para colocar no ar com foco em conversão e clareza de escopo.",
-            ctaLabel: "Pedir orçamento",
-            ctaHref: `${portfolioRoutes.contact}#contact-form`,
-            secondaryLabel: "WhatsApp",
-            secondaryHref: "https://wa.me/5500000000000",
+            secondaryHref: "https://www.linkedin.com/in/vagner-silv4/",
           },
         ],
         formLabels: {
@@ -492,7 +474,7 @@ export function getResumeContent(locale: Locale) {
 export function getResumePdfContent(locale: Locale) {
   return locale === "en"
     ? {
-        title: "João Silva",
+        title: "Vagner Silva",
         subtitle: "Full Stack Developer",
         summaryTitle: "Summary",
         summary:
@@ -505,10 +487,10 @@ export function getResumePdfContent(locale: Locale) {
           "2021 - Present | Landing pages, dashboards, APIs and integrations",
         ],
         contactsTitle: "Contacts",
-        contacts: ["linkedin.com/in/joaosilva", "github.com/joaosilva", "hello@joaosilva.dev"],
+        contacts: ["linkedin.com/in/vagner-silv4"],
       }
     : {
-        title: "Joao Silva",
+        title: "Vagner Silva",
         subtitle: "Full Stack Developer",
         summaryTitle: "Resumo",
         summary: "Desenvolvedor focado em conversao, interfaces claras e backends modulares.",
@@ -520,7 +502,7 @@ export function getResumePdfContent(locale: Locale) {
           "2021 - Atual | Landing pages, dashboards, APIs e integracoes",
         ],
         contactsTitle: "Contatos",
-        contacts: ["linkedin.com/in/joaosilva", "github.com/joaosilva", "hello@joaosilva.dev"],
+        contacts: ["linkedin.com/in/vagner-silv4"],
       }
 }
 

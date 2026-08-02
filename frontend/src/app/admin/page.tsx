@@ -62,7 +62,7 @@ export default async function AdminPage() {
         locale={locale}
         siteConfig={siteConfig}
         stats={stats}
-        projects={projects.map(mapApiProjectToPortfolioProject)}
+              projects={projects.map((project) => mapApiProjectToPortfolioProject(project, locale))}
       />
     </PortfolioRouteShell>
   )

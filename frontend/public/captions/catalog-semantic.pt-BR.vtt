@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00.000 --> 00:10.000
+Este catálogo usa busca semântica para aproximar a intenção do visitante dos produtos disponíveis.
+
+00:10.000 --> 00:25.000
+A experiência pública combina busca, filtros e detalhes com contexto estruturado.
+
+00:25.000 --> 00:43.000
+No bastidor, o worker prepara documentos e embeddings para o PostgreSQL com pgvector.
+
+00:43.000 --> 01:00.000
+A arquitetura deixa a base pronta para respostas assistidas por RAG, sem esconder os limites do MVP.

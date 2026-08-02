@@ -14,17 +14,17 @@ import { IConfigRepository } from '../../domain/repositories/i-config-repository
 
 const DEFAULT_CONFIG = {
   id: '1',
-  siteName: 'João Silva',
+  siteName: 'Vagner Silva',
   description:
     'Full Stack Developer building scalable and modern applications.',
   aboutBio: {
     pt: [
-      'Sou João Silva, desenvolvedor Full Stack com foco em produtos que precisam comunicar valor rápido, sustentar crescimento e ser fáceis de evoluir.',
+      'Sou Vagner Silva, desenvolvedor Full Stack com foco em produtos web, interfaces claras, APIs confiáveis e IA aplicada.',
       'Trabalho com Next.js, TypeScript, NestJS e PostgreSQL para construir jornadas que simplificam a decisão do usuário e reduzem atrito na conversão.',
       'Prefiro escopos bem definidos, entregas previsíveis e interfaces que deixam claro o próximo passo para recrutadores, clientes e times técnicos.',
     ],
     en: [
-      "I'm João Silva, a Full Stack Developer focused on products that need to communicate value quickly, support growth and stay easy to evolve.",
+      "I'm Vagner Silva, a Full Stack Developer focused on web products, clear interfaces, reliable APIs and applied AI.",
       'I work with Next.js, TypeScript, NestJS and PostgreSQL to build journeys that simplify user decisions and reduce conversion friction.',
       'I prefer well-defined scopes, predictable deliveries and interfaces that make the next step clear for recruiters, clients and technical teams.',
     ],
@@ -167,16 +167,14 @@ const DEFAULT_CONFIG = {
     pt: {
       title: 'Pronto para conversar?', subtitle: 'Entre em contato com o contexto do seu projeto.', contactTitle: 'Canais diretos', contactDescription: 'Escolha o canal mais rápido para você.', contactNote: 'Informe contexto, prazo e objetivo para acelerar a resposta.',
       paths: [
-        { title: 'Sou recrutador', description: 'Quero conhecer seu histórico e currículo.', ctaLabel: 'Ver currículo', ctaHref: '/curriculo', secondaryLabel: 'LinkedIn', secondaryHref: 'https://linkedin.com/in/joaosilva' },
-        { title: 'Sou cliente', description: 'Quero conversar sobre um projeto.', ctaLabel: 'Pedir orçamento', ctaHref: '/contato#contact-form', secondaryLabel: 'WhatsApp', secondaryHref: 'https://wa.me/5500000000000' },
+        { title: 'Sou recrutador', description: 'Quero conhecer os cases e o currículo.', ctaLabel: 'Ver currículo', ctaHref: '/curriculo', secondaryLabel: 'LinkedIn', secondaryHref: 'https://www.linkedin.com/in/vagner-silv4/' },
       ],
       formLabels: { name: 'Nome', email: 'E-mail', subject: 'Assunto', message: 'Mensagem' }, formPlaceholders: { name: 'Seu nome', email: 'voce@empresa.com', subject: 'Landing page, dashboard ou API?', message: 'Conte brevemente o que você precisa entregar...' }, submitButton: 'Enviar mensagem', submittingText: 'Enviando...',
     },
     en: {
       title: 'Ready to talk?', subtitle: 'Get in touch with your project context.', contactTitle: 'Direct channels', contactDescription: 'Choose the fastest channel for you.', contactNote: 'Share the context, deadline and goal to speed up my reply.',
       paths: [
-        { title: "I'm a recruiter", description: 'I want to see your background and resume.', ctaLabel: 'View resume', ctaHref: '/curriculo', secondaryLabel: 'LinkedIn', secondaryHref: 'https://linkedin.com/in/joaosilva' },
-        { title: "I'm a client", description: 'I want to discuss a project.', ctaLabel: 'Request quote', ctaHref: '/contato#contact-form', secondaryLabel: 'WhatsApp', secondaryHref: 'https://wa.me/5500000000000' },
+        { title: "I'm a recruiter", description: 'I want to see the cases and resume.', ctaLabel: 'View resume', ctaHref: '/curriculo', secondaryLabel: 'LinkedIn', secondaryHref: 'https://www.linkedin.com/in/vagner-silv4/' },
       ],
       formLabels: { name: 'Name', email: 'Email', subject: 'Subject', message: 'Message' }, formPlaceholders: { name: 'Your name', email: 'you@company.com', subject: 'Landing page, dashboard or API?', message: 'Briefly tell me what you need to deliver...' }, submitButton: 'Send message', submittingText: 'Sending...',
     },

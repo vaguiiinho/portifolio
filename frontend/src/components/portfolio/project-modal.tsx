@@ -96,12 +96,10 @@ export function ProjectModal({ project, onClose, onEdit, onDelete, canManage = f
                       <h3 className="font-semibold">{locale === "en" ? "Presentation video" : "Vídeo de apresentação"}</h3>
                     </div>
                     <div className="overflow-hidden rounded-2xl border border-border bg-black">
-                      <video
-                        controls
-                        preload="metadata"
-                        className="aspect-video w-full"
-                        src={resolveMediaUrl(project.videoUrl)}
-                      />
+                      <video controls preload="metadata" className="aspect-video w-full" src={resolveMediaUrl(project.videoUrl)}>
+                        {project.captions?.pt && <track kind="subtitles" srcLang="pt-BR" label="Português" src={resolveMediaUrl(project.captions.pt)} default={locale === "pt"} />}
+                        {project.captions?.en && <track kind="subtitles" srcLang="en-US" label="English" src={resolveMediaUrl(project.captions.en)} default={locale === "en"} />}
+                      </video>
                     </div>
                   </div>
                 )}

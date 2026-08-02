@@ -66,6 +66,8 @@ export class ProjectsController {
   ) {
     return toProjectResponse(await this.createProject.execute({
       ...dto,
+      localizedContent: dto.localizedContent as never,
+      captions: dto.captions as never,
       videoUrl: this.resolveVideoUrl(dto.videoUrl, videoFile),
     }));
   }
@@ -88,6 +90,8 @@ export class ProjectsController {
     return toProjectResponse(await this.updateProject.execute({
       id,
       ...dto,
+      localizedContent: dto.localizedContent as never,
+      captions: dto.captions as never,
       videoUrl: this.resolveVideoUrl(dto.videoUrl, videoFile),
     }));
   }

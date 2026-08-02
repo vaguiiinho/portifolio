@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Project } from '../domain/entities/project';
+import type { ProjectCaptions, ProjectLocalizedContent } from '../domain/entities/project';
 import type { IProjectRepository } from '../domain/repositories/i-project-repository';
 import type { IIdGenerator } from '../../../shared/domain/services/i-id-generator';
 import { ID_GENERATOR, PROJECT_REPOSITORY } from '../../../shared/domain/tokens';
@@ -18,6 +19,8 @@ export interface CreateProjectInput {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  localizedContent?: ProjectLocalizedContent;
+  captions?: ProjectCaptions;
   featured?: boolean;
 }
 
@@ -49,6 +52,8 @@ export class CreateProject {
       input.solutionDescription,
       input.resultTitle,
       input.resultDescription,
+      input.localizedContent,
+      input.captions,
     );
 
     return toProjectResult(await this.projectRepository.create(project));

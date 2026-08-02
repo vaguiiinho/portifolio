@@ -45,6 +45,7 @@ export type ConfigCountAggregateOutputType = {
   aboutBio: number
   servicesContent: number
   testimonialsContent: number
+  contactContent: number
   updatedAt: number
   _all: number
 }
@@ -71,6 +72,7 @@ export type ConfigCountAggregateInputType = {
   aboutBio?: true
   servicesContent?: true
   testimonialsContent?: true
+  contactContent?: true
   updatedAt?: true
   _all?: true
 }
@@ -154,6 +156,7 @@ export type ConfigGroupByOutputType = {
   aboutBio: runtime.JsonValue
   servicesContent: runtime.JsonValue
   testimonialsContent: runtime.JsonValue
+  contactContent: runtime.JsonValue
   updatedAt: Date
   _count: ConfigCountAggregateOutputType | null
   _min: ConfigMinAggregateOutputType | null
@@ -185,6 +188,7 @@ export type ConfigWhereInput = {
   aboutBio?: Prisma.JsonFilter<"Config">
   servicesContent?: Prisma.JsonFilter<"Config">
   testimonialsContent?: Prisma.JsonFilter<"Config">
+  contactContent?: Prisma.JsonFilter<"Config">
   updatedAt?: Prisma.DateTimeFilter<"Config"> | Date | string
 }
 
@@ -195,6 +199,7 @@ export type ConfigOrderByWithRelationInput = {
   aboutBio?: Prisma.SortOrder
   servicesContent?: Prisma.SortOrder
   testimonialsContent?: Prisma.SortOrder
+  contactContent?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -208,6 +213,7 @@ export type ConfigWhereUniqueInput = Prisma.AtLeast<{
   aboutBio?: Prisma.JsonFilter<"Config">
   servicesContent?: Prisma.JsonFilter<"Config">
   testimonialsContent?: Prisma.JsonFilter<"Config">
+  contactContent?: Prisma.JsonFilter<"Config">
   updatedAt?: Prisma.DateTimeFilter<"Config"> | Date | string
 }, "id">
 
@@ -218,6 +224,7 @@ export type ConfigOrderByWithAggregationInput = {
   aboutBio?: Prisma.SortOrder
   servicesContent?: Prisma.SortOrder
   testimonialsContent?: Prisma.SortOrder
+  contactContent?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ConfigCountOrderByAggregateInput
   _max?: Prisma.ConfigMaxOrderByAggregateInput
@@ -234,6 +241,7 @@ export type ConfigScalarWhereWithAggregatesInput = {
   aboutBio?: Prisma.JsonWithAggregatesFilter<"Config">
   servicesContent?: Prisma.JsonWithAggregatesFilter<"Config">
   testimonialsContent?: Prisma.JsonWithAggregatesFilter<"Config">
+  contactContent?: Prisma.JsonWithAggregatesFilter<"Config">
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Config"> | Date | string
 }
 
@@ -244,6 +252,7 @@ export type ConfigCreateInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
@@ -254,6 +263,7 @@ export type ConfigUncheckedCreateInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
@@ -264,6 +274,7 @@ export type ConfigUpdateInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -274,6 +285,7 @@ export type ConfigUncheckedUpdateInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -284,6 +296,7 @@ export type ConfigCreateManyInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
@@ -294,6 +307,7 @@ export type ConfigUpdateManyMutationInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -304,6 +318,7 @@ export type ConfigUncheckedUpdateManyInput = {
   aboutBio?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   servicesContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   testimonialsContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  contactContent?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -314,6 +329,7 @@ export type ConfigCountOrderByAggregateInput = {
   aboutBio?: Prisma.SortOrder
   servicesContent?: Prisma.SortOrder
   testimonialsContent?: Prisma.SortOrder
+  contactContent?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -340,6 +356,7 @@ export type ConfigSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   aboutBio?: boolean
   servicesContent?: boolean
   testimonialsContent?: boolean
+  contactContent?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["config"]>
 
@@ -350,6 +367,7 @@ export type ConfigSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   aboutBio?: boolean
   servicesContent?: boolean
   testimonialsContent?: boolean
+  contactContent?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["config"]>
 
@@ -360,6 +378,7 @@ export type ConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   aboutBio?: boolean
   servicesContent?: boolean
   testimonialsContent?: boolean
+  contactContent?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["config"]>
 
@@ -370,10 +389,11 @@ export type ConfigSelectScalar = {
   aboutBio?: boolean
   servicesContent?: boolean
   testimonialsContent?: boolean
+  contactContent?: boolean
   updatedAt?: boolean
 }
 
-export type ConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "aboutBio" | "servicesContent" | "testimonialsContent" | "updatedAt", ExtArgs["result"]["config"]>
+export type ConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "siteName" | "description" | "aboutBio" | "servicesContent" | "testimonialsContent" | "contactContent" | "updatedAt", ExtArgs["result"]["config"]>
 
 export type $ConfigPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Config"
@@ -385,6 +405,7 @@ export type $ConfigPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     aboutBio: runtime.JsonValue
     servicesContent: runtime.JsonValue
     testimonialsContent: runtime.JsonValue
+    contactContent: runtime.JsonValue
     updatedAt: Date
   }, ExtArgs["result"]["config"]>
   composites: {}
@@ -815,6 +836,7 @@ export interface ConfigFieldRefs {
   readonly aboutBio: Prisma.FieldRef<"Config", 'Json'>
   readonly servicesContent: Prisma.FieldRef<"Config", 'Json'>
   readonly testimonialsContent: Prisma.FieldRef<"Config", 'Json'>
+  readonly contactContent: Prisma.FieldRef<"Config", 'Json'>
   readonly updatedAt: Prisma.FieldRef<"Config", 'DateTime'>
 }
     

@@ -21,13 +21,13 @@ export interface SiteConfig {
 }
 
 export const siteDefaults = {
-  domain: 'joaosilva.dev',
-  email: 'hello@joaosilva.dev',
-  github: 'https://github.com/joaosilva',
-  linkedin: 'https://linkedin.com/in/joaosilva',
-  siteName: 'João Silva',
+  domain: 'localhost:3000',
+  email: '',
+  github: '',
+  linkedin: 'https://www.linkedin.com/in/vagner-silv4/',
+  siteName: 'Vagner Silva',
   description:
-    'Full Stack Developer focado em conversão, portfólios, dashboards e APIs com arquitetura limpa.',
+    'Desenvolvedor Full Stack com foco em produtos web, APIs, integrações e IA aplicada.',
 }
 
 export async function fetchSiteConfig(): Promise<SiteConfig> {

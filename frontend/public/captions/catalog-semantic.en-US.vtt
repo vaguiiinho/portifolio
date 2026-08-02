@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00.000 --> 00:10.000
+This catalog uses semantic search to connect visitor intent with available products.
+
+00:10.000 --> 00:25.000
+The public experience combines search, filters and product details with structured context.
+
+00:25.000 --> 00:43.000
+Behind the scenes, a worker prepares documents and embeddings for PostgreSQL with pgvector.
+
+00:43.000 --> 01:00.000
+The architecture is ready for RAG-assisted answers while clearly stating the MVP limits.

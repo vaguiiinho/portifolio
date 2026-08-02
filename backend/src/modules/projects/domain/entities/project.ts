@@ -11,8 +11,24 @@ export interface ProjectDetails {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  localizedContent?: ProjectLocalizedContent;
+  captions?: ProjectCaptions;
   featured?: boolean;
 }
+
+export interface ProjectCaseContent {
+  title: string;
+  description: string;
+  problemTitle?: string;
+  problemDescription?: string;
+  solutionTitle?: string;
+  solutionDescription?: string;
+  resultTitle?: string;
+  resultDescription?: string;
+}
+
+export interface ProjectLocalizedContent { pt: ProjectCaseContent; en: ProjectCaseContent; }
+export interface ProjectCaptions { pt?: string; en?: string; }
 
 export class Project {
   private _id: string;
@@ -28,6 +44,8 @@ export class Project {
   private _solutionDescription?: string;
   private _resultTitle?: string;
   private _resultDescription?: string;
+  private _localizedContent?: ProjectLocalizedContent;
+  private _captions?: ProjectCaptions;
   private _featured: boolean;
   private _createdAt: Date;
 
@@ -47,6 +65,8 @@ export class Project {
     solutionDescription?: string,
     resultTitle?: string,
     resultDescription?: string,
+    localizedContent?: ProjectLocalizedContent,
+    captions?: ProjectCaptions,
   ) {
     this._id = this.required(id, 'Project id');
     this._title = this.required(title, 'Project title');
@@ -63,6 +83,8 @@ export class Project {
     this._solutionDescription = solutionDescription;
     this._resultTitle = resultTitle;
     this._resultDescription = resultDescription;
+    this._localizedContent = localizedContent;
+    this._captions = captions;
   }
 
   get id(): string {
@@ -116,6 +138,9 @@ export class Project {
   get resultDescription(): string | undefined {
     return this._resultDescription;
   }
+
+  get localizedContent(): ProjectLocalizedContent | undefined { return this._localizedContent; }
+  get captions(): ProjectCaptions | undefined { return this._captions; }
 
   get createdAt(): Date {
     return this._createdAt;
@@ -173,6 +198,9 @@ export class Project {
     this._resultDescription = resultDescription;
   }
 
+  updateLocalizedContent(localizedContent?: ProjectLocalizedContent): void { this._localizedContent = localizedContent; }
+  updateCaptions(captions?: ProjectCaptions): void { this._captions = captions; }
+
   updateFeatured(featured: boolean): void {
     this._featured = featured;
   }
@@ -206,6 +234,8 @@ export class Project {
     if (details.resultDescription !== undefined) {
       this.updateResultDescription(details.resultDescription);
     }
+    if (details.localizedContent !== undefined) this.updateLocalizedContent(details.localizedContent);
+    if (details.captions !== undefined) this.updateCaptions(details.captions);
     if (details.featured !== undefined) this.updateFeatured(details.featured);
   }
 
@@ -224,6 +254,8 @@ export class Project {
       solutionDescription: this.solutionDescription,
       resultTitle: this.resultTitle,
       resultDescription: this.resultDescription,
+      localizedContent: this.localizedContent,
+      captions: this.captions,
       featured: this.featured,
       createdAt: this.createdAt,
     };

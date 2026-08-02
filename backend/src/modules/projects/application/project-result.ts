@@ -1,4 +1,4 @@
-import { Project } from '../domain/entities/project';
+import { Project, type ProjectCaptions, type ProjectLocalizedContent } from '../domain/entities/project';
 
 export interface ProjectResult {
   id: string;
@@ -14,6 +14,8 @@ export interface ProjectResult {
   solutionDescription?: string;
   resultTitle?: string;
   resultDescription?: string;
+  localizedContent?: ProjectLocalizedContent;
+  captions?: ProjectCaptions;
   featured: boolean;
   createdAt: Date;
 }
@@ -33,6 +35,8 @@ export function toProjectResult(project: Project): ProjectResult {
     solutionDescription: project.solutionDescription,
     resultTitle: project.resultTitle,
     resultDescription: project.resultDescription,
+    localizedContent: project.localizedContent,
+    captions: project.captions,
     featured: project.featured,
     createdAt: project.createdAt,
   };

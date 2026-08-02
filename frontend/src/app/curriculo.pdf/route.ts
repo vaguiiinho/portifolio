@@ -6,7 +6,7 @@ function escapePdfText(value: string) {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)")
 }
 
-async function buildPdf(): Promise<Uint8Array> {
+async function buildPdf(): Promise<{ pdf: Uint8Array; locale: "pt" | "en" }> {
   const cookieStore = await cookies()
   const locale = getLocaleFromCookieValue(cookieStore.get(getLocaleCookieName())?.value)
   const resumePdfContent = getResumePdfContent(locale)
@@ -41,7 +41,9 @@ async function buildPdf(): Promise<Uint8Array> {
   ]
 
   const contentStream = textCommands.join("\n")
-  const streamLength = Buffer.byteLength(contentStream, "ascii")
+  // Helvetica's WinAnsi encoding covers the Portuguese characters used here.
+  // Keeping the PDF byte stream in latin1 avoids corrupting accents at download time.
+  const streamLength = Buffer.byteLength(contentStream, "latin1")
 
   const objects = [
     "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n",
@@ -55,11 +57,11 @@ async function buildPdf(): Promise<Uint8Array> {
   const offsets: number[] = [0]
 
   for (const object of objects) {
-    offsets.push(Buffer.byteLength(body, "ascii"))
+    offsets.push(Buffer.byteLength(body, "latin1"))
     body += object
   }
 
-  const xrefOffset = Buffer.byteLength(body, "ascii")
+  const xrefOffset = Buffer.byteLength(body, "latin1")
   const xrefLines = [
     "xref",
     "0 6",
@@ -73,17 +75,17 @@ async function buildPdf(): Promise<Uint8Array> {
   ]
 
   const pdf = `${body}${xrefLines.join("\n")}\n`
-  return new TextEncoder().encode(pdf)
+  return { pdf: new Uint8Array(Buffer.from(pdf, "latin1")), locale }
 }
 
 export async function GET() {
-  const pdf = await buildPdf()
+  const { pdf, locale } = await buildPdf()
   const body = pdf as unknown as BodyInit
 
   return new Response(body, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": 'attachment; filename="curriculo-joao-silva.pdf"',
+      "Content-Disposition": `attachment; filename="curriculo-vagner-silva-${locale === "en" ? "en-us" : "pt-br"}.pdf"`,
       "Content-Length": String(pdf.byteLength),
     },
   })
