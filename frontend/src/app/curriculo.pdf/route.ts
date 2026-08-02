@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import { getLocaleFromCookieValue, getLocaleCookieName } from "@/lib/locale"
 import { getResumePdfContent } from "@/lib/content/localized"
+import { getApiBaseUrlCandidates } from "@/lib/api-base-url"
 
 function escapePdfText(value: string) {
   return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)")
@@ -79,6 +80,24 @@ async function buildPdf(): Promise<{ pdf: Uint8Array; locale: "pt" | "en" }> {
 }
 
 export async function GET() {
+  for (const baseUrl of getApiBaseUrlCandidates()) {
+    try {
+      const uploadedResume = await fetch(`${baseUrl}/uploads/resume/curriculo.pdf`, { cache: "no-store" })
+
+      if (uploadedResume.ok) {
+        return new Response(uploadedResume.body, {
+          headers: {
+            "Content-Type": "application/pdf",
+            "Content-Disposition": 'attachment; filename="curriculo-vagner-rodrigues.pdf"',
+            "Cache-Control": "no-store",
+          },
+        })
+      }
+    } catch {
+      // Fall back to the generated resume when the API or an uploaded file is unavailable.
+    }
+  }
+
   const { pdf, locale } = await buildPdf()
   const body = pdf as unknown as BodyInit
 
