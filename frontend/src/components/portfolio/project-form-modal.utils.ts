@@ -17,6 +17,7 @@ export interface ProjectFormState {
   solutionDescription: string
   resultTitle: string
   resultDescription: string
+  localizedContent?: Project["localizedContent"]
 }
 
 export function buildInitialProjectFormState(project: Project | null): ProjectFormState {
@@ -34,6 +35,7 @@ export function buildInitialProjectFormState(project: Project | null): ProjectFo
     solutionDescription: project?.solutionDescription ?? "",
     resultTitle: project?.resultTitle ?? "",
     resultDescription: project?.resultDescription ?? "",
+    localizedContent: project?.localizedContent,
   }
 }
 
@@ -97,7 +99,7 @@ export function buildProjectPayload(values: ProjectFormState): ProjectPayload {
   return payload
 }
 
-export function buildProjectFormData(values: ProjectFormState, videoFile: File | null) {
+export function buildProjectFormData(values: ProjectFormState, videoFile: File | null, locale: Locale) {
   const payload = buildProjectPayload(values)
   const formData = new FormData()
 
@@ -120,6 +122,22 @@ export function buildProjectFormData(values: ProjectFormState, videoFile: File |
   }
 
   formData.append("featured", String(values.featured))
+
+  const currentContent = {
+    title: values.title.trim(),
+    description: values.description.trim(),
+    problemTitle: normalizeOptionalValue(values.problemTitle),
+    problemDescription: normalizeOptionalValue(values.problemDescription),
+    solutionTitle: normalizeOptionalValue(values.solutionTitle),
+    solutionDescription: normalizeOptionalValue(values.solutionDescription),
+    resultTitle: normalizeOptionalValue(values.resultTitle),
+    resultDescription: normalizeOptionalValue(values.resultDescription),
+  }
+  const fallbackContent = values.localizedContent?.[locale === "en" ? "pt" : "en"] ?? currentContent
+  formData.append("localizedContent", JSON.stringify({
+    pt: locale === "pt" ? currentContent : fallbackContent,
+    en: locale === "en" ? currentContent : fallbackContent,
+  }))
 
   if (values.problemTitle.trim()) {
     formData.append("problemTitle", values.problemTitle.trim())

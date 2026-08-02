@@ -68,7 +68,7 @@ export function ProjectFormModal({
     try {
       setIsSubmitting(true)
       setError(null)
-      const formData = buildProjectFormData(values, selectedVideoFile)
+      const formData = buildProjectFormData(values, selectedVideoFile, locale)
 
       if (project) {
         await updateProject(project.id, formData)

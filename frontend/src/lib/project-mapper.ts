@@ -20,6 +20,7 @@ export function mapApiProjectToPortfolioProject(project: ApiProject, locale: Loc
     resultTitle: content?.resultTitle ?? project.resultTitle ?? undefined,
     resultDescription: content?.resultDescription ?? project.resultDescription ?? undefined,
     captions: project.captions ?? undefined,
+    localizedContent: project.localizedContent ?? undefined,
     featured: project.featured ?? false,
   }
 }

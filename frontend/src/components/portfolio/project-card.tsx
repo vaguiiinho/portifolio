@@ -25,6 +25,7 @@ export interface Project {
   resultTitle?: string
   resultDescription?: string
   captions?: { pt?: string; en?: string }
+  localizedContent?: { pt: { title: string; description: string; problemTitle?: string; problemDescription?: string; solutionTitle?: string; solutionDescription?: string; resultTitle?: string; resultDescription?: string }; en: { title: string; description: string; problemTitle?: string; problemDescription?: string; solutionTitle?: string; solutionDescription?: string; resultTitle?: string; resultDescription?: string } }
   featured?: boolean
 }
 
