@@ -6,10 +6,11 @@ import type { Locale } from "@/lib/locale"
 
 interface ProjectsGalleryProps {
   allowCreate?: boolean
+  showProjectDetails?: boolean
   locale: Locale
 }
 
-export async function ProjectsGallery({ allowCreate = false, locale }: ProjectsGalleryProps) {
+export async function ProjectsGallery({ allowCreate = false, showProjectDetails = false, locale }: ProjectsGalleryProps) {
   let errorMessage: string | null = null
   let projects: Project[] = []
 
@@ -25,5 +26,5 @@ export async function ProjectsGallery({ allowCreate = false, locale }: ProjectsG
           : "Falha ao carregar os cases"
   }
 
-  return <ProjectsGalleryClient projects={projects} error={errorMessage} allowCreate={allowCreate} locale={locale} />
+  return <ProjectsGalleryClient projects={projects} error={errorMessage} allowCreate={allowCreate} showProjectDetails={showProjectDetails} locale={locale} />
 }

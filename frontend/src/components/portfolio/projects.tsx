@@ -12,10 +12,11 @@ interface ProjectsProps {
   showHeader?: boolean
   showActions?: boolean
   showCreateAction?: boolean
+  showProjectDetails?: boolean
   locale: Locale
 }
 
-export function Projects({ showHeader = true, showActions = true, showCreateAction = false, locale }: ProjectsProps) {
+export function Projects({ showHeader = true, showActions = true, showCreateAction = false, showProjectDetails = false, locale }: ProjectsProps) {
   const projectsContent = getProjectsContent(locale)
 
   return (
@@ -38,7 +39,7 @@ export function Projects({ showHeader = true, showActions = true, showCreateActi
           </div>
         )}
 
-        <ProjectsGallery allowCreate={showCreateAction} locale={locale} />
+        <ProjectsGallery allowCreate={showCreateAction} showProjectDetails={showProjectDetails} locale={locale} />
       </Container>
     </section>
   )

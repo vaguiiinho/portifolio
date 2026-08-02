@@ -118,7 +118,7 @@ export function ProjectsGalleryClient({
                     }
                   : undefined
               }
-              showDetailsAction={showProjectDetails && canManageProjects}
+              showDetailsAction={showProjectDetails}
             />
           ))}
         </div>
