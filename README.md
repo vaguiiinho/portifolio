@@ -357,7 +357,7 @@ Novos projetos, tecnologias e melhorias são adicionados conforme avanço nos es
 Full Stack Developer | Backend | Arquitetura de Software
 
 🌐 Portfólio  
-https://portifolio.kangaroo-tech.net/
+https://portfolio.kangaroo-tech.net/
 
 💻 GitHub  
 https://github.com/vaguiiinho
